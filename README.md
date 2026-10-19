@@ -1,8 +1,10 @@
 # YOUR PROJECT NAME
 
 ## Contributors
-- PERSON
-- PERSON
+- Youran Ma
+- Mengpang Xing
+- Naman Dua
+- Yurou Quan
 
 ## Dependencies
 - JDK 11
