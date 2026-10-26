@@ -3,11 +3,15 @@
 1. Didn't have admin permission for setting up branch protection, Github Actions and finish the following steps.
 
 # Week 4 (10/19/2026-10/25/2026)
+**Decisions**:
+- Application: Chess, built as a GUI application with **Java Swing** (same library as the reference starter code).
+- First feature: **Game Setup Phase** ([requirements](requirements/game-setup.md), [design](design/game-setup.md)).
+- Game rules documented in [requirements/game-rules.md](requirements/game-rules.md).
+
 **Planning and Progress Tracking**:
-1. [done] Person: Task (Links to PR)
-2. [not started] Person: Task (Links to PR)
-3. [80% done] Person: Task (Links to PR)
-4. etc.
+1. [done] Youran Ma: Gradle CI and build status badge ([PR #1](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/1))
+2. [done] Mengpang Xing: Game rules, Game Setup user story / use case, and design docs ([PR #2](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/2))
+
 
 # Week 5 (10/26/2026-11/01/2026)
 **Planning and Progress Tracking**:
