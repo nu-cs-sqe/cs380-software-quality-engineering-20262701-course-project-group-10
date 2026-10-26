@@ -10,7 +10,7 @@
 
 **Planning and Progress Tracking**:
 1. [done] Youran Ma: Gradle CI and build status badge ([PR #1](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/1))
-2. [done] Mengpang Xing: Game rules, Game Setup user story / use case, and design docs ([PR #2](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/2))
+2. [done] Mengpang Xing: Game rules, Game Setup user story / use case, and design docs ([PR #3](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/3))
 
 
 # Week 5 (10/26/2026-11/01/2026)
