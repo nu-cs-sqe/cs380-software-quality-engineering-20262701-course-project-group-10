@@ -124,4 +124,10 @@ public class PieceTests {
         assertSame(PieceType.PAWN, piece.getType());
         assertSame(Color.BLACK, piece.getColor());
     }
+
+    // P13: null pointer boundary.
+    @Test
+    public void nullTypeIsRejected() {
+        assertThrows(NullPointerException.class, () -> new Piece(null, Color.WHITE));
+    }
 }
