@@ -9,7 +9,7 @@ public final class Piece {
 
     public Piece(PieceType type, Color color) {
         this.type = Objects.requireNonNull(type, "type");
-        this.color = color;
+        this.color = Objects.requireNonNull(color, "color");
     }
 
     public PieceType getType() {
