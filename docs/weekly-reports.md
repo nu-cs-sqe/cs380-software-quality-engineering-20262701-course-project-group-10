@@ -15,7 +15,8 @@
 
 # Week 5 (10/26/2026-11/01/2026)
 **Planning and Progress Tracking**:
-1. [done] Person: Task (Links to PR)
+1. [done] Mengpang: Add piece types, colors, and piece tests ([PR #4](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/4))
+
 2. [not started] Person: Task (Links to PR)
 3. [80% done] Person: Task (Links to PR)
 4. etc.
