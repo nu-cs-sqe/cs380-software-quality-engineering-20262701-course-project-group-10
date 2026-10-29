@@ -59,4 +59,4 @@ For P13-P15, the method under test is `Piece(PieceType, Color)`.
 | --- | --- | --- | --- |
 | P13 | `null, WHITE` | `NullPointerException` | yes |
 | P14 | `KING, null` | `NullPointerException` | yes |
-| P15 | `null, null` | `NullPointerException` | no |
+| P15 | `null, null` | `NullPointerException` | yes |
