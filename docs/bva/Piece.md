@@ -41,17 +41,17 @@ Expected results apply on both successive getter reads.
 | ID | State / constructor arguments | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | P01 | `KING, WHITE` | construction succeeds; type `KING`, color `WHITE` | yes |
-| P02 | `QUEEN, WHITE` | construction succeeds; type `QUEEN`, color `WHITE` | no |
-| P03 | `ROOK, WHITE` | construction succeeds; type `ROOK`, color `WHITE` | no |
-| P04 | `BISHOP, WHITE` | construction succeeds; type `BISHOP`, color `WHITE` | no |
-| P05 | `KNIGHT, WHITE` | construction succeeds; type `KNIGHT`, color `WHITE` | no |
-| P06 | `PAWN, WHITE` | construction succeeds; type `PAWN`, color `WHITE` | no |
-| P07 | `KING, BLACK` | construction succeeds; type `KING`, color `BLACK` | no |
-| P08 | `QUEEN, BLACK` | construction succeeds; type `QUEEN`, color `BLACK` | no |
-| P09 | `ROOK, BLACK` | construction succeeds; type `ROOK`, color `BLACK` | no |
-| P10 | `BISHOP, BLACK` | construction succeeds; type `BISHOP`, color `BLACK` | no |
-| P11 | `KNIGHT, BLACK` | construction succeeds; type `KNIGHT`, color `BLACK` | no |
-| P12 | `PAWN, BLACK` | construction succeeds; type `PAWN`, color `BLACK` | no |
+| P02 | `QUEEN, WHITE` | construction succeeds; type `QUEEN`, color `WHITE` | yes |
+| P03 | `ROOK, WHITE` | construction succeeds; type `ROOK`, color `WHITE` | yes |
+| P04 | `BISHOP, WHITE` | construction succeeds; type `BISHOP`, color `WHITE` | yes |
+| P05 | `KNIGHT, WHITE` | construction succeeds; type `KNIGHT`, color `WHITE` | yes |
+| P06 | `PAWN, WHITE` | construction succeeds; type `PAWN`, color `WHITE` | yes |
+| P07 | `KING, BLACK` | construction succeeds; type `KING`, color `BLACK` | yes |
+| P08 | `QUEEN, BLACK` | construction succeeds; type `QUEEN`, color `BLACK` | yes |
+| P09 | `ROOK, BLACK` | construction succeeds; type `ROOK`, color `BLACK` | yes |
+| P10 | `BISHOP, BLACK` | construction succeeds; type `BISHOP`, color `BLACK` | yes |
+| P11 | `KNIGHT, BLACK` | construction succeeds; type `KNIGHT`, color `BLACK` | yes |
+| P12 | `PAWN, BLACK` | construction succeeds; type `PAWN`, color `BLACK` | yes |
 
 For P13-P15, the method under test is `Piece(PieceType, Color)`.
 
