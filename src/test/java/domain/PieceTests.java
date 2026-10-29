@@ -130,4 +130,10 @@ public class PieceTests {
     public void nullTypeIsRejected() {
         assertThrows(NullPointerException.class, () -> new Piece(null, Color.WHITE));
     }
+
+    // P14: null pointer boundary.
+    @Test
+    public void nullColorIsRejected() {
+        assertThrows(NullPointerException.class, () -> new Piece(PieceType.KING, null));
+    }
 }
