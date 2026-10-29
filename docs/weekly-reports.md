@@ -21,6 +21,39 @@
 3. [80% done] Person: Task (Links to PR)
 4. etc.
 
+# Week 6 (11/2/2026-11/8/2026)
+**Planning and Progress Tracking**:
+1. [not started] Person: Task (Links to PR)
+2. [not started] Person: Task (Links to PR)
+3. [80% done] Person: Task (Links to PR)
+4. etc.
+
+
+# Week 7 (11/9/2026-11/15/2026)
+**Planning and Progress Tracking**:
+1. [not started] Person: Task (Links to PR)
+2. [not started] Person: Task (Links to PR)
+3. [80% done] Person: Task (Links to PR)
+4. etc.
+
+
+# Week 8 (11/16/2026-11/22/2026)
+**Planning and Progress Tracking**:
+1. [not started] Person: Task (Links to PR)
+2. [not started] Person: Task (Links to PR)
+3. [80% done] Person: Task (Links to PR)
+4. etc.
+
+
+
+# Week 9 (11/23/2026-11/29/2026)
+**Planning and Progress Tracking**:
+1. [not started] Person: Task (Links to PR)
+2. [not started] Person: Task (Links to PR)
+3. [80% done] Person: Task (Links to PR)
+4. etc.
+
+
 # One section per week until the last week of class (the week before the Finals week)
 
 
