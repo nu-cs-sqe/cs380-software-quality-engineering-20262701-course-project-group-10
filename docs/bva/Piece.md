@@ -40,7 +40,7 @@ Expected results apply on both successive getter reads.
 
 | ID | State / constructor arguments | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| P01 | `KING, WHITE` | construction succeeds; type `KING`, color `WHITE` | no |
+| P01 | `KING, WHITE` | construction succeeds; type `KING`, color `WHITE` | yes |
 | P02 | `QUEEN, WHITE` | construction succeeds; type `QUEEN`, color `WHITE` | no |
 | P03 | `ROOK, WHITE` | construction succeeds; type `ROOK`, color `WHITE` | no |
 | P04 | `BISHOP, WHITE` | construction succeeds; type `BISHOP`, color `WHITE` | no |
