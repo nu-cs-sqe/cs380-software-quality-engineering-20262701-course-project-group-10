@@ -57,6 +57,6 @@ For P13-P15, the method under test is `Piece(PieceType, Color)`.
 
 | ID | State / constructor arguments | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| P13 | `null, WHITE` | `NullPointerException` | no |
+| P13 | `null, WHITE` | `NullPointerException` | yes |
 | P14 | `KING, null` | `NullPointerException` | no |
 | P15 | `null, null` | `NullPointerException` | no |
