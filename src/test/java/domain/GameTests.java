@@ -68,4 +68,19 @@ public class GameTests {
         assertSame(Color.WHITE, game.getCurrentPlayer());
         EasyMock.verify(board);
     }
+
+    // G06: startNewGame() resets the same board instead of replacing it.
+    @Test
+    public void startNewGameKeepsTheSameBoard() {
+        Board board = EasyMock.createMock(Board.class);
+        board.setUpStartingPosition();
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(board);
+
+        Game game = new Game(board);
+        game.startNewGame();
+
+        assertSame(board, game.getBoard());
+        EasyMock.verify(board);
+    }
 }
