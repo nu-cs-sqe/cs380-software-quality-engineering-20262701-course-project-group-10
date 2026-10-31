@@ -12,6 +12,11 @@ public final class Game {
         this.currentPlayer = Color.WHITE;
     }
 
+    public void startNewGame() {
+        board.setUpStartingPosition();
+        currentPlayer = Color.WHITE;
+    }
+
     public Board getBoard() {
         return board;
     }
