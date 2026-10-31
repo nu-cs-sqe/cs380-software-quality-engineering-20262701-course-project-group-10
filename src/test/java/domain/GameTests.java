@@ -3,6 +3,7 @@ package domain;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class GameTests {
     // G01: non-null pointer; the constructor must not touch the board.
@@ -16,5 +17,11 @@ public class GameTests {
         assertSame(board, game.getBoard());
         assertSame(board, game.getBoard());
         EasyMock.verify(board);
+    }
+
+    // G02: null pointer boundary.
+    @Test
+    public void nullBoardIsRejected() {
+        assertThrows(NullPointerException.class, () -> new Game(null));
     }
 }
