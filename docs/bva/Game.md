@@ -46,13 +46,13 @@ unexpected board call fails the test.
 | ID | State of the system | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | G01 | `new Game(mockBoard)`; `startNewGame()` not called | `getBoard()` returns `mockBoard` (same reference) on both reads; no calls on the board | yes |
-| G02 | `new Game(null)` | `NullPointerException` | no |
+| G02 | `new Game(null)` | `NullPointerException` | yes |
 
 ### Method under test: `getCurrentPlayer()`
 
 | ID | State of the system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| G03 | `new Game(mockBoard)`; `startNewGame()` called 0 times | `WHITE` on both reads; no calls on the board | no |
+| G03 | `new Game(mockBoard)`; `startNewGame()` called 0 times | `WHITE` on both reads; no calls on the board | yes |
 
 ### Method under test: `startNewGame()`
 

@@ -37,4 +37,19 @@ public class GameTests {
         assertSame(Color.WHITE, game.getCurrentPlayer());
         EasyMock.verify(board);
     }
+
+    // G04: one startNewGame() call sets up the board exactly once.
+    @Test
+    public void startNewGameSetsUpTheBoardOnce() {
+        Board board = EasyMock.createMock(Board.class);
+        board.setUpStartingPosition();
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(board);
+
+        Game game = new Game(board);
+        game.startNewGame();
+
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+        EasyMock.verify(board);
+    }
 }
