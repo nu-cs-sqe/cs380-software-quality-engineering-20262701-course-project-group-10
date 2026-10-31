@@ -24,4 +24,17 @@ public class GameTests {
     public void nullBoardIsRejected() {
         assertThrows(NullPointerException.class, () -> new Game(null));
     }
+
+    // G03: zero startNewGame() calls; White is to move from construction.
+    @Test
+    public void whiteMovesFirstBeforeStartNewGame() {
+        Board board = EasyMock.createMock(Board.class);
+        EasyMock.replay(board);
+
+        Game game = new Game(board);
+
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+        EasyMock.verify(board);
+    }
 }
