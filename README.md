@@ -12,8 +12,11 @@
 - JDK 11
 - JUnit 5.10
 - Gradle 8.10
+- EasyMock 5.4.0
+- 
 
 ## Exceptions
+Swing view classes, verified manually.
 ### Code Coverage
 N/A
 ### Mutation Testing
