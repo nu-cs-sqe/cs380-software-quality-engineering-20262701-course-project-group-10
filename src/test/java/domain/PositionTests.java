@@ -3,6 +3,7 @@ package domain;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PositionTests {
     private void assertCoordinates(int file, int rank) {
@@ -57,5 +58,50 @@ public class PositionTests {
     @Test
     public void PS09_storesDifferentInteriorCoordinates() {
         assertCoordinates(3, 4);
+    }
+
+    @Test
+    public void PB01_rejectsFileBelowZero() {
+        assertThrows(IllegalArgumentException.class, () -> new Position(-1, 3));
+    }
+
+    @Test
+    public void PB02_rejectsFileAboveSeven() {
+        assertThrows(IllegalArgumentException.class, () -> new Position(8, 3));
+    }
+
+    @Test
+    public void PB03_rejectsMinimumIntegerFile() {
+        assertThrows(IllegalArgumentException.class, () -> new Position(Integer.MIN_VALUE, 3));
+    }
+
+    @Test
+    public void PB04_rejectsMaximumIntegerFile() {
+        assertThrows(IllegalArgumentException.class, () -> new Position(Integer.MAX_VALUE, 3));
+    }
+
+    @Test
+    public void PB05_rejectsRankBelowZero() {
+        assertThrows(IllegalArgumentException.class, () -> new Position(3, -1));
+    }
+
+    @Test
+    public void PB06_rejectsRankAboveSeven() {
+        assertThrows(IllegalArgumentException.class, () -> new Position(3, 8));
+    }
+
+    @Test
+    public void PB07_rejectsMinimumIntegerRank() {
+        assertThrows(IllegalArgumentException.class, () -> new Position(3, Integer.MIN_VALUE));
+    }
+
+    @Test
+    public void PB08_rejectsMaximumIntegerRank() {
+        assertThrows(IllegalArgumentException.class, () -> new Position(3, Integer.MAX_VALUE));
+    }
+
+    @Test
+    public void PB09_rejectsBothInvalidCoordinates() {
+        assertThrows(IllegalArgumentException.class, () -> new Position(-1, 8));
     }
 }
