@@ -1,14 +1,13 @@
 package domain;
 
-/**
- * Skeleton so the GUI can ask the Board for pieces.
- * The real implementation (bounds checks, equals/hashCode) comes from the Position task.
- */
 public final class Position {
     private final int file;
     private final int rank;
 
     public Position(int file, int rank) {
+        if (file < 0 || file > 7 || rank < 0 || rank > 7) {
+            throw new IllegalArgumentException("Coordinates must be between 0 and 7");
+        }
         this.file = file;
         this.rank = rank;
     }
