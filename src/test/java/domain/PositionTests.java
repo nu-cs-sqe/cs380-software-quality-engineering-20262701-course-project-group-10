@@ -3,7 +3,9 @@ package domain;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PositionTests {
     private void assertCoordinates(int file, int rank) {
@@ -103,5 +105,85 @@ public class PositionTests {
     @Test
     public void PB09_rejectsBothInvalidCoordinates() {
         assertThrows(IllegalArgumentException.class, () -> new Position(-1, 8));
+    }
+
+    @Test
+    public void PE01_equalsItself() {
+        Position position = new Position(3, 4);
+
+        assertTrue(position.equals(position));
+    }
+
+    @Test
+    public void PE02_equalsMatchingCoordinatesInBothDirections() {
+        Position first = new Position(3, 4);
+        Position second = new Position(3, 4);
+
+        assertTrue(first.equals(second));
+        assertTrue(second.equals(first));
+    }
+
+    @Test
+    public void PE03_rejectsDifferentFilesInBothDirections() {
+        Position first = new Position(0, 3);
+        Position second = new Position(7, 3);
+
+        assertFalse(first.equals(second));
+        assertFalse(second.equals(first));
+    }
+
+    @Test
+    public void PE04_rejectsDifferentRanksInBothDirections() {
+        Position first = new Position(3, 0);
+        Position second = new Position(3, 7);
+
+        assertFalse(first.equals(second));
+        assertFalse(second.equals(first));
+    }
+
+    @Test
+    public void PE05_rejectsBothDifferentCoordinates() {
+        Position first = new Position(0, 0);
+        Position second = new Position(7, 7);
+
+        assertFalse(first.equals(second));
+    }
+
+    @Test
+    public void PE06_doesNotEqualNull() {
+        Position position = new Position(3, 4);
+
+        assertFalse(position.equals(null));
+    }
+
+    @Test
+    public void PE07_doesNotEqualAnotherType() {
+        Position position = new Position(3, 4);
+
+        assertFalse(position.equals("3,4"));
+    }
+
+    @Test
+    public void PE08_equalityIsTransitive() {
+        Position first = new Position(3, 4);
+        Position second = new Position(3, 4);
+        Position third = new Position(3, 4);
+
+        assertTrue(first.equals(second));
+        assertTrue(second.equals(third));
+        assertTrue(first.equals(third));
+    }
+
+    @Test
+    public void PE09_repeatedEqualityPreservesCoordinates() {
+        Position first = new Position(3, 4);
+        Position second = new Position(3, 4);
+
+        assertTrue(first.equals(second));
+        assertTrue(first.equals(second));
+        assertEquals(3, first.getFile());
+        assertEquals(4, first.getRank());
+        assertEquals(3, second.getFile());
+        assertEquals(4, second.getRank());
     }
 }
