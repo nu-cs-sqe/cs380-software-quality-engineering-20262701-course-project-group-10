@@ -19,4 +19,16 @@ public final class Position {
     public int getRank() {
         return rank;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (!(other instanceof Position)) {
+            return false;
+        }
+        Position position = (Position) other;
+        return file == position.file && rank == position.rank;
+    }
 }
