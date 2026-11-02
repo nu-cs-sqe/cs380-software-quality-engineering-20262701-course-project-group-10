@@ -21,6 +21,8 @@ public class Board {
     }
 
     public void setUpStartingPosition() {
+        // Clear the board before setting up the pieces
+        squares = new Piece[8][8];
 
         // Place white back rank
         placeBackRank(Color.WHITE, 0);
@@ -64,4 +66,6 @@ public class Board {
             placePiece(piece, new Position(file, rank));
         }
     }
+
+
 }
