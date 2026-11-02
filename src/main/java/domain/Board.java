@@ -17,7 +17,7 @@ public class Board {
     }
 
     public boolean isEmpty(Position position) {
-        return true;
+        return getPiece(position) == null;
     }
 
     public void setUpStartingPosition() {
