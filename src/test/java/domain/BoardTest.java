@@ -389,7 +389,6 @@ class BoardTest {
     public void testSetUpStartingPositionClearsExistingPieces() {
         Board board = new Board();
 
-        // Place an extra piece in the middle of the board
         board.placePiece(
                 new Piece(PieceType.QUEEN, Color.WHITE),
                 new Position(3, 3)
@@ -397,10 +396,8 @@ class BoardTest {
 
         board.setUpStartingPosition();
 
-        // The extra piece should be cleared
         assertTrue(board.isEmpty(new Position(3, 3)));
 
-        // The standard starting position should still be correct
         assertEquals(32, countPieces(board));
     }
 
