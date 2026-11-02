@@ -196,4 +196,56 @@ class BoardTest {
 
         assertFalse(board.isEmpty(position));
     }
+
+
+
+
+    // Count all pieces belonging to a player
+    private int countPieces(Board board, Color color) {
+        int count = 0;
+
+        for (int file = 0; file < 8; file++) {
+            for (int rank = 0; rank < 8; rank++) {
+                Piece piece = board.getPiece(new Position(file, rank));
+
+                if (piece != null && piece.getColor() == color) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    @Test
+    void setUpStartingPosition_createsExactly32Pieces() {
+        Board board = new Board();
+
+        board.setUpStartingPosition();
+
+        int total = countPieces(board, Color.WHITE)
+                + countPieces(board, Color.BLACK);
+
+        assertEquals(32, total);
+    }
+
+    @Test
+    void setUpStartingPosition_creates16WhitePieces() {
+        Board board = new Board();
+
+        board.setUpStartingPosition();
+
+        assertEquals(16, countPieces(board, Color.WHITE));
+    }
+
+    @Test
+    void setUpStartingPosition_creates16BlackPieces() {
+        Board board = new Board();
+
+        board.setUpStartingPosition();
+
+        assertEquals(16, countPieces(board, Color.BLACK));
+    }
+
+
 }
