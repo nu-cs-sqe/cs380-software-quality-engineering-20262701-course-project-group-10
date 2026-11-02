@@ -370,4 +370,52 @@ class BoardTest {
             }
         }
     }
+
+    private int countPieces(Board board) {
+        int count = 0;
+
+        for (int file = 0; file < 8; file++) {
+            for (int rank = 0; rank < 8; rank++) {
+                if (!board.isEmpty(new Position(file, rank))) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    @Test
+    public void testSetUpStartingPositionClearsExistingPieces() {
+        Board board = new Board();
+
+        // Place an extra piece in the middle of the board
+        board.placePiece(
+                new Piece(PieceType.QUEEN, Color.WHITE),
+                new Position(3, 3)
+        );
+
+        board.setUpStartingPosition();
+
+        // The extra piece should be cleared
+        assertTrue(board.isEmpty(new Position(3, 3)));
+
+        // The standard starting position should still be correct
+        assertEquals(32, countPieces(board));
+    }
+
+    @Test
+    public void testSetUpStartingPositionCanBeCalledRepeatedly() {
+        Board board = new Board();
+
+        board.setUpStartingPosition();
+        board.setUpStartingPosition();
+
+        assertEquals(32, countPieces(board));
+
+        assertBackRank(board, Color.WHITE, 0);
+        assertBackRank(board, Color.BLACK, 7);
+        assertPawnRank(board, Color.WHITE, 1);
+        assertPawnRank(board, Color.BLACK, 6);
+    }
 }
