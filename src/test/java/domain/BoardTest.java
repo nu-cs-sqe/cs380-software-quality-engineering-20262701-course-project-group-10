@@ -129,4 +129,71 @@ class BoardTest {
 
         assertSame(piece, board.getPiece(position));
     }
+
+    // ---------- isEmpty() tests ----------
+
+    @Test
+    void isEmpty_returnsTrueForEmptyA1() {
+        Board board = new Board();
+        Position position = new Position(0, 0);
+
+        assertTrue(board.isEmpty(position));
+    }
+
+    @Test
+    void isEmpty_returnsTrueForEmptyH1() {
+        Board board = new Board();
+        Position position = new Position(7, 0);
+
+        assertTrue(board.isEmpty(position));
+    }
+
+    @Test
+    void isEmpty_returnsTrueForEmptyA8() {
+        Board board = new Board();
+        Position position = new Position(0, 7);
+
+        assertTrue(board.isEmpty(position));
+    }
+
+    @Test
+    void isEmpty_returnsTrueForEmptyH8() {
+        Board board = new Board();
+        Position position = new Position(7, 7);
+
+        assertTrue(board.isEmpty(position));
+    }
+
+    @Test
+    void isEmpty_returnsFalseForOccupiedA1() {
+        Board board = new Board();
+        Position position = new Position(0, 0);
+        Piece piece = new Piece(PieceType.ROOK, Color.WHITE);
+
+        board.placePiece(piece, position);
+
+        assertFalse(board.isEmpty(position));
+    }
+
+    @Test
+    void isEmpty_returnsFalseForOccupiedH8() {
+        Board board = new Board();
+        Position position = new Position(7, 7);
+        Piece piece = new Piece(PieceType.ROOK, Color.BLACK);
+
+        board.placePiece(piece, position);
+
+        assertFalse(board.isEmpty(position));
+    }
+
+    @Test
+    void isEmpty_returnsFalseForOccupiedInteriorPosition() {
+        Board board = new Board();
+        Position position = new Position(3, 3);
+        Piece piece = new Piece(PieceType.KNIGHT, Color.WHITE);
+
+        board.placePiece(piece, position);
+
+        assertFalse(board.isEmpty(position));
+    }
 }
