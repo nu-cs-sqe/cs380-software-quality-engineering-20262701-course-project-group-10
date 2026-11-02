@@ -292,4 +292,41 @@ class BoardTest {
     }
 
 
+    private void assertBackRank(Board board, Color color, int rank) {
+        PieceType[] expected = {
+                PieceType.ROOK,
+                PieceType.KNIGHT,
+                PieceType.BISHOP,
+                PieceType.QUEEN,
+                PieceType.KING,
+                PieceType.BISHOP,
+                PieceType.KNIGHT,
+                PieceType.ROOK
+        };
+
+        for (int file = 0; file < 8; file++) {
+            Piece piece = board.getPiece(new Position(file, rank));
+
+            assertNotNull(piece);
+            assertEquals(color, piece.getColor());
+            assertEquals(expected[file], piece.getType());
+        }
+    }
+
+    
+    @Test
+    public void testWhiteBackRankOrder() {
+        Board board = new Board();
+        board.setUpStartingPosition();
+
+        assertBackRank(board, Color.WHITE, 0);
+    }
+
+    @Test
+    public void testBlackBackRankOrder() {
+        Board board = new Board();
+        board.setUpStartingPosition();
+
+        assertBackRank(board, Color.BLACK, 7);
+    }
 }
