@@ -31,4 +31,9 @@ public final class Position {
         Position position = (Position) other;
         return file == position.file && rank == position.rank;
     }
+
+    @Override
+    public int hashCode() {
+        return 31 * file + rank;
+    }
 }
