@@ -247,5 +247,49 @@ class BoardTest {
         assertEquals(16, countPieces(board, Color.BLACK));
     }
 
+    private int countPieces(Board board, Color color, PieceType type) {
+        int count = 0;
+
+        for (int file = 0; file < 8; file++) {
+            for (int rank = 0; rank < 8; rank++) {
+                Piece piece = board.getPiece(new Position(file, rank));
+
+                if (piece != null
+                        && piece.getColor() == color
+                        && piece.getType() == type) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    @Test
+    public void testWhitePieceCounts() {
+        Board board = new Board();
+        board.setUpStartingPosition();
+
+        assertEquals(1, countPieces(board, Color.WHITE, PieceType.KING));
+        assertEquals(1, countPieces(board, Color.WHITE, PieceType.QUEEN));
+        assertEquals(2, countPieces(board, Color.WHITE, PieceType.ROOK));
+        assertEquals(2, countPieces(board, Color.WHITE, PieceType.BISHOP));
+        assertEquals(2, countPieces(board, Color.WHITE, PieceType.KNIGHT));
+        assertEquals(8, countPieces(board, Color.WHITE, PieceType.PAWN));
+    }
+
+    @Test
+    public void testBlackPieceCounts() {
+        Board board = new Board();
+        board.setUpStartingPosition();
+
+        assertEquals(1, countPieces(board, Color.BLACK, PieceType.KING));
+        assertEquals(1, countPieces(board, Color.BLACK, PieceType.QUEEN));
+        assertEquals(2, countPieces(board, Color.BLACK, PieceType.ROOK));
+        assertEquals(2, countPieces(board, Color.BLACK, PieceType.BISHOP));
+        assertEquals(2, countPieces(board, Color.BLACK, PieceType.KNIGHT));
+        assertEquals(8, countPieces(board, Color.BLACK, PieceType.PAWN));
+    }
+
 
 }
