@@ -96,20 +96,14 @@ Ranks are 0–7 in code (rank 1–8 on the board). White moves toward rank index
 - **Check is ignored for now.** Detecting moves into check needs to know which squares are attacked. That
   belongs to the win-condition features.
 
-## Shared Stubs (merge first)
-Merge these as one small PR before the other tasks start, so everyone can compile and mock against them:
+## Shared Signatures
+Everyone codes against these exact signatures. Each task stubs or mocks the parts it doesn't own in its own
+branch. If two branches add the same stub, keep the real implementation when resolving the merge conflict.
 
-```java
-public class MoveValidator {
-    public boolean isLegalMove(Board board, Position from, Position to) {
-        return false;
-    }
-}
-```
-
-- `Board.movePiece(Position from, Position to)` with an empty body
-- `Game(Board board, MoveValidator validator)` constructor, and `makeMove(Position from, Position to)` with an empty body
-- Update `Main` and `GameTests` to use the new constructor
+- `MoveValidator.isLegalMove(Board board, Position from, Position to): boolean`
+- `Board.movePiece(Position from, Position to): void`
+- `Game(Board board, MoveValidator validator)`
+- `Game.makeMove(Position from, Position to): void`, throws `IllegalArgumentException` for illegal moves
 
 ## BVA Files to Write or Update
 - `docs/bva/MoveValidator.md` (new). The Pawn/Knight/King and Rook/Bishop/Queen tasks each add their own section.
@@ -121,8 +115,7 @@ public class MoveValidator {
 |------|---------|------------------|
 | 1 | `MoveValidator`: Pawn, Knight, King | `feature/move-rules-pawn-knight-king` |
 | 2 | `MoveValidator`: Rook, Bishop, Queen | `feature/move-rules-sliding` |
-| 3 | Shared stubs, `Board.movePiece`, `Game.makeMove` | `feature/make-move` |
+| 3 | `Board.movePiece`, `Game.makeMove` (turn rules and captures) | `feature/make-move` |
 | 4 | `BoardPanel`, `ChessFrame`, `Main` (click-to-move GUI) | `feature/click-to-move-gui` |
 
-All four tasks can be worked on at the same time once the shared stubs are merged. Tasks use mocks or
-stubs for the classes they don't own.
+All four tasks can be worked on at the same time. Each task uses mocks or stubs for the classes it doesn't own.
