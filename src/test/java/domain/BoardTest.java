@@ -313,7 +313,7 @@ class BoardTest {
         }
     }
 
-    
+
     @Test
     public void testWhiteBackRankOrder() {
         Board board = new Board();
@@ -328,5 +328,46 @@ class BoardTest {
         board.setUpStartingPosition();
 
         assertBackRank(board, Color.BLACK, 7);
+    }
+
+    private void assertPawnRank(Board board, Color color, int rank) {
+        for (int file = 0; file < 8; file++) {
+            Piece piece = board.getPiece(new Position(file, rank));
+
+            assertNotNull(piece);
+            assertEquals(color, piece.getColor());
+            assertEquals(PieceType.PAWN, piece.getType());
+        }
+    }
+
+    @Test
+    public void testWhitePawnsOnSecondRank() {
+        Board board = new Board();
+        board.setUpStartingPosition();
+
+        assertPawnRank(board, Color.WHITE, 1);
+    }
+
+    @Test
+    public void testBlackPawnsOnSeventhRank() {
+        Board board = new Board();
+        board.setUpStartingPosition();
+
+        assertPawnRank(board, Color.BLACK, 6);
+    }
+
+    @Test
+    public void testMiddleFourRanksAreEmpty() {
+        Board board = new Board();
+        board.setUpStartingPosition();
+
+        for (int file = 0; file < 8; file++) {
+            for (int rank = 2; rank <= 5; rank++) {
+                assertTrue(
+                        board.isEmpty(new Position(file, rank)),
+                        "Expected position (" + file + ", " + rank + ") to be empty"
+                );
+            }
+        }
     }
 }
