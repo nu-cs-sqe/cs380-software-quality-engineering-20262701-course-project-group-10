@@ -1,15 +1,21 @@
 package domain;
 
-/**
- * Skeleton so Game and the GUI can be built before the real Board exists.
- * The real implementation comes from the Board task.
- */
 public class Board {
-    public void setUpStartingPosition() {
+
+    public Board() {
     }
 
-    /** Always empty until the real Board lands, so the GUI draws a blank board. */
     public Piece getPiece(Position position) {
         return null;
+    }
+
+    public void placePiece(Piece piece, Position position) {
+    }
+
+    public boolean isEmpty(Position position) {
+        return true;
+    }
+
+    public void setUpStartingPosition() {
     }
 }
