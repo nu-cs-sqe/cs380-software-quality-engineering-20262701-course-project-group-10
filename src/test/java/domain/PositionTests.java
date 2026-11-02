@@ -2,6 +2,8 @@ package domain;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -185,5 +187,49 @@ public class PositionTests {
         assertEquals(4, first.getRank());
         assertEquals(3, second.getFile());
         assertEquals(4, second.getRank());
+    }
+
+    @Test
+    public void PH01_repeatedHashPreservesCoordinates() {
+        Position position = new Position(3, 4);
+        int firstHash = position.hashCode();
+
+        assertEquals(firstHash, position.hashCode());
+        assertEquals(3, position.getFile());
+        assertEquals(4, position.getRank());
+    }
+
+    @Test
+    public void PH02_equalLowerCornersHaveEqualHashes() {
+        Position first = new Position(0, 0);
+        Position second = new Position(0, 0);
+
+        assertEquals(first.hashCode(), second.hashCode());
+    }
+
+    @Test
+    public void PH03_equalUpperCornersHaveEqualHashes() {
+        Position first = new Position(7, 7);
+        Position second = new Position(7, 7);
+
+        assertEquals(first.hashCode(), second.hashCode());
+    }
+
+    @Test
+    public void PH04_equalInteriorPositionsHaveEqualHashes() {
+        Position first = new Position(3, 4);
+        Position second = new Position(3, 4);
+
+        assertEquals(first.hashCode(), second.hashCode());
+    }
+
+    @Test
+    public void PH05_hashSetRejectsDuplicateCoordinates() {
+        HashSet<Position> positions = new HashSet<Position>();
+
+        assertTrue(positions.add(new Position(3, 4)));
+        assertFalse(positions.add(new Position(3, 4)));
+        assertTrue(positions.add(new Position(4, 3)));
+        assertEquals(2, positions.size());
     }
 }
