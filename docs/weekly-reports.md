@@ -22,6 +22,7 @@
 # Week 6 (11/2/2026-11/8/2026)
 **Planning and Progress Tracking**:
 1. [done] Mengpang Xing: One Turn requirements (user story, acceptance criteria, use case) and design docs ([PR #15](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/15))
+2. [done] Naman Dua: Click-to-move GUI (BoardClickHandler with TDD + BVA, BoardPanel, ChessFrame turn label and error dialog), makeMove stubbed until the make-move task merges ([PR #23](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/23))
 
 
 # Week 7 (11/9/2026-11/15/2026)
