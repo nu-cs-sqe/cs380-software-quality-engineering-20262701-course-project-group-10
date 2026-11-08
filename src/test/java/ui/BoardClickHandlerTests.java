@@ -225,6 +225,18 @@ public class BoardClickHandlerTests {
         assertNull(handler.getSelected());
     }
 
+    // K09: a square selected; an off-board click (null) keeps the selection
+    // and makes no move.
+    @Test
+    public void offBoardClickKeepsTheSelection() {
+        BoardClickHandler handler = new BoardClickHandler(gameWithPawns(Color.WHITE));
+        handler.click(E2);
+
+        handler.click(null);
+
+        assertEquals(E2, handler.getSelected());
+    }
+
     // A replayed mock with no expectations fails on any call, so these tests
     // also check that mapping a pixel never touches the game.
     private BoardClickHandler handlerWithIdleGame() {

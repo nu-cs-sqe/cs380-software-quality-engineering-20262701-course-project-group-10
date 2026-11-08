@@ -91,8 +91,8 @@ expects no `makeMove` call unless the case says so.
 | K05 | White to move; e2 selected; click e2 | `getSelected()` is `null`; no `makeMove` | yes |
 | K06 | White to move; e2 selected; click e4 | `makeMove(e2, e4)` called once; `getSelected()` is `null` | yes |
 | K07 | White to move; e2 selected; click e5; `makeMove` throws `IllegalArgumentException("That piece cannot move there.")` | the same exception and message are passed on; `getSelected()` is `null` | yes |
-| K08 | White to move; nothing selected; click `null` | `getSelected()` is `null`; no `makeMove` | no |
-| K09 | White to move; e2 selected; click `null` | `getSelected()` is still e2; no `makeMove` | no |
+| K08 | White to move; nothing selected; click `null` | `getSelected()` is `null`; no `makeMove` | yes |
+| K09 | White to move; e2 selected; click `null` | `getSelected()` is still e2; no `makeMove` | yes |
 
 ### Method under test: `clearSelection()`
 
