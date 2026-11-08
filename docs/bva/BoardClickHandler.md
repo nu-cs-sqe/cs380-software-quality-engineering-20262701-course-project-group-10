@@ -99,4 +99,4 @@ expects no `makeMove` call unless the case says so.
 | ID | State of the system | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | S01 | e2 selected; `clearSelection()` | `getSelected()` is `null` | yes |
-| S02 | nothing selected; `clearSelection()` | `getSelected()` is `null` | no |
+| S02 | nothing selected; `clearSelection()` | `getSelected()` is `null` | yes |

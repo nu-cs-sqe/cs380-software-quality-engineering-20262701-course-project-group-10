@@ -248,6 +248,16 @@ public class BoardClickHandlerTests {
         assertNull(handler.getSelected());
     }
 
+    // S02: clearing when nothing is selected is harmless.
+    @Test
+    public void clearSelectionWithNothingSelectedIsHarmless() {
+        BoardClickHandler handler = handlerWithIdleGame();
+
+        handler.clearSelection();
+
+        assertNull(handler.getSelected());
+    }
+
     // A replayed mock with no expectations fails on any call, so these tests
     // also check that mapping a pixel never touches the game.
     private BoardClickHandler handlerWithIdleGame() {
