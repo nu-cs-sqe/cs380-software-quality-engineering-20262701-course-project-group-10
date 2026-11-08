@@ -215,6 +215,16 @@ public class BoardClickHandlerTests {
         EasyMock.verify(game);
     }
 
+    // K08: nothing selected; an off-board click (null) changes nothing.
+    @Test
+    public void offBoardClickWithNothingSelectedIsIgnored() {
+        BoardClickHandler handler = new BoardClickHandler(gameWithPawns(Color.WHITE));
+
+        handler.click(null);
+
+        assertNull(handler.getSelected());
+    }
+
     // A replayed mock with no expectations fails on any call, so these tests
     // also check that mapping a pixel never touches the game.
     private BoardClickHandler handlerWithIdleGame() {
