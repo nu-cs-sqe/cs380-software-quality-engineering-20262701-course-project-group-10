@@ -85,8 +85,8 @@ expects no `makeMove` call unless the case says so.
 | ID | State of the system | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | K01 | White to move; nothing selected; click e2 (White pawn) | `getSelected()` is e2; no `makeMove` | yes |
-| K02 | White to move; nothing selected; click e4 (empty) | `getSelected()` is `null`; no `makeMove` | no |
-| K03 | White to move; nothing selected; click e7 (Black pawn) | `getSelected()` is `null`; no `makeMove` | no |
+| K02 | White to move; nothing selected; click e4 (empty) | `getSelected()` is `null`; no `makeMove` | yes |
+| K03 | White to move; nothing selected; click e7 (Black pawn) | `getSelected()` is `null`; no `makeMove` | yes |
 | K04 | Black to move; nothing selected; click e7 (Black pawn) | `getSelected()` is e7; no `makeMove` | no |
 | K05 | White to move; e2 selected; click e2 | `getSelected()` is `null`; no `makeMove` | no |
 | K06 | White to move; e2 selected; click e4 | `makeMove(e2, e4)` called once; `getSelected()` is `null` | no |

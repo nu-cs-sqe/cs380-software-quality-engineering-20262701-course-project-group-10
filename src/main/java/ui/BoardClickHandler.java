@@ -1,5 +1,6 @@
 package ui;
 
+import domain.Board;
 import domain.Game;
 import domain.Position;
 
@@ -31,9 +32,15 @@ public class BoardClickHandler {
     }
 
     public void click(Position position) {
-        if (game.getBoard().isEmpty(position)) {
+        if (!isCurrentPlayersPiece(position)) {
             return;
         }
         selected = position;
+    }
+
+    private boolean isCurrentPlayersPiece(Position position) {
+        Board board = game.getBoard();
+        return !board.isEmpty(position)
+                && board.getPiece(position).getColor() == game.getCurrentPlayer();
     }
 }
