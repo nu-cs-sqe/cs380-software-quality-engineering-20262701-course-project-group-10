@@ -10,6 +10,7 @@ import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BoardClickHandlerTests {
@@ -31,6 +32,7 @@ public class BoardClickHandlerTests {
     private static final int RANK_1 = 0;
     private static final int RANK_2 = 1;
     private static final int RANK_4 = 3;
+    private static final int RANK_5 = 4;
     private static final int RANK_7 = 6;
     private static final int RANK_8 = 7;
 
@@ -39,6 +41,7 @@ public class BoardClickHandlerTests {
     private static final Position H1 = new Position(FILE_H, RANK_1);
     private static final Position E2 = new Position(FILE_E, RANK_2);
     private static final Position E4 = new Position(FILE_E, RANK_4);
+    private static final Position E5 = new Position(FILE_E, RANK_5);
     private static final Position E7 = new Position(FILE_E, RANK_7);
 
     // H01: nothing is selected after construction.
@@ -187,6 +190,27 @@ public class BoardClickHandlerTests {
 
         handler.click(E4);
 
+        assertNull(handler.getSelected());
+        EasyMock.verify(game);
+    }
+
+    // K07: an illegal move passes the game's exception on unchanged and still
+    // clears the selection (flow 4a).
+    @Test
+    public void illegalMovePassesErrorOnAndDeselects() {
+        IllegalArgumentException illegalMove =
+                new IllegalArgumentException("That piece cannot move there.");
+        Game game = recordGameWithPawns(Color.WHITE);
+        game.makeMove(E2, E5);
+        EasyMock.expectLastCall().andThrow(illegalMove).once();
+        EasyMock.replay(game);
+        BoardClickHandler handler = new BoardClickHandler(game);
+        handler.click(E2);
+
+        IllegalArgumentException thrown =
+                assertThrows(IllegalArgumentException.class, () -> handler.click(E5));
+
+        assertSame(illegalMove, thrown);
         assertNull(handler.getSelected());
         EasyMock.verify(game);
     }
