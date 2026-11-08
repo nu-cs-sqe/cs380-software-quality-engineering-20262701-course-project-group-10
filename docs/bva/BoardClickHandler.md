@@ -62,7 +62,7 @@ expects no `makeMove` call unless the case says so.
 
 | ID | State of the system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| H01 | `new BoardClickHandler(mockGame)` | `getSelected()` is `null` | no |
+| H01 | `new BoardClickHandler(mockGame)` | `getSelected()` is `null` | yes |
 | H02 | `new BoardClickHandler(null)` | `NullPointerException` | no |
 
 ### Method under test: `toPosition(int, int, int)`
