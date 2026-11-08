@@ -17,6 +17,7 @@ import java.awt.RenderingHints;
 public class BoardPanel extends JPanel {
     private static final int SIZE = 8;
     private static final int DEFAULT_SQUARE_SIZE = 64;
+    private static final double PIECE_TO_SQUARE_RATIO = 0.75;
     private static final java.awt.Color LIGHT_SQUARE = new java.awt.Color(240, 217, 181);
     private static final java.awt.Color DARK_SQUARE = new java.awt.Color(181, 136, 99);
 
@@ -36,7 +37,7 @@ public class BoardPanel extends JPanel {
 
         int square = Math.min(getWidth(), getHeight()) / SIZE;
         // Segoe UI Symbol has the chess glyphs on Windows; Java falls back to Dialog elsewhere.
-        g2.setFont(new Font("Segoe UI Symbol", Font.PLAIN, square * 3 / 4));
+        g2.setFont(new Font("Segoe UI Symbol", Font.PLAIN, (int) (square * PIECE_TO_SQUARE_RATIO)));
 
         for (int rank = 0; rank < SIZE; rank++) {
             for (int file = 0; file < SIZE; file++) {
