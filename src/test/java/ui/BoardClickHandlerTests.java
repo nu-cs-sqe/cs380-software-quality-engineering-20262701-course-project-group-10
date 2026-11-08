@@ -163,6 +163,17 @@ public class BoardClickHandlerTests {
         assertEquals(E7, handler.getSelected());
     }
 
+    // K05: clicking the selected square again clears the selection (flow 3a).
+    @Test
+    public void clickingSelectedSquareAgainDeselectsIt() {
+        BoardClickHandler handler = new BoardClickHandler(gameWithPawns(Color.WHITE));
+        handler.click(E2);
+
+        handler.click(E2);
+
+        assertNull(handler.getSelected());
+    }
+
     // A replayed mock with no expectations fails on any call, so these tests
     // also check that mapping a pixel never touches the game.
     private BoardClickHandler handlerWithIdleGame() {
