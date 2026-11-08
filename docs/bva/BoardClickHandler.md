@@ -74,7 +74,7 @@ expects no `makeMove` call unless the case says so.
 | C03 | `x = 64, y = 64, squareSize = 64` | b7 (file 1, rank 6) | yes |
 | C04 | `x = 511, y = 511, squareSize = 64` | h1 (file 7, rank 0) | yes |
 | C05 | `x = 512, y = 0, squareSize = 64` | `null` | yes |
-| C06 | `x = 0, y = 512, squareSize = 64` | `null` | no |
+| C06 | `x = 0, y = 512, squareSize = 64` | `null` | yes |
 | C07 | `x = -1, y = 0, squareSize = 64` | `null` | no |
 | C08 | `x = 0, y = -1, squareSize = 64` | `null` | no |
 | C09 | `x = 0, y = 0, squareSize = 0` | `null` | no |
