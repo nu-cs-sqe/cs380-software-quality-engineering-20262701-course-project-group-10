@@ -29,4 +29,8 @@ public class BoardClickHandler {
         int rank = BOARD_SIZE - 1 - y / squareSize;
         return new Position(file, rank);
     }
+
+    public void click(Position position) {
+        selected = position;
+    }
 }
