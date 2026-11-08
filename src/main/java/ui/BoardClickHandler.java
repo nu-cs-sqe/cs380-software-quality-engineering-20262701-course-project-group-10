@@ -20,6 +20,10 @@ public class BoardClickHandler {
     }
 
     public Position toPosition(int x, int y, int squareSize) {
+        int boardPixels = BOARD_SIZE * squareSize;
+        if (x >= boardPixels) {
+            return null;
+        }
         int file = x / squareSize;
         // Rank 8 is drawn on the top row, so screen rows run opposite to ranks.
         int rank = BOARD_SIZE - 1 - y / squareSize;
