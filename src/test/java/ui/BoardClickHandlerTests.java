@@ -174,6 +174,23 @@ public class BoardClickHandlerTests {
         assertNull(handler.getSelected());
     }
 
+    // K06: a square selected; clicking another square makes the move once
+    // and clears the selection.
+    @Test
+    public void clickingDestinationMakesTheMove() {
+        Game game = recordGameWithPawns(Color.WHITE);
+        game.makeMove(E2, E4);
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(game);
+        BoardClickHandler handler = new BoardClickHandler(game);
+        handler.click(E2);
+
+        handler.click(E4);
+
+        assertNull(handler.getSelected());
+        EasyMock.verify(game);
+    }
+
     // A replayed mock with no expectations fails on any call, so these tests
     // also check that mapping a pixel never touches the game.
     private BoardClickHandler handlerWithIdleGame() {
@@ -183,8 +200,16 @@ public class BoardClickHandlerTests {
     }
 
     // A White pawn on e2 and a Black pawn on e7. Only reads are expected, so any
-    // makeMove call fails the test unless a case records it.
+    // makeMove call fails the test.
     private Game gameWithPawns(Color currentPlayer) {
+        Game game = recordGameWithPawns(currentPlayer);
+        EasyMock.replay(game);
+        return game;
+    }
+
+    // Same game, still recording, so a case can add a makeMove expectation
+    // before calling replay.
+    private Game recordGameWithPawns(Color currentPlayer) {
         Board board = new Board();
         board.placePiece(new Piece(PieceType.PAWN, Color.WHITE), E2);
         board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), E7);
@@ -192,7 +217,6 @@ public class BoardClickHandlerTests {
         Game game = EasyMock.createMock(Game.class);
         EasyMock.expect(game.getBoard()).andReturn(board).anyTimes();
         EasyMock.expect(game.getCurrentPlayer()).andReturn(currentPlayer).anyTimes();
-        EasyMock.replay(game);
         return game;
     }
 }

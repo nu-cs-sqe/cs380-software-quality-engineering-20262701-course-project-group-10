@@ -17,6 +17,12 @@ public class Game {
         currentPlayer = Color.WHITE;
     }
 
+    // Stub so the click-to-move GUI compiles. The real version, with turn rules
+    // and IllegalArgumentException for illegal moves, comes from the make-move task.
+    public void makeMove(Position from, Position to) {
+        throw new UnsupportedOperationException("makeMove is not implemented yet");
+    }
+
     public Board getBoard() {
         return board;
     }
