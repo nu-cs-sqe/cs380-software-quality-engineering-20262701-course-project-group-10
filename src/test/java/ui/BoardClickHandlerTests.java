@@ -15,6 +15,7 @@ public class BoardClickHandlerTests {
     private static final int FIRST_PIXEL_OF_SECOND_SQUARE = SQUARE_SIZE;
     private static final int BOARD_PIXELS = BOARD_SIZE * SQUARE_SIZE;
     private static final int LAST_BOARD_PIXEL = BOARD_PIXELS - 1;
+    private static final int PIXEL_BEFORE_BOARD = -1;
 
     private static final int FILE_A = 0;
     private static final int FILE_B = 1;
@@ -82,6 +83,12 @@ public class BoardClickHandlerTests {
     @Test
     public void pixelPastBottomEdgeIsOffBoard() {
         assertNull(handlerWithIdleGame().toPosition(0, BOARD_PIXELS, SQUARE_SIZE));
+    }
+
+    // C07: one pixel before the left edge of the board.
+    @Test
+    public void pixelBeforeLeftEdgeIsOffBoard() {
+        assertNull(handlerWithIdleGame().toPosition(PIXEL_BEFORE_BOARD, 0, SQUARE_SIZE));
     }
 
     // A replayed mock with no expectations fails on any call, so these tests
