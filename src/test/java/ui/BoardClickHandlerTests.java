@@ -51,6 +51,12 @@ public class BoardClickHandlerTests {
         assertEquals(new Position(7, 0), handlerWithIdleGame().toPosition(511, 511, 64));
     }
 
+    // C05: one pixel past the right edge of the board.
+    @Test
+    public void pixelPastRightEdgeIsOffBoard() {
+        assertNull(handlerWithIdleGame().toPosition(512, 0, 64));
+    }
+
     // A replayed mock with no expectations fails on any call, so these tests
     // also check that mapping a pixel never touches the game.
     private BoardClickHandler handlerWithIdleGame() {
