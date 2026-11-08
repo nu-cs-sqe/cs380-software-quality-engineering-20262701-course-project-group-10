@@ -37,8 +37,10 @@ public class BoardClickHandler {
             return;
         }
         if (selected != null) {
-            game.makeMove(selected, position);
+            // Clear first so an illegal move, which throws, still leaves nothing selected.
+            Position from = selected;
             selected = null;
+            game.makeMove(from, position);
             return;
         }
         if (!isCurrentPlayersPiece(position)) {
