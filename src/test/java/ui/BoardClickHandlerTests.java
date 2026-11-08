@@ -16,6 +16,9 @@ public class BoardClickHandlerTests {
     private static final int BOARD_PIXELS = BOARD_SIZE * SQUARE_SIZE;
     private static final int LAST_BOARD_PIXEL = BOARD_PIXELS - 1;
     private static final int PIXEL_BEFORE_BOARD = -1;
+    private static final int NO_BOARD_SQUARE_SIZE = 0;
+    private static final int SMALLEST_SQUARE_SIZE = 1;
+    private static final int LAST_PIXEL_OF_SMALLEST_BOARD = BOARD_SIZE * SMALLEST_SQUARE_SIZE - 1;
 
     private static final int FILE_A = 0;
     private static final int FILE_B = 1;
@@ -95,6 +98,19 @@ public class BoardClickHandlerTests {
     @Test
     public void pixelAboveTopEdgeIsOffBoard() {
         assertNull(handlerWithIdleGame().toPosition(0, PIXEL_BEFORE_BOARD, SQUARE_SIZE));
+    }
+
+    // C09: zero square size; the panel is too small to draw a board.
+    @Test
+    public void zeroSquareSizeHasNoBoard() {
+        assertNull(handlerWithIdleGame().toPosition(0, 0, NO_BOARD_SQUARE_SIZE));
+    }
+
+    // C10: smallest drawable board; its last pixel is still h1.
+    @Test
+    public void lastPixelOfSmallestBoardIsH1() {
+        assertEquals(H1, handlerWithIdleGame().toPosition(
+                LAST_PIXEL_OF_SMALLEST_BOARD, LAST_PIXEL_OF_SMALLEST_BOARD, SMALLEST_SQUARE_SIZE));
     }
 
     // A replayed mock with no expectations fails on any call, so these tests
