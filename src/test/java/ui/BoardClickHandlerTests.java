@@ -237,6 +237,17 @@ public class BoardClickHandlerTests {
         assertEquals(E2, handler.getSelected());
     }
 
+    // S01: clearing an existing selection leaves nothing selected.
+    @Test
+    public void clearSelectionRemovesTheSelection() {
+        BoardClickHandler handler = new BoardClickHandler(gameWithPawns(Color.WHITE));
+        handler.click(E2);
+
+        handler.clearSelection();
+
+        assertNull(handler.getSelected());
+    }
+
     // A replayed mock with no expectations fails on any call, so these tests
     // also check that mapping a pixel never touches the game.
     private BoardClickHandler handlerWithIdleGame() {
