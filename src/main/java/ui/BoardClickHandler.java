@@ -21,7 +21,7 @@ public class BoardClickHandler {
 
     public Position toPosition(int x, int y, int squareSize) {
         int boardPixels = BOARD_SIZE * squareSize;
-        if (x >= boardPixels || y >= boardPixels) {
+        if (x < 0 || x >= boardPixels || y >= boardPixels) {
             return null;
         }
         int file = x / squareSize;
