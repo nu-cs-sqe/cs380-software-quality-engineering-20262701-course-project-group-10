@@ -30,6 +30,7 @@ public class BoardClickHandlerTests {
     private static final int FILE_H = 7;
     private static final int RANK_1 = 0;
     private static final int RANK_2 = 1;
+    private static final int RANK_4 = 3;
     private static final int RANK_7 = 6;
     private static final int RANK_8 = 7;
 
@@ -37,6 +38,7 @@ public class BoardClickHandlerTests {
     private static final Position B7 = new Position(FILE_B, RANK_7);
     private static final Position H1 = new Position(FILE_H, RANK_1);
     private static final Position E2 = new Position(FILE_E, RANK_2);
+    private static final Position E4 = new Position(FILE_E, RANK_4);
     private static final Position E7 = new Position(FILE_E, RANK_7);
 
     // H01: nothing is selected after construction.
@@ -129,6 +131,16 @@ public class BoardClickHandlerTests {
         handler.click(E2);
 
         assertEquals(E2, handler.getSelected());
+    }
+
+    // K02: nothing selected; clicking an empty square selects nothing (flow 1a).
+    @Test
+    public void clickingEmptySquareSelectsNothing() {
+        BoardClickHandler handler = new BoardClickHandler(gameWithPawns(Color.WHITE));
+
+        handler.click(E4);
+
+        assertNull(handler.getSelected());
     }
 
     // A replayed mock with no expectations fails on any call, so these tests
