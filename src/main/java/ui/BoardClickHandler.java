@@ -32,6 +32,10 @@ public class BoardClickHandler {
     }
 
     public void click(Position position) {
+        if (position.equals(selected)) {
+            selected = null;
+            return;
+        }
         if (!isCurrentPlayersPiece(position)) {
             return;
         }
