@@ -20,6 +20,10 @@ public class BoardClickHandler {
         return selected;
     }
 
+    public void clearSelection() {
+        selected = null;
+    }
+
     public Position toPosition(int x, int y, int squareSize) {
         int boardPixels = BOARD_SIZE * squareSize;
         if (x < 0 || y < 0 || x >= boardPixels || y >= boardPixels) {
