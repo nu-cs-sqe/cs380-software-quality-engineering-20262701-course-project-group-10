@@ -87,7 +87,7 @@ expects no `makeMove` call unless the case says so.
 | K01 | White to move; nothing selected; click e2 (White pawn) | `getSelected()` is e2; no `makeMove` | yes |
 | K02 | White to move; nothing selected; click e4 (empty) | `getSelected()` is `null`; no `makeMove` | yes |
 | K03 | White to move; nothing selected; click e7 (Black pawn) | `getSelected()` is `null`; no `makeMove` | yes |
-| K04 | Black to move; nothing selected; click e7 (Black pawn) | `getSelected()` is e7; no `makeMove` | no |
+| K04 | Black to move; nothing selected; click e7 (Black pawn) | `getSelected()` is e7; no `makeMove` | yes |
 | K05 | White to move; e2 selected; click e2 | `getSelected()` is `null`; no `makeMove` | no |
 | K06 | White to move; e2 selected; click e4 | `makeMove(e2, e4)` called once; `getSelected()` is `null` | no |
 | K07 | White to move; e2 selected; click e5; `makeMove` throws `IllegalArgumentException("That piece cannot move there.")` | the same exception and message are passed on; `getSelected()` is `null` | no |

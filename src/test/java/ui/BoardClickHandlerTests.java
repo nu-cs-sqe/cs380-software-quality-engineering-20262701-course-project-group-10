@@ -153,6 +153,16 @@ public class BoardClickHandlerTests {
         assertNull(handler.getSelected());
     }
 
+    // K04: Black to move; clicking a Black piece selects it.
+    @Test
+    public void blackCanSelectOwnPieceOnBlacksTurn() {
+        BoardClickHandler handler = new BoardClickHandler(gameWithPawns(Color.BLACK));
+
+        handler.click(E7);
+
+        assertEquals(E7, handler.getSelected());
+    }
+
     // A replayed mock with no expectations fails on any call, so these tests
     // also check that mapping a pixel never touches the game.
     private BoardClickHandler handlerWithIdleGame() {
