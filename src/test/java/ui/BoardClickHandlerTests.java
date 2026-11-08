@@ -143,6 +143,16 @@ public class BoardClickHandlerTests {
         assertNull(handler.getSelected());
     }
 
+    // K03: nothing selected; clicking an opponent's piece selects nothing (flow 1a).
+    @Test
+    public void clickingOpponentPieceSelectsNothing() {
+        BoardClickHandler handler = new BoardClickHandler(gameWithPawns(Color.WHITE));
+
+        handler.click(E7);
+
+        assertNull(handler.getSelected());
+    }
+
     // A replayed mock with no expectations fails on any call, so these tests
     // also check that mapping a pixel never touches the game.
     private BoardClickHandler handlerWithIdleGame() {
