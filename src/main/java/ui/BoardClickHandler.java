@@ -41,20 +41,25 @@ public class BoardClickHandler {
             return;
         }
         if (position.equals(selected)) {
-            selected = null;
-            return;
+            clearSelection();
+        } else if (selected != null) {
+            moveSelectedTo(position);
+        } else {
+            selectIfOwnPiece(position);
         }
-        if (selected != null) {
-            // Clear first so an illegal move, which throws, still leaves nothing selected.
-            Position from = selected;
-            selected = null;
-            game.makeMove(from, position);
-            return;
+    }
+
+    private void moveSelectedTo(Position to) {
+        // Clear first so an illegal move, which throws, still leaves nothing selected.
+        Position from = selected;
+        clearSelection();
+        game.makeMove(from, to);
+    }
+
+    private void selectIfOwnPiece(Position position) {
+        if (isCurrentPlayersPiece(position)) {
+            selected = position;
         }
-        if (!isCurrentPlayersPiece(position)) {
-            return;
-        }
-        selected = position;
     }
 
     private boolean isCurrentPlayersPiece(Position position) {
