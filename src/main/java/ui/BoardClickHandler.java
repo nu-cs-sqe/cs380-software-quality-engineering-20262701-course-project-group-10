@@ -36,6 +36,11 @@ public class BoardClickHandler {
             selected = null;
             return;
         }
+        if (selected != null) {
+            game.makeMove(selected, position);
+            selected = null;
+            return;
+        }
         if (!isCurrentPlayersPiece(position)) {
             return;
         }
