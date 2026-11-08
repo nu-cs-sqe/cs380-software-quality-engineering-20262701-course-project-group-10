@@ -91,6 +91,12 @@ public class BoardClickHandlerTests {
         assertNull(handlerWithIdleGame().toPosition(PIXEL_BEFORE_BOARD, 0, SQUARE_SIZE));
     }
 
+    // C08: one pixel above the top edge of the board.
+    @Test
+    public void pixelAboveTopEdgeIsOffBoard() {
+        assertNull(handlerWithIdleGame().toPosition(0, PIXEL_BEFORE_BOARD, SQUARE_SIZE));
+    }
+
     // A replayed mock with no expectations fails on any call, so these tests
     // also check that mapping a pixel never touches the game.
     private BoardClickHandler handlerWithIdleGame() {
