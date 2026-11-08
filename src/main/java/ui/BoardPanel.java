@@ -2,6 +2,7 @@ package ui;
 
 import domain.Board;
 import domain.Color;
+import domain.Game;
 import domain.Piece;
 import domain.Position;
 
@@ -12,20 +13,56 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.function.Consumer;
 
-/** Draws the 8x8 board and its pieces by reading the Board. White is at the bottom. */
+/** Draws the board and turns mouse clicks into moves. White is at the bottom. */
 public class BoardPanel extends JPanel {
     private static final int SIZE = 8;
     private static final int DEFAULT_SQUARE_SIZE = 64;
     private static final double PIECE_TO_SQUARE_RATIO = 0.75;
     private static final java.awt.Color LIGHT_SQUARE = new java.awt.Color(240, 217, 181);
     private static final java.awt.Color DARK_SQUARE = new java.awt.Color(181, 136, 99);
+    private static final java.awt.Color SELECTED_SQUARE = new java.awt.Color(246, 246, 105, 180);
 
-    private final Board board;
+    private final Game game;
+    private final BoardClickHandler clickHandler;
+    private final Runnable onBoardChanged;
+    private final Consumer<String> onIllegalMove;
 
-    public BoardPanel(Board board) {
-        this.board = board;
+    public BoardPanel(Game game, Runnable onBoardChanged, Consumer<String> onIllegalMove) {
+        this.game = game;
+        this.clickHandler = new BoardClickHandler(game);
+        this.onBoardChanged = onBoardChanged;
+        this.onIllegalMove = onIllegalMove;
         setPreferredSize(new Dimension(SIZE * DEFAULT_SQUARE_SIZE, SIZE * DEFAULT_SQUARE_SIZE));
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent event) {
+                handleClick(event.getX(), event.getY());
+            }
+        });
+    }
+
+    public void clearSelection() {
+        clickHandler.clearSelection();
+        repaint();
+    }
+
+    private void handleClick(int x, int y) {
+        try {
+            clickHandler.click(clickHandler.toPosition(x, y, squareSize()));
+            onBoardChanged.run();
+        } catch (IllegalArgumentException illegalMove) {
+            onIllegalMove.accept(illegalMove.getMessage());
+        } finally {
+            repaint();
+        }
+    }
+
+    private int squareSize() {
+        return Math.min(getWidth(), getHeight()) / SIZE;
     }
 
     @Override
@@ -35,12 +72,14 @@ public class BoardPanel extends JPanel {
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        int square = Math.min(getWidth(), getHeight()) / SIZE;
+        int square = squareSize();
         // Segoe UI Symbol has the chess glyphs on Windows; Java falls back to Dialog elsewhere.
         g2.setFont(new Font("Segoe UI Symbol", Font.PLAIN, (int) (square * PIECE_TO_SQUARE_RATIO)));
 
+        Board board = game.getBoard();
         for (int rank = 0; rank < SIZE; rank++) {
             for (int file = 0; file < SIZE; file++) {
+                Position position = new Position(file, rank);
                 // Rank 8 is drawn on the top row, so screen rows run opposite to ranks.
                 int x = file * square;
                 int y = (SIZE - 1 - rank) * square;
@@ -49,7 +88,12 @@ public class BoardPanel extends JPanel {
                 g2.setColor((file + rank) % 2 == 0 ? DARK_SQUARE : LIGHT_SQUARE);
                 g2.fillRect(x, y, square, square);
 
-                Piece piece = board.getPiece(new Position(file, rank));
+                if (position.equals(clickHandler.getSelected())) {
+                    g2.setColor(SELECTED_SQUARE);
+                    g2.fillRect(x, y, square, square);
+                }
+
+                Piece piece = board.getPiece(position);
                 if (piece != null) {
                     drawPiece(g2, piece, x, y, square);
                 }
