@@ -32,6 +32,10 @@ public class BoardClickHandler {
     }
 
     public void click(Position position) {
+        // toPosition returns null for clicks off the board.
+        if (position == null) {
+            return;
+        }
         if (position.equals(selected)) {
             selected = null;
             return;
