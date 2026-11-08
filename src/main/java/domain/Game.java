@@ -3,7 +3,7 @@ package domain;
 import java.util.Objects;
 
 /** A chess game: owns the board and tracks whose turn it is. */
-public final class Game {
+public class Game {
     private final Board board;
     private Color currentPlayer;
 
