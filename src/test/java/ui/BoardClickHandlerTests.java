@@ -1,6 +1,10 @@
 package ui;
 
+import domain.Board;
+import domain.Color;
 import domain.Game;
+import domain.Piece;
+import domain.PieceType;
 import domain.Position;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
@@ -22,14 +26,18 @@ public class BoardClickHandlerTests {
 
     private static final int FILE_A = 0;
     private static final int FILE_B = 1;
+    private static final int FILE_E = 4;
     private static final int FILE_H = 7;
     private static final int RANK_1 = 0;
+    private static final int RANK_2 = 1;
     private static final int RANK_7 = 6;
     private static final int RANK_8 = 7;
 
     private static final Position A8 = new Position(FILE_A, RANK_8);
     private static final Position B7 = new Position(FILE_B, RANK_7);
     private static final Position H1 = new Position(FILE_H, RANK_1);
+    private static final Position E2 = new Position(FILE_E, RANK_2);
+    private static final Position E7 = new Position(FILE_E, RANK_7);
 
     // H01: nothing is selected after construction.
     @Test
@@ -113,11 +121,35 @@ public class BoardClickHandlerTests {
                 LAST_PIXEL_OF_SMALLEST_BOARD, LAST_PIXEL_OF_SMALLEST_BOARD, SMALLEST_SQUARE_SIZE));
     }
 
+    // K01: nothing selected; clicking a current-player piece selects it.
+    @Test
+    public void clickingOwnPieceSelectsIt() {
+        BoardClickHandler handler = new BoardClickHandler(gameWithPawns(Color.WHITE));
+
+        handler.click(E2);
+
+        assertEquals(E2, handler.getSelected());
+    }
+
     // A replayed mock with no expectations fails on any call, so these tests
     // also check that mapping a pixel never touches the game.
     private BoardClickHandler handlerWithIdleGame() {
         Game game = EasyMock.createMock(Game.class);
         EasyMock.replay(game);
         return new BoardClickHandler(game);
+    }
+
+    // A White pawn on e2 and a Black pawn on e7. Only reads are expected, so any
+    // makeMove call fails the test unless a case records it.
+    private Game gameWithPawns(Color currentPlayer) {
+        Board board = new Board();
+        board.placePiece(new Piece(PieceType.PAWN, Color.WHITE), E2);
+        board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), E7);
+
+        Game game = EasyMock.createMock(Game.class);
+        EasyMock.expect(game.getBoard()).andReturn(board).anyTimes();
+        EasyMock.expect(game.getCurrentPlayer()).andReturn(currentPlayer).anyTimes();
+        EasyMock.replay(game);
+        return game;
     }
 }
