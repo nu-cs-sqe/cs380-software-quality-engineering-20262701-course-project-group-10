@@ -70,9 +70,9 @@ expects no `makeMove` call unless the case says so.
 | ID | State of the system | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | C01 | `x = 0, y = 0, squareSize = 64` | a8 (file 0, rank 7) | yes |
-| C02 | `x = 63, y = 63, squareSize = 64` | a8 (file 0, rank 7) | no |
-| C03 | `x = 64, y = 64, squareSize = 64` | b7 (file 1, rank 6) | no |
-| C04 | `x = 511, y = 511, squareSize = 64` | h1 (file 7, rank 0) | no |
+| C02 | `x = 63, y = 63, squareSize = 64` | a8 (file 0, rank 7) | yes |
+| C03 | `x = 64, y = 64, squareSize = 64` | b7 (file 1, rank 6) | yes |
+| C04 | `x = 511, y = 511, squareSize = 64` | h1 (file 7, rank 0) | yes |
 | C05 | `x = 512, y = 0, squareSize = 64` | `null` | no |
 | C06 | `x = 0, y = 512, squareSize = 64` | `null` | no |
 | C07 | `x = -1, y = 0, squareSize = 64` | `null` | no |
