@@ -57,6 +57,12 @@ public class BoardClickHandlerTests {
         assertNull(handlerWithIdleGame().toPosition(512, 0, 64));
     }
 
+    // C06: one pixel past the bottom edge of the board.
+    @Test
+    public void pixelPastBottomEdgeIsOffBoard() {
+        assertNull(handlerWithIdleGame().toPosition(0, 512, 64));
+    }
+
     // A replayed mock with no expectations fails on any call, so these tests
     // also check that mapping a pixel never touches the game.
     private BoardClickHandler handlerWithIdleGame() {
