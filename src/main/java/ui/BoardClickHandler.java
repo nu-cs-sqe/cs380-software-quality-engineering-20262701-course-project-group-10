@@ -31,6 +31,9 @@ public class BoardClickHandler {
     }
 
     public void click(Position position) {
+        if (game.getBoard().isEmpty(position)) {
+            return;
+        }
         selected = position;
     }
 }
