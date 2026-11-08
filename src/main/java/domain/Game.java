@@ -20,7 +20,7 @@ public class Game {
     // Stub so the click-to-move GUI compiles. The real version, with turn rules
     // and IllegalArgumentException for illegal moves, comes from the make-move task.
     public void makeMove(Position from, Position to) {
-        throw new UnsupportedOperationException("makeMove is not implemented yet");
+        throw new IllegalArgumentException("Moves are not available yet.");
     }
 
     public Board getBoard() {
