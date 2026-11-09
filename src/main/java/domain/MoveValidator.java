@@ -61,6 +61,7 @@ public class MoveValidator {
 		int startRank = piece.getColor() == Color.WHITE
 				? WHITE_PAWN_START : BLACK_PAWN_START;
 		return forward == DOUBLE_STEP && from.getRank() == startRank
-				&& board.isEmpty(new Position(from.getFile(), from.getRank() + direction));
+				&& board.isEmpty(new Position(from.getFile(),
+						from.getRank() + direction));
 	}
 }
