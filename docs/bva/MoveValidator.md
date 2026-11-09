@@ -246,7 +246,7 @@ same piece references. IDs appear in test method names for direct traceability.
 
 | ID | State of system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| V01 | null board; from (3,3), to (3,4) | NullPointerException | no |
+| V01 | null board; from (3,3), to (3,4) | NullPointerException | yes |
 | V02 | real board; null from, to (3,4) | NullPointerException | no |
 | V03 | real board; from (3,3), null to | NullPointerException | no |
 | V04 | all three arguments null | NullPointerException | no |
