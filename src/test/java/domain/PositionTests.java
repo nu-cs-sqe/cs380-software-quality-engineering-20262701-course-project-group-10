@@ -76,12 +76,14 @@ public class PositionTests {
 
 	@Test
 	public void PB03_rejectsMinimumIntegerFile() {
-		assertThrows(IllegalArgumentException.class, () -> new Position(Integer.MIN_VALUE, 3));
+		assertThrows(IllegalArgumentException.class, () -> new Position(Integer.MIN_VALUE,
+				3));
 	}
 
 	@Test
 	public void PB04_rejectsMaximumIntegerFile() {
-		assertThrows(IllegalArgumentException.class, () -> new Position(Integer.MAX_VALUE, 3));
+		assertThrows(IllegalArgumentException.class, () -> new Position(Integer.MAX_VALUE,
+				3));
 	}
 
 	@Test
@@ -96,12 +98,14 @@ public class PositionTests {
 
 	@Test
 	public void PB07_rejectsMinimumIntegerRank() {
-		assertThrows(IllegalArgumentException.class, () -> new Position(3, Integer.MIN_VALUE));
+		assertThrows(IllegalArgumentException.class, () -> new Position(3,
+				Integer.MIN_VALUE));
 	}
 
 	@Test
 	public void PB08_rejectsMaximumIntegerRank() {
-		assertThrows(IllegalArgumentException.class, () -> new Position(3, Integer.MAX_VALUE));
+		assertThrows(IllegalArgumentException.class, () -> new Position(3,
+				Integer.MAX_VALUE));
 	}
 
 	@Test
