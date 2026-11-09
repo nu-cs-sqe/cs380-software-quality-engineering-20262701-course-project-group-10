@@ -29,7 +29,7 @@ public class MoveValidator {
 				return fileChange == SINGLE_STEP && rankChange == DOUBLE_STEP
 						|| fileChange == DOUBLE_STEP && rankChange == SINGLE_STEP;
 			case KING:
-				return false;
+				return fileChange <= SINGLE_STEP && rankChange <= SINGLE_STEP;
 			default:
 				// Sliding-piece rules are supplied by the separate task.
 				return false;

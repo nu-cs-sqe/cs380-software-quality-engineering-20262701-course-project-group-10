@@ -202,14 +202,14 @@ same piece references. IDs appear in test method names for direct traceability.
 
 | ID | State of system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| K01 | WHITE KING at (3, 3); to (3, 4) | `true`; board unchanged | no |
-| K02 | WHITE KING at (3, 3); to (4, 3) | `true`; board unchanged | no |
-| K03 | WHITE KING at (3, 3); to (4, 4) | `true`; board unchanged | no |
-| K04 | WHITE KING at (3, 3); to (2, 3) | `true`; board unchanged | no |
-| K05 | WHITE KING at (3, 3); to (3, 2) | `true`; board unchanged | no |
-| K06 | WHITE KING at (3, 3); to (2, 2) | `true`; board unchanged | no |
-| K07 | WHITE KING at (3, 3); to (2, 4) | `true`; board unchanged | no |
-| K08 | WHITE KING at (3, 3); to (4, 2) | `true`; board unchanged | no |
+| K01 | WHITE KING at (3, 3); to (3, 4) | `true`; board unchanged | yes |
+| K02 | WHITE KING at (3, 3); to (4, 3) | `true`; board unchanged | yes |
+| K03 | WHITE KING at (3, 3); to (4, 4) | `true`; board unchanged | yes |
+| K04 | WHITE KING at (3, 3); to (2, 3) | `true`; board unchanged | yes |
+| K05 | WHITE KING at (3, 3); to (3, 2) | `true`; board unchanged | yes |
+| K06 | WHITE KING at (3, 3); to (2, 2) | `true`; board unchanged | yes |
+| K07 | WHITE KING at (3, 3); to (2, 4) | `true`; board unchanged | yes |
+| K08 | WHITE KING at (3, 3); to (4, 2) | `true`; board unchanged | yes |
 
 ### king bounds
 
