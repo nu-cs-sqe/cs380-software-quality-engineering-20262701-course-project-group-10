@@ -84,8 +84,8 @@ same piece references. IDs appear in test method names for direct traceability.
 
 | ID | State of system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| P12 | WHITE PAWN at (3, 1); to (3, 3) | `true`; board unchanged | no |
-| P13 | BLACK PAWN at (3, 6); to (3, 4) | `true`; board unchanged | no |
+| P12 | WHITE PAWN at (3, 1); to (3, 3) | `true`; board unchanged | yes |
+| P13 | BLACK PAWN at (3, 6); to (3, 4) | `true`; board unchanged | yes |
 
 ### pawn start
 
