@@ -16,14 +16,20 @@ public class MoveValidatorTests {
 
 	@Test
 	public void V02NullSourceIsRejected() {
+		MoveValidator validator = new MoveValidator();
+		Board board = new Board();
+		Position to = new Position(3, 4);
 		assertThrows(NullPointerException.class,
-				() -> new MoveValidator().isLegalMove(new Board(), null, new Position(3, 4)));
+				() -> validator.isLegalMove(board, null, to));
 	}
 
 	@Test
 	public void V03NullDestinationIsRejected() {
+		MoveValidator validator = new MoveValidator();
+		Board board = new Board();
+		Position from = new Position(3, 3);
 		assertThrows(NullPointerException.class,
-				() -> new MoveValidator().isLegalMove(new Board(), new Position(3, 3), null));
+				() -> validator.isLegalMove(board, from, null));
 	}
 
 	@Test
@@ -46,7 +52,8 @@ public class MoveValidatorTests {
 
 	@Test
 	public void V06SamePositionReferenceIsIllegalForEveryOwnedTypeAndColor() {
-		for (PieceType type : new PieceType[] {PieceType.PAWN, PieceType.KNIGHT, PieceType.KING}) {
+		for (PieceType type : new PieceType[] {
+				PieceType.PAWN, PieceType.KNIGHT, PieceType.KING}) {
 			for (Color color : Color.values()) {
 				Board board = new Board();
 				Position position = new Position(3, 3);
@@ -58,12 +65,14 @@ public class MoveValidatorTests {
 
 	@Test
 	public void V07EqualPositionObjectsAreIllegalForEveryOwnedTypeAndColor() {
-		for (PieceType type : new PieceType[] {PieceType.PAWN, PieceType.KNIGHT, PieceType.KING}) {
+		for (PieceType type : new PieceType[] {
+				PieceType.PAWN, PieceType.KNIGHT, PieceType.KING}) {
 			for (Color color : Color.values()) {
 				Board board = new Board();
 				Position from = new Position(3, 3);
 				board.placePiece(new Piece(type, color), from);
-				MoveRuleAssertions.assertMove(board, from, new Position(3, 3), false);
+				MoveRuleAssertions.assertMove(board, from, new Position(3, 3),
+						false);
 			}
 		}
 	}
@@ -73,7 +82,8 @@ public class MoveValidatorTests {
 		Board board = EasyMock.createStrictMock(Board.class);
 		Position from = new Position(3, 3);
 		Position to = new Position(4, 5);
-		EasyMock.expect(board.getPiece(from)).andReturn(new Piece(PieceType.KNIGHT, Color.WHITE));
+		EasyMock.expect(board.getPiece(from))
+				.andReturn(new Piece(PieceType.KNIGHT, Color.WHITE));
 		EasyMock.replay(board);
 
 		assertTrue(new MoveValidator().isLegalMove(board, from, to));
@@ -86,7 +96,8 @@ public class MoveValidatorTests {
 		Board board = EasyMock.createStrictMock(Board.class);
 		Position from = new Position(3, 3);
 		Position to = new Position(4, 4);
-		EasyMock.expect(board.getPiece(from)).andReturn(new Piece(PieceType.KING, Color.BLACK));
+		EasyMock.expect(board.getPiece(from))
+				.andReturn(new Piece(PieceType.KING, Color.BLACK));
 		EasyMock.replay(board);
 
 		assertTrue(new MoveValidator().isLegalMove(board, from, to));
@@ -99,7 +110,8 @@ public class MoveValidatorTests {
 		Board board = EasyMock.createStrictMock(Board.class);
 		Position from = new Position(3, 1);
 		Position to = new Position(3, 3);
-		EasyMock.expect(board.getPiece(from)).andReturn(new Piece(PieceType.PAWN, Color.WHITE));
+		EasyMock.expect(board.getPiece(from))
+				.andReturn(new Piece(PieceType.PAWN, Color.WHITE));
 		EasyMock.expect(board.isEmpty(to)).andReturn(true);
 		EasyMock.expect(board.isEmpty(new Position(3, 2))).andReturn(true);
 		EasyMock.replay(board);
@@ -114,8 +126,10 @@ public class MoveValidatorTests {
 		Board board = EasyMock.createStrictMock(Board.class);
 		Position from = new Position(3, 3);
 		Position to = new Position(4, 4);
-		EasyMock.expect(board.getPiece(from)).andReturn(new Piece(PieceType.PAWN, Color.WHITE));
-		EasyMock.expect(board.getPiece(to)).andReturn(new Piece(PieceType.ROOK, Color.BLACK));
+		EasyMock.expect(board.getPiece(from))
+				.andReturn(new Piece(PieceType.PAWN, Color.WHITE));
+		EasyMock.expect(board.getPiece(to))
+				.andReturn(new Piece(PieceType.ROOK, Color.BLACK));
 		EasyMock.replay(board);
 
 		assertTrue(new MoveValidator().isLegalMove(board, from, to));
@@ -126,7 +140,8 @@ public class MoveValidatorTests {
 	// Temporary branch boundary; replace these expectations when sliding rules merge.
 	@Test
 	public void V12SlidingPiecesAreDeferredToTheirOwnTask() {
-		for (PieceType type : new PieceType[] {PieceType.ROOK, PieceType.BISHOP, PieceType.QUEEN}) {
+		for (PieceType type : new PieceType[] {
+				PieceType.ROOK, PieceType.BISHOP, PieceType.QUEEN}) {
 			Board board = new Board();
 			Position from = new Position(3, 3);
 			board.placePiece(new Piece(type, Color.WHITE), from);
