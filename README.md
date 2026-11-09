@@ -13,7 +13,9 @@
 - JUnit 5.10
 - Gradle 8.10
 - EasyMock 5.4.0
-- 
+- Checkstyle 9.3
+- SpotBugs Gradle plugin 6.0.25
+
 
 ## Exceptions
 Swing view classes, verified manually.
@@ -23,3 +25,11 @@ N/A
 N/A
 ### Others
 N/A
+
+## Static analysis
+Run `bash ./gradlew check` to run tests, Checkstyle, and SpotBugs. These checks also run
+with `bash ./gradlew build`, including in CI. Findings fail the build.
+
+Run individual checks with `bash ./gradlew checkstyleMain checkstyleTest spotbugsMain spotbugsTest`.
+HTML reports are generated under `build/reports/checkstyle/` and `build/reports/spotbugs/`.
+Checkstyle rules are defined in `config/checkstyle/checkstyle.xml`.
