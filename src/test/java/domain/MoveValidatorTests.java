@@ -137,15 +137,15 @@ public class MoveValidatorTests {
 		EasyMock.verify(board);
 	}
 
-	// Temporary branch boundary; replace these expectations when sliding rules merge.
 	@Test
-	public void V12SlidingPiecesAreDeferredToTheirOwnTask() {
+	public void V12SlidingPiecesFollowVerticalRules() {
 		for (PieceType type : new PieceType[] {
 				PieceType.ROOK, PieceType.BISHOP, PieceType.QUEEN}) {
 			Board board = new Board();
 			Position from = new Position(3, 3);
 			board.placePiece(new Piece(type, Color.WHITE), from);
-			MoveRuleAssertions.assertMove(board, from, new Position(3, 4), false);
+			boolean legal = type != PieceType.BISHOP;
+			MoveRuleAssertions.assertMove(board, from, new Position(3, 4), legal);
 		}
 	}
 }

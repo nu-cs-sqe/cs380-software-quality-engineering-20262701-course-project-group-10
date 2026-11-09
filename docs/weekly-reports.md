@@ -29,6 +29,7 @@
    - Reviewed `Game.getBoard()` against the design and BVA G01/G06. Added a method-level `EI_EXPOSE_REP` suppression because the GUI must share the supplied board across resets; documented the exception in the README. Added SpotBugs annotations as a compile-only dependency.
    - Validation: all 110 tests pass with none skipped; Checkstyle and SpotBugs report zero findings in main and test sources. A clean build exposed one final annotation line-length issue; the subsequent build passed after correcting it. No game behavior or test expectations changed.
 4. [done] Mengpang Xing: Implement Pawn, Knight, and King move rules with BVA and tests ([PR #32](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/32)).
+5. [done] Youran Ma: Implement Rook, Bishop, and Queen move rules with BVA and tests ([PR #30](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/30)).
 
 
 

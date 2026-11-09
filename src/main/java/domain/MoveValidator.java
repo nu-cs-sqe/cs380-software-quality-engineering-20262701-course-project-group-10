@@ -29,8 +29,17 @@ public class MoveValidator {
 				return isKnightMove(fileChange, rankChange);
 			case KING:
 				return isKingMove(fileChange, rankChange);
+			case ROOK:
+				return isRookMove(fileChange, rankChange)
+						&& isPathClear(board, from, to);
+			case BISHOP:
+				return isBishopMove(fileChange, rankChange)
+						&& isPathClear(board, from, to);
+			case QUEEN:
+				return (isRookMove(fileChange, rankChange)
+						|| isBishopMove(fileChange, rankChange))
+						&& isPathClear(board, from, to);
 			default:
-				// Sliding-piece rules are supplied by the separate task.
 				return false;
 		}
 	}
@@ -63,5 +72,31 @@ public class MoveValidator {
 		return forward == DOUBLE_STEP && from.getRank() == startRank
 				&& board.isEmpty(new Position(from.getFile(),
 						from.getRank() + direction));
+	}
+
+	private boolean isRookMove(int fileChange, int rankChange) {
+		return fileChange == 0 || rankChange == 0;
+	}
+
+	private boolean isBishopMove(int fileChange, int rankChange) {
+		return fileChange == rankChange;
+	}
+
+	private boolean isPathClear(Board board, Position from, Position to) {
+		int endFile = to.getFile();
+		int endRank = to.getRank();
+		int fileStep = Integer.compare(endFile, from.getFile());
+		int rankStep = Integer.compare(endRank, from.getRank());
+		int file = from.getFile() + fileStep;
+		int rank = from.getRank() + rankStep;
+
+		while (file != endFile || rank != endRank) {
+			if (!board.isEmpty(new Position(file, rank))) {
+				return false;
+			}
+			file += fileStep;
+			rank += rankStep;
+		}
+		return true;
 	}
 }
