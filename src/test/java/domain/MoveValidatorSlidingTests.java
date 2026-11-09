@@ -115,4 +115,72 @@ public class MoveValidatorSlidingTests {
 		expectEmpty(board, new Position(0, 2), false);
 		assertMove(board, from, new Position(0, 3), false);
 	}
+
+	@Test
+	public void B01_adjacentDiagonal() {
+		Position from = new Position(0, 0);
+		Board board = boardWith(PieceType.BISHOP, from);
+		assertMove(board, from, new Position(1, 1), true);
+	}
+
+	@Test
+	public void B02_acrossDiagonal() {
+		Position from = new Position(0, 0);
+		Board board = boardWith(PieceType.BISHOP, from);
+		expectEmpty(board, new Position(1, 1), true);
+		expectEmpty(board, new Position(2, 2), true);
+		expectEmpty(board, new Position(3, 3), true);
+		expectEmpty(board, new Position(4, 4), true);
+		expectEmpty(board, new Position(5, 5), true);
+		expectEmpty(board, new Position(6, 6), true);
+		assertMove(board, from, new Position(7, 7), true);
+	}
+
+	@Test
+	public void B03_downLeft() {
+		Position from = new Position(7, 7);
+		Board board = boardWith(PieceType.BISHOP, from);
+		expectEmpty(board, new Position(6, 6), true);
+		assertMove(board, from, new Position(5, 5), true);
+	}
+
+	@Test
+	public void B04_downRight() {
+		Position from = new Position(0, 7);
+		Board board = boardWith(PieceType.BISHOP, from);
+		expectEmpty(board, new Position(1, 6), true);
+		assertMove(board, from, new Position(2, 5), true);
+	}
+
+	@Test
+	public void B05_upLeft() {
+		Position from = new Position(7, 0);
+		Board board = boardWith(PieceType.BISHOP, from);
+		expectEmpty(board, new Position(6, 1), true);
+		assertMove(board, from, new Position(5, 2), true);
+	}
+
+	@Test
+	public void B06_rejectsUnequalSteps() {
+		Position from = new Position(0, 0);
+		Board board = boardWith(PieceType.BISHOP, from);
+		assertMove(board, from, new Position(2, 1), false);
+	}
+
+	@Test
+	public void B07_rejectsStraightLine() {
+		Position from = new Position(0, 0);
+		Board board = boardWith(PieceType.BISHOP, from);
+		assertMove(board, from, new Position(0, 2), false);
+	}
+
+	@Test
+	public void B08_blockedDiagonal() {
+		Position from = new Position(0, 0);
+		Board board = boardWith(PieceType.BISHOP, from);
+		expectEmpty(board, new Position(1, 1), true);
+		expectEmpty(board, new Position(2, 2), true);
+		expectEmpty(board, new Position(3, 3), false);
+		assertMove(board, from, new Position(4, 4), false);
+	}
 }
