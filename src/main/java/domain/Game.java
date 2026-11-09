@@ -3,7 +3,7 @@ package domain;
 import java.util.Objects;
 
 /** A chess game: owns the board and tracks whose turn it is. */
-public final class Game {
+public class Game {
     private final Board board;
     private Color currentPlayer;
 
@@ -15,6 +15,12 @@ public final class Game {
     public void startNewGame() {
         board.setUpStartingPosition();
         currentPlayer = Color.WHITE;
+    }
+
+    // Stub so the click-to-move GUI compiles. The real version, with turn rules
+    // and IllegalArgumentException for illegal moves, comes from the make-move task.
+    public void makeMove(Position from, Position to) {
+        throw new IllegalArgumentException("Moves are not available yet.");
     }
 
     public Board getBoard() {

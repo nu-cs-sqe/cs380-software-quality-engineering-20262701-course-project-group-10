@@ -39,6 +39,15 @@ classDiagram
     class ChessFrame {
         <<ui>>
     }
+    class BoardClickHandler {
+        -Game game
+        -Position selected
+        +BoardClickHandler(Game game)
+        +toPosition(int x, int y, int squareSize) Position
+        +click(Position position) void
+        +getSelected() Position
+        +clearSelection() void
+    }
 
     Game --> Board
     Game --> MoveValidator
@@ -46,6 +55,8 @@ classDiagram
     ChessFrame --> Game
     ChessFrame *-- BoardPanel
     BoardPanel ..> Game
+    BoardPanel *-- BoardClickHandler
+    BoardClickHandler ..> Game
 ```
 
 ### `domain` package
@@ -81,7 +92,8 @@ Ranks are 0–7 in code (rank 1–8 on the board). White moves toward rank index
 ### `ui` package (Java Swing)
 | Class | Change |
 |-------|--------|
-| `BoardPanel` | Turns a mouse click into a `Position`, remembering that rank 8 is drawn on the top row. First click selects one of the current player's pieces and highlights it. A second click calls `game.makeMove`. Clicking the selected square again deselects it. Repaints after each move. |
+| `BoardClickHandler` | **New.** The click-to-move logic, kept out of Swing so it can be unit tested. `toPosition` turns a pixel into a `Position` (rank 8 on the top row) and returns `null` off the board. `click` selects one of the current player's pieces, deselects when the selected square is clicked again, and otherwise calls `game.makeMove` once. The selection is cleared before `makeMove` runs, so it is also cleared when the move is illegal; the `IllegalArgumentException` is passed on unchanged. A `null` (off-board) click is ignored. |
+| `BoardPanel` | Forwards each mouse press to `BoardClickHandler`, highlights the selected square, and repaints after each click. Reports illegal-move messages and board changes to `ChessFrame` through callbacks. |
 | `ChessFrame` | Adds a turn label ("White to move" / "Black to move"). Shows the message from `IllegalArgumentException` in a dialog. "New Game" also clears the selection and resets the label. |
 | `Main` | Builds `new Game(new Board(), new MoveValidator())`. |
 
@@ -93,6 +105,9 @@ Ranks are 0–7 in code (rank 1–8 on the board). White moves toward rank index
   we can split it later.
 - **Illegal moves throw `IllegalArgumentException`.** The exception message tells the player why the move was
   rejected, which a `boolean` return value can't.
+- **Click handling is split out of `BoardPanel` into `BoardClickHandler`.** Pixel-to-square mapping and the
+  select/deselect/move rules are real logic, so they get TDD and BVA. `BoardPanel` is left with drawing and
+  forwarding clicks, which is view code.
 - **Check is ignored for now.** Detecting moves into check needs to know which squares are attacked. That
   belongs to the win-condition features.
 
@@ -109,6 +124,7 @@ branch. If two branches add the same stub, keep the real implementation when res
 - `docs/bva/MoveValidator.md` (new). The Pawn/Knight/King and Rook/Bishop/Queen tasks each add their own section.
 - `docs/bva/Board.md`: add `movePiece`.
 - `docs/bva/Game.md`: add `makeMove` and the new constructor.
+- `docs/bva/BoardClickHandler.md` (new). Done by the click-to-move GUI task.
 
 ## Task Split
 | Task | Classes | Branch (example) |
@@ -116,6 +132,6 @@ branch. If two branches add the same stub, keep the real implementation when res
 | 1 | `MoveValidator`: Pawn, Knight, King | `feature/move-rules-pawn-knight-king` |
 | 2 | `MoveValidator`: Rook, Bishop, Queen | `feature/move-rules-sliding` |
 | 3 | `Board.movePiece`, `Game.makeMove` (turn rules and captures) | `feature/make-move` |
-| 4 | `BoardPanel`, `ChessFrame`, `Main` (click-to-move GUI) | `feature/click-to-move-gui` |
+| 4 | `BoardClickHandler`, `BoardPanel`, `ChessFrame`, `Main` (click-to-move GUI) | `feature/click-to-move-gui` |
 
 All four tasks can be worked on at the same time. Each task uses mocks or stubs for the classes it doesn't own.
