@@ -25,7 +25,8 @@ public class ChessFrame extends JFrame {
 	public ChessFrame(Game game) {
 		super("Chess");
 		this.game = game;
-		this.boardPanel = new BoardPanel(game, this::updateTurnLabel, this::showIllegalMove);
+		this.boardPanel = new BoardPanel(game, this::updateTurnLabel,
+				this::showIllegalMove);
 
 		turnLabel.setBorder(BorderFactory.createEmptyBorder(
 				LABEL_PADDING, LABEL_PADDING, LABEL_PADDING, LABEL_PADDING));
@@ -52,12 +53,14 @@ public class ChessFrame extends JFrame {
 	}
 
 	private void updateTurnLabel() {
-		turnLabel.setText(game.getCurrentPlayer() == Color.WHITE ? WHITE_TO_MOVE : BLACK_TO_MOVE);
+		turnLabel.setText(
+				game.getCurrentPlayer() == Color.WHITE ? WHITE_TO_MOVE : BLACK_TO_MOVE);
 	}
 
 	// Use case 2, flow 4a: tell the player why the move was rejected.
 	private void showIllegalMove(String message) {
-		JOptionPane.showMessageDialog(this, message, "Illegal Move", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(this, message, "Illegal Move",
+				JOptionPane.ERROR_MESSAGE);
 	}
 
 	// Use case 1a: abandoning a game in progress needs the player's confirmation.
@@ -67,7 +70,8 @@ public class ChessFrame extends JFrame {
 				"New Game", JOptionPane.YES_NO_OPTION);
 		if (choice == JOptionPane.YES_OPTION) {
 			game.startNewGame();
-			// The board object is reused (see Game G06), so clearing and repainting shows the reset.
+			// The board object is reused (see Game G06), so clearing and repainting
+			// shows the reset.
 			boardPanel.clearSelection();
 			updateTurnLabel();
 		}
