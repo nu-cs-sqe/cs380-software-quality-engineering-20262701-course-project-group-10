@@ -416,4 +416,98 @@ public class PawnMoveTests {
 		board.placePiece(new Piece(PieceType.ROOK, Color.WHITE), new Position(2, 5));
 		MoveRuleAssertions.assertMove(board, from, to, false);
 	}
+
+	@Test
+	public void P44WhitePawnReachesBoardEdgeP44() {
+		Board board = new Board();
+		Position from = new Position(0, 6);
+		Position to = new Position(0, 7);
+		board.placePiece(new Piece(PieceType.PAWN, Color.WHITE), from);
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
+
+	@Test
+	public void P45WhitePawnReachesBoardEdgeP45() {
+		Board board = new Board();
+		Position from = new Position(7, 6);
+		Position to = new Position(7, 7);
+		board.placePiece(new Piece(PieceType.PAWN, Color.WHITE), from);
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
+
+	@Test
+	public void P46BlackPawnReachesBoardEdgeP46() {
+		Board board = new Board();
+		Position from = new Position(0, 1);
+		Position to = new Position(0, 0);
+		board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
+
+	@Test
+	public void P47BlackPawnReachesBoardEdgeP47() {
+		Board board = new Board();
+		Position from = new Position(7, 1);
+		Position to = new Position(7, 0);
+		board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
+
+	@Test
+	public void P48WhitePawnReachesBoardEdgeP48() {
+		Board board = new Board();
+		Position from = new Position(0, 1);
+		Position to = new Position(0, 3);
+		board.placePiece(new Piece(PieceType.PAWN, Color.WHITE), from);
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
+
+	@Test
+	public void P49BlackPawnReachesBoardEdgeP49() {
+		Board board = new Board();
+		Position from = new Position(7, 6);
+		Position to = new Position(7, 4);
+		board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
+
+	@Test
+	public void P50WhitePawnCapturesAtBoardEdgeP50() {
+		Board board = new Board();
+		Position from = new Position(0, 6);
+		Position to = new Position(1, 7);
+		board.placePiece(new Piece(PieceType.PAWN, Color.WHITE), from);
+		board.placePiece(new Piece(PieceType.QUEEN, Color.BLACK), new Position(1, 7));
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
+
+	@Test
+	public void P51WhitePawnCapturesAtBoardEdgeP51() {
+		Board board = new Board();
+		Position from = new Position(7, 6);
+		Position to = new Position(6, 7);
+		board.placePiece(new Piece(PieceType.PAWN, Color.WHITE), from);
+		board.placePiece(new Piece(PieceType.QUEEN, Color.BLACK), new Position(6, 7));
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
+
+	@Test
+	public void P52BlackPawnCapturesAtBoardEdgeP52() {
+		Board board = new Board();
+		Position from = new Position(0, 1);
+		Position to = new Position(1, 0);
+		board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), from);
+		board.placePiece(new Piece(PieceType.QUEEN, Color.WHITE), new Position(1, 0));
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
+
+	@Test
+	public void P53BlackPawnCapturesAtBoardEdgeP53() {
+		Board board = new Board();
+		Position from = new Position(7, 1);
+		Position to = new Position(6, 0);
+		board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), from);
+		board.placePiece(new Piece(PieceType.QUEEN, Color.WHITE), new Position(6, 0));
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
 }

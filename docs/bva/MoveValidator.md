@@ -141,16 +141,16 @@ same piece references. IDs appear in test method names for direct traceability.
 
 | ID | State of system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| P44 | WHITE PAWN at (0, 6); to (0, 7) | `true`; board unchanged | no |
-| P45 | WHITE PAWN at (7, 6); to (7, 7) | `true`; board unchanged | no |
-| P46 | BLACK PAWN at (0, 1); to (0, 0) | `true`; board unchanged | no |
-| P47 | BLACK PAWN at (7, 1); to (7, 0) | `true`; board unchanged | no |
-| P48 | WHITE PAWN at (0, 1); to (0, 3) | `true`; board unchanged | no |
-| P49 | BLACK PAWN at (7, 6); to (7, 4) | `true`; board unchanged | no |
-| P50 | WHITE PAWN at (0, 6); to (1, 7); also BLACK QUEEN at (1, 7) | `true`; board unchanged | no |
-| P51 | WHITE PAWN at (7, 6); to (6, 7); also BLACK QUEEN at (6, 7) | `true`; board unchanged | no |
-| P52 | BLACK PAWN at (0, 1); to (1, 0); also WHITE QUEEN at (1, 0) | `true`; board unchanged | no |
-| P53 | BLACK PAWN at (7, 1); to (6, 0); also WHITE QUEEN at (6, 0) | `true`; board unchanged | no |
+| P44 | WHITE PAWN at (0, 6); to (0, 7) | `true`; board unchanged | yes |
+| P45 | WHITE PAWN at (7, 6); to (7, 7) | `true`; board unchanged | yes |
+| P46 | BLACK PAWN at (0, 1); to (0, 0) | `true`; board unchanged | yes |
+| P47 | BLACK PAWN at (7, 1); to (7, 0) | `true`; board unchanged | yes |
+| P48 | WHITE PAWN at (0, 1); to (0, 3) | `true`; board unchanged | yes |
+| P49 | BLACK PAWN at (7, 6); to (7, 4) | `true`; board unchanged | yes |
+| P50 | WHITE PAWN at (0, 6); to (1, 7); also BLACK QUEEN at (1, 7) | `true`; board unchanged | yes |
+| P51 | WHITE PAWN at (7, 6); to (6, 7); also BLACK QUEEN at (6, 7) | `true`; board unchanged | yes |
+| P52 | BLACK PAWN at (0, 1); to (1, 0); also WHITE QUEEN at (1, 0) | `true`; board unchanged | yes |
+| P53 | BLACK PAWN at (7, 1); to (6, 0); also WHITE QUEEN at (6, 0) | `true`; board unchanged | yes |
 
 ### knight shape
 
