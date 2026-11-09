@@ -184,12 +184,12 @@ same piece references. IDs appear in test method names for direct traceability.
 
 | ID | State of system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| N19 | BLACK KNIGHT at (0, 0); to (1, 2) | `true`; board unchanged | no |
-| N20 | BLACK KNIGHT at (7, 7); to (5, 6) | `true`; board unchanged | no |
-| N21 | BLACK KNIGHT at (0, 7); to (2, 6) | `true`; board unchanged | no |
-| N22 | BLACK KNIGHT at (7, 0); to (6, 2) | `true`; board unchanged | no |
-| N23 | BLACK KNIGHT at (1, 2); to (0, 0) | `true`; board unchanged | no |
-| N24 | BLACK KNIGHT at (5, 6); to (7, 7) | `true`; board unchanged | no |
+| N19 | BLACK KNIGHT at (0, 0); to (1, 2) | `true`; board unchanged | yes |
+| N20 | BLACK KNIGHT at (7, 7); to (5, 6) | `true`; board unchanged | yes |
+| N21 | BLACK KNIGHT at (0, 7); to (2, 6) | `true`; board unchanged | yes |
+| N22 | BLACK KNIGHT at (7, 0); to (6, 2) | `true`; board unchanged | yes |
+| N23 | BLACK KNIGHT at (1, 2); to (0, 0) | `true`; board unchanged | yes |
+| N24 | BLACK KNIGHT at (5, 6); to (7, 7) | `true`; board unchanged | yes |
 
 ### knight jumping
 

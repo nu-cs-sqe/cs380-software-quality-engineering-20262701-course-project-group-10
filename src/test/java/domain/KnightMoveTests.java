@@ -165,4 +165,58 @@ public class KnightMoveTests {
 		board.placePiece(new Piece(PieceType.KNIGHT, Color.BLACK), from);
 		MoveRuleAssertions.assertMove(board, from, to, false);
 	}
+
+	@Test
+	public void N19KnightMovesAtEdge19() {
+		Board board = new Board();
+		Position from = new Position(0, 0);
+		Position to = new Position(1, 2);
+		board.placePiece(new Piece(PieceType.KNIGHT, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
+
+	@Test
+	public void N20KnightMovesAtEdge20() {
+		Board board = new Board();
+		Position from = new Position(7, 7);
+		Position to = new Position(5, 6);
+		board.placePiece(new Piece(PieceType.KNIGHT, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
+
+	@Test
+	public void N21KnightMovesAtEdge21() {
+		Board board = new Board();
+		Position from = new Position(0, 7);
+		Position to = new Position(2, 6);
+		board.placePiece(new Piece(PieceType.KNIGHT, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
+
+	@Test
+	public void N22KnightMovesAtEdge22() {
+		Board board = new Board();
+		Position from = new Position(7, 0);
+		Position to = new Position(6, 2);
+		board.placePiece(new Piece(PieceType.KNIGHT, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
+
+	@Test
+	public void N23KnightMovesAtEdge23() {
+		Board board = new Board();
+		Position from = new Position(1, 2);
+		Position to = new Position(0, 0);
+		board.placePiece(new Piece(PieceType.KNIGHT, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
+
+	@Test
+	public void N24KnightMovesAtEdge24() {
+		Board board = new Board();
+		Position from = new Position(5, 6);
+		Position to = new Position(7, 7);
+		board.placePiece(new Piece(PieceType.KNIGHT, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
 }
