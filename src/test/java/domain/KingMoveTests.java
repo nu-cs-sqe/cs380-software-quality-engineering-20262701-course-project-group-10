@@ -165,4 +165,40 @@ public class KingMoveTests {
 		board.placePiece(new Piece(PieceType.KING, Color.BLACK), from);
 		MoveRuleAssertions.assertMove(board, from, to, false);
 	}
+
+	@Test
+	public void K19KingMovesAtCorner19() {
+		Board board = new Board();
+		Position from = new Position(0, 0);
+		Position to = new Position(1, 1);
+		board.placePiece(new Piece(PieceType.KING, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
+
+	@Test
+	public void K20KingMovesAtCorner20() {
+		Board board = new Board();
+		Position from = new Position(7, 7);
+		Position to = new Position(6, 6);
+		board.placePiece(new Piece(PieceType.KING, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
+
+	@Test
+	public void K21KingMovesAtCorner21() {
+		Board board = new Board();
+		Position from = new Position(0, 7);
+		Position to = new Position(1, 6);
+		board.placePiece(new Piece(PieceType.KING, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
+
+	@Test
+	public void K22KingMovesAtCorner22() {
+		Board board = new Board();
+		Position from = new Position(7, 0);
+		Position to = new Position(6, 1);
+		board.placePiece(new Piece(PieceType.KING, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
 }

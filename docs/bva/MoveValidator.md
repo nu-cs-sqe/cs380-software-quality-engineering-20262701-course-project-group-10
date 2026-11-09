@@ -230,10 +230,10 @@ same piece references. IDs appear in test method names for direct traceability.
 
 | ID | State of system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| K19 | BLACK KING at (0, 0); to (1, 1) | `true`; board unchanged | no |
-| K20 | BLACK KING at (7, 7); to (6, 6) | `true`; board unchanged | no |
-| K21 | BLACK KING at (0, 7); to (1, 6) | `true`; board unchanged | no |
-| K22 | BLACK KING at (7, 0); to (6, 1) | `true`; board unchanged | no |
+| K19 | BLACK KING at (0, 0); to (1, 1) | `true`; board unchanged | yes |
+| K20 | BLACK KING at (7, 7); to (6, 6) | `true`; board unchanged | yes |
+| K21 | BLACK KING at (0, 7); to (1, 6) | `true`; board unchanged | yes |
+| K22 | BLACK KING at (7, 0); to (6, 1) | `true`; board unchanged | yes |
 
 ### king occupancy
 
