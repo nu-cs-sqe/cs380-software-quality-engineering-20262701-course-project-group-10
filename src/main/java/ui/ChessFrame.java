@@ -54,7 +54,8 @@ public class ChessFrame extends JFrame {
 
 	private void updateTurnLabel() {
 		turnLabel.setText(
-				game.getCurrentPlayer() == Color.WHITE ? WHITE_TO_MOVE : BLACK_TO_MOVE);
+				game.getCurrentPlayer() == Color.WHITE
+						? WHITE_TO_MOVE : BLACK_TO_MOVE);
 	}
 
 	// Use case 2, flow 4a: tell the player why the move was rejected.
