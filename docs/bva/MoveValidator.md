@@ -100,14 +100,14 @@ same piece references. IDs appear in test method names for direct traceability.
 
 | ID | State of system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| P18 | WHITE PAWN at (3, 1); to (3, 3); also WHITE BISHOP at (3, 2) | `false`; board unchanged | no |
-| P19 | WHITE PAWN at (3, 1); to (3, 3); also BLACK BISHOP at (3, 2) | `false`; board unchanged | no |
-| P20 | WHITE PAWN at (3, 1); to (3, 3); also WHITE BISHOP at (3, 3) | `false`; board unchanged | no |
-| P21 | WHITE PAWN at (3, 1); to (3, 3); also BLACK BISHOP at (3, 3) | `false`; board unchanged | no |
-| P22 | BLACK PAWN at (3, 6); to (3, 4); also WHITE BISHOP at (3, 5) | `false`; board unchanged | no |
-| P23 | BLACK PAWN at (3, 6); to (3, 4); also BLACK BISHOP at (3, 5) | `false`; board unchanged | no |
-| P24 | BLACK PAWN at (3, 6); to (3, 4); also WHITE BISHOP at (3, 4) | `false`; board unchanged | no |
-| P25 | BLACK PAWN at (3, 6); to (3, 4); also BLACK BISHOP at (3, 4) | `false`; board unchanged | no |
+| P18 | WHITE PAWN at (3, 1); to (3, 3); also WHITE BISHOP at (3, 2) | `false`; board unchanged | yes |
+| P19 | WHITE PAWN at (3, 1); to (3, 3); also BLACK BISHOP at (3, 2) | `false`; board unchanged | yes |
+| P20 | WHITE PAWN at (3, 1); to (3, 3); also WHITE BISHOP at (3, 3) | `false`; board unchanged | yes |
+| P21 | WHITE PAWN at (3, 1); to (3, 3); also BLACK BISHOP at (3, 3) | `false`; board unchanged | yes |
+| P22 | BLACK PAWN at (3, 6); to (3, 4); also WHITE BISHOP at (3, 5) | `false`; board unchanged | yes |
+| P23 | BLACK PAWN at (3, 6); to (3, 4); also BLACK BISHOP at (3, 5) | `false`; board unchanged | yes |
+| P24 | BLACK PAWN at (3, 6); to (3, 4); also WHITE BISHOP at (3, 4) | `false`; board unchanged | yes |
+| P25 | BLACK PAWN at (3, 6); to (3, 4); also BLACK BISHOP at (3, 4) | `false`; board unchanged | yes |
 
 ### pawn capture
 
