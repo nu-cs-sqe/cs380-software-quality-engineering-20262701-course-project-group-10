@@ -38,7 +38,9 @@ public class MoveValidator {
 	private boolean isPawnMove(Board board, Piece piece, Position from, Position to) {
 		int direction = piece.getColor() == Color.WHITE ? SINGLE_STEP : -SINGLE_STEP;
 		int forward = (to.getRank() - from.getRank()) * direction;
-		return to.getFile() == from.getFile() && (forward == SINGLE_STEP || forward == DOUBLE_STEP)
-				&& board.isEmpty(to);
+		int startRank = piece.getColor() == Color.WHITE ? WHITE_PAWN_START : BLACK_PAWN_START;
+		return to.getFile() == from.getFile() && board.isEmpty(to)
+				&& (forward == SINGLE_STEP
+						|| forward == DOUBLE_STEP && from.getRank() == startRank);
 	}
 }

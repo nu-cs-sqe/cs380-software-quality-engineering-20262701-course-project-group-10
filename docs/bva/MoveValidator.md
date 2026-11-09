@@ -91,10 +91,10 @@ same piece references. IDs appear in test method names for direct traceability.
 
 | ID | State of system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| P14 | WHITE PAWN at (3, 0); to (3, 2) | `false`; board unchanged | no |
-| P15 | WHITE PAWN at (3, 2); to (3, 4) | `false`; board unchanged | no |
-| P16 | BLACK PAWN at (3, 5); to (3, 3) | `false`; board unchanged | no |
-| P17 | BLACK PAWN at (3, 7); to (3, 5) | `false`; board unchanged | no |
+| P14 | WHITE PAWN at (3, 0); to (3, 2) | `false`; board unchanged | yes |
+| P15 | WHITE PAWN at (3, 2); to (3, 4) | `false`; board unchanged | yes |
+| P16 | BLACK PAWN at (3, 5); to (3, 3) | `false`; board unchanged | yes |
+| P17 | BLACK PAWN at (3, 7); to (3, 5) | `false`; board unchanged | yes |
 
 ### pawn double blocked
 
