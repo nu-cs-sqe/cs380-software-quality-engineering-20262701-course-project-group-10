@@ -215,16 +215,16 @@ same piece references. IDs appear in test method names for direct traceability.
 
 | ID | State of system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| K09 | BLACK KING at (3, 3); to (3, 3) | `false`; board unchanged | no |
-| K10 | BLACK KING at (3, 3); to (3, 5) | `false`; board unchanged | no |
-| K11 | BLACK KING at (3, 3); to (5, 3) | `false`; board unchanged | no |
-| K12 | BLACK KING at (3, 3); to (5, 5) | `false`; board unchanged | no |
-| K13 | BLACK KING at (3, 3); to (4, 5) | `false`; board unchanged | no |
-| K14 | BLACK KING at (3, 3); to (5, 4) | `false`; board unchanged | no |
-| K15 | BLACK KING at (3, 3); to (1, 3) | `false`; board unchanged | no |
-| K16 | BLACK KING at (3, 3); to (3, 1) | `false`; board unchanged | no |
-| K17 | BLACK KING at (3, 3); to (1, 1) | `false`; board unchanged | no |
-| K18 | BLACK KING at (0, 0); to (7, 7) | `false`; board unchanged | no |
+| K09 | BLACK KING at (3, 3); to (3, 3) | `false`; board unchanged | yes |
+| K10 | BLACK KING at (3, 3); to (3, 5) | `false`; board unchanged | yes |
+| K11 | BLACK KING at (3, 3); to (5, 3) | `false`; board unchanged | yes |
+| K12 | BLACK KING at (3, 3); to (5, 5) | `false`; board unchanged | yes |
+| K13 | BLACK KING at (3, 3); to (4, 5) | `false`; board unchanged | yes |
+| K14 | BLACK KING at (3, 3); to (5, 4) | `false`; board unchanged | yes |
+| K15 | BLACK KING at (3, 3); to (1, 3) | `false`; board unchanged | yes |
+| K16 | BLACK KING at (3, 3); to (3, 1) | `false`; board unchanged | yes |
+| K17 | BLACK KING at (3, 3); to (1, 1) | `false`; board unchanged | yes |
+| K18 | BLACK KING at (0, 0); to (7, 7) | `false`; board unchanged | yes |
 
 ### king edges
 

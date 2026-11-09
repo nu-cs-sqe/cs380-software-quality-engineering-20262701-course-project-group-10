@@ -75,4 +75,94 @@ public class KingMoveTests {
 		board.placePiece(new Piece(PieceType.KING, Color.WHITE), from);
 		MoveRuleAssertions.assertMove(board, from, to, true);
 	}
+
+	@Test
+	public void K09KingRejectsOffset9() {
+		Board board = new Board();
+		Position from = new Position(3, 3);
+		Position to = new Position(3, 3);
+		board.placePiece(new Piece(PieceType.KING, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, false);
+	}
+
+	@Test
+	public void K10KingRejectsOffset10() {
+		Board board = new Board();
+		Position from = new Position(3, 3);
+		Position to = new Position(3, 5);
+		board.placePiece(new Piece(PieceType.KING, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, false);
+	}
+
+	@Test
+	public void K11KingRejectsOffset11() {
+		Board board = new Board();
+		Position from = new Position(3, 3);
+		Position to = new Position(5, 3);
+		board.placePiece(new Piece(PieceType.KING, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, false);
+	}
+
+	@Test
+	public void K12KingRejectsOffset12() {
+		Board board = new Board();
+		Position from = new Position(3, 3);
+		Position to = new Position(5, 5);
+		board.placePiece(new Piece(PieceType.KING, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, false);
+	}
+
+	@Test
+	public void K13KingRejectsOffset13() {
+		Board board = new Board();
+		Position from = new Position(3, 3);
+		Position to = new Position(4, 5);
+		board.placePiece(new Piece(PieceType.KING, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, false);
+	}
+
+	@Test
+	public void K14KingRejectsOffset14() {
+		Board board = new Board();
+		Position from = new Position(3, 3);
+		Position to = new Position(5, 4);
+		board.placePiece(new Piece(PieceType.KING, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, false);
+	}
+
+	@Test
+	public void K15KingRejectsOffset15() {
+		Board board = new Board();
+		Position from = new Position(3, 3);
+		Position to = new Position(1, 3);
+		board.placePiece(new Piece(PieceType.KING, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, false);
+	}
+
+	@Test
+	public void K16KingRejectsOffset16() {
+		Board board = new Board();
+		Position from = new Position(3, 3);
+		Position to = new Position(3, 1);
+		board.placePiece(new Piece(PieceType.KING, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, false);
+	}
+
+	@Test
+	public void K17KingRejectsOffset17() {
+		Board board = new Board();
+		Position from = new Position(3, 3);
+		Position to = new Position(1, 1);
+		board.placePiece(new Piece(PieceType.KING, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, false);
+	}
+
+	@Test
+	public void K18KingRejectsOffset18() {
+		Board board = new Board();
+		Position from = new Position(0, 0);
+		Position to = new Position(7, 7);
+		board.placePiece(new Piece(PieceType.KING, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, false);
+	}
 }
