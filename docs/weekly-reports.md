@@ -34,7 +34,7 @@
 
 # Week 7 (11/9/2026-11/15/2026)
 **Planning and Progress Tracking**:
-1. [not started] Person: Task (Links to PR)
+1. [done] Youran Ma: Implement rook, bishop, and queen move rules with BVA and tests ([PR #29](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/29))
 2. [not started] Person: Task (Links to PR)
 3. [80% done] Person: Task (Links to PR)
 4. etc.
