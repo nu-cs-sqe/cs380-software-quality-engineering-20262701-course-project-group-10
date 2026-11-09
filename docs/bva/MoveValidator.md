@@ -64,12 +64,12 @@ same piece references. IDs appear in test method names for direct traceability.
 
 | ID | State of system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| P02 | BLACK PAWN at (3, 6); to (3, 5) | `true`; board unchanged | no |
-| P03 | WHITE PAWN at (3, 3); to (3, 2) | `false`; board unchanged | no |
-| P04 | BLACK PAWN at (3, 4); to (3, 5) | `false`; board unchanged | no |
-| P05 | WHITE PAWN at (3, 3); to (4, 3) | `false`; board unchanged | no |
-| P06 | WHITE PAWN at (3, 1); to (3, 4) | `false`; board unchanged | no |
-| P07 | BLACK PAWN at (3, 6); to (3, 3) | `false`; board unchanged | no |
+| P02 | BLACK PAWN at (3, 6); to (3, 5) | `true`; board unchanged | yes |
+| P03 | WHITE PAWN at (3, 3); to (3, 2) | `false`; board unchanged | yes |
+| P04 | BLACK PAWN at (3, 4); to (3, 5) | `false`; board unchanged | yes |
+| P05 | WHITE PAWN at (3, 3); to (4, 3) | `false`; board unchanged | yes |
+| P06 | WHITE PAWN at (3, 1); to (3, 4) | `false`; board unchanged | yes |
+| P07 | BLACK PAWN at (3, 6); to (3, 3) | `false`; board unchanged | yes |
 
 ### pawn blocked
 
