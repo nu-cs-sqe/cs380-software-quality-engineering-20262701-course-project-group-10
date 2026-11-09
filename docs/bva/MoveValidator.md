@@ -247,10 +247,10 @@ same piece references. IDs appear in test method names for direct traceability.
 | ID | State of system | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | V01 | null board; from (3,3), to (3,4) | NullPointerException | yes |
-| V02 | real board; null from, to (3,4) | NullPointerException | no |
-| V03 | real board; from (3,3), null to | NullPointerException | no |
-| V04 | all three arguments null | NullPointerException | no |
-| V05 | empty board; from (3,3), to (3,4) | false; unchanged | no |
+| V02 | real board; null from, to (3,4) | NullPointerException | yes |
+| V03 | real board; from (3,3), null to | NullPointerException | yes |
+| V04 | all three arguments null | NullPointerException | yes |
+| V05 | empty board; from (3,3), to (3,4) | false; unchanged | yes |
 | V06 | each owned type/color; same Position reference for from/to | false; unchanged | no |
 | V07 | each owned type/color; distinct Position objects with equal (3,3) coordinates | false; unchanged | no |
 | V08 | white knight at (3,3), to (4,5); strict Board expects only source read | true; no other Board calls | no |
