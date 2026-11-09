@@ -113,10 +113,10 @@ same piece references. IDs appear in test method names for direct traceability.
 
 | ID | State of system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| P26 | WHITE PAWN at (3, 3); to (2, 4); also BLACK ROOK at (2, 4) | `true`; board unchanged | no |
-| P27 | WHITE PAWN at (3, 3); to (4, 4); also BLACK ROOK at (4, 4) | `true`; board unchanged | no |
-| P28 | BLACK PAWN at (3, 4); to (2, 3); also WHITE ROOK at (2, 3) | `true`; board unchanged | no |
-| P29 | BLACK PAWN at (3, 4); to (4, 3); also WHITE ROOK at (4, 3) | `true`; board unchanged | no |
+| P26 | WHITE PAWN at (3, 3); to (2, 4); also BLACK ROOK at (2, 4) | `true`; board unchanged | yes |
+| P27 | WHITE PAWN at (3, 3); to (4, 4); also BLACK ROOK at (4, 4) | `true`; board unchanged | yes |
+| P28 | BLACK PAWN at (3, 4); to (2, 3); also WHITE ROOK at (2, 3) | `true`; board unchanged | yes |
+| P29 | BLACK PAWN at (3, 4); to (4, 3); also WHITE ROOK at (4, 3) | `true`; board unchanged | yes |
 
 ### pawn capture bounds
 
