@@ -14,6 +14,9 @@ public class MoveValidator {
 				return isRookMove(board, from, to);
 			case BISHOP:
 				return isBishopMove(board, from, to);
+			case QUEEN:
+				return isRookMove(board, from, to)
+						|| isBishopMove(board, from, to);
 			default:
 				return false;
 		}
