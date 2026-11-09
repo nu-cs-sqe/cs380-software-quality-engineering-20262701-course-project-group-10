@@ -27,7 +27,7 @@ public class Game {
 
 	@SuppressFBWarnings(
 			value = "EI_EXPOSE_REP",
-			justification = "The GUI observes the same board across resets, as required by G01/G06.")
+			justification = "G01/G06 require sharing the board with the GUI.")
 	public Board getBoard() {
 		return board;
 	}
