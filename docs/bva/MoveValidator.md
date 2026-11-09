@@ -1,4 +1,4 @@
-# MoveValidator: Pawn, Knight, and King
+# MoveValidator
 
 ## Contract and scope
 
@@ -6,9 +6,9 @@ Method under test for all cases: `isLegalMove(Board board, Position from, Positi
 The validator observes the board and returns a boolean without moving pieces.
 Null board, from, or to throws `NullPointerException`; an empty source or equal
 positions returns false. Pawn rules include occupancy and opponent-only captures.
-Knight and King check geometry only; Game owns destination-color and turn checks.
-Rook, Bishop, and Queen are deferred to the sliding-piece task and return false
-in this branch. Check, castling, en passant, and promotion are out of scope.
+Knight and King check geometry only. Rook, Bishop, and Queen check geometry
+and require a clear path. Game owns destination-color and turn checks.
+Check, castling, en passant, and promotion are out of scope.
 The implicit public no-argument constructor has no inputs or branches; every case
 constructs a fresh validator, so construction is covered by every implemented row.
 
@@ -44,15 +44,15 @@ King: all eight neighboring squares, zero displacement, two-square boundaries
 on each axis and both axes, maximum displacement, corners, either target color.
 Real Board instances test observable behavior. Strict EasyMock Boards check
 that Knight/King do not read paths/targets and Pawn reads the required squares.
-Mocks do not fabricate out-of-range Position objects or pretend to implement
-the separate sliding-piece task. Null arguments are each isolated with other
-arguments valid, plus all null together.
+The sliding-piece tests use EasyMock for the source and intermediate squares.
+Null arguments are each isolated with other arguments valid, plus all null
+together.
 
 ## 4. Concrete test cases
 
 All coordinates are zero-based `(file, rank)`. Unlisted squares are empty.
-Every valid-reference test additionally asserts that all 64 squares keep the
-same piece references. IDs appear in test method names for direct traceability.
+Tests using a real Board also assert that all 64 squares keep the same piece
+references. Mock Board tests check expected calls. IDs appear in test method names.
 
 ### pawn one
 
@@ -257,4 +257,45 @@ same piece references. IDs appear in test method names for direct traceability.
 | V09 | black king at (3,3), to (4,4); strict Board expects only source read | true; no other Board calls | yes |
 | V10 | white pawn at (3,1), to (3,3); strict Board supplies empty destination and intermediate square | true; required reads and no writes | yes |
 | V11 | white pawn at (3,3), to (4,4); strict Board supplies black rook at destination | true; required reads and no writes | yes |
-| V12 | white rook, bishop, queen separately at (3,3), to (3,4) | false pending sliding-piece task; unchanged | yes |
+| V12 | WHITE ROOK, BISHOP, and QUEEN separately at (3, 3); to (3, 4) | `true` for rook and queen, `false` for bishop; board unchanged | yes |
+| C01 | null board; from (0, 0), to (0, 1) | NullPointerException | yes |
+| C02 | mock board; null from, to (0, 1) | NullPointerException; no Board calls | yes |
+| C03 | mock board; from (0, 0), null to | NullPointerException; no Board calls | yes |
+| C04 | empty source at (0, 0); to (0, 1) | `false`; only source read | yes |
+| C05 | distinct Position objects for (0, 0) to (0, 0) | `false`; no Board calls | yes |
+
+### rook moves
+
+| ID | State of system | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| R01 | WHITE ROOK at (0, 0); to (1, 0) | `true`; expected Board reads only | yes |
+| R02 | WHITE ROOK at (7, 0); to (0, 0); (6, 0), (5, 0), (4, 0), (3, 0), (2, 0), (1, 0) clear | `true`; expected Board reads only | yes |
+| R03 | WHITE ROOK at (0, 0); to (0, 2); (0, 1) clear | `true`; expected Board reads only | yes |
+| R04 | WHITE ROOK at (0, 7); to (0, 5); (0, 6) clear | `true`; expected Board reads only | yes |
+| R05 | WHITE ROOK at (0, 0); to (1, 1) | `false`; expected Board reads only | yes |
+| R06 | WHITE ROOK at (0, 0); to (0, 3); (0, 1) occupied | `false`; expected Board reads only | yes |
+| R07 | WHITE ROOK at (0, 0); to (0, 3); (0, 1) clear; (0, 2) occupied | `false`; expected Board reads only | yes |
+
+### bishop moves
+
+| ID | State of system | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| B01 | WHITE BISHOP at (0, 0); to (1, 1) | `true`; expected Board reads only | yes |
+| B02 | WHITE BISHOP at (0, 0); to (7, 7); (1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6) clear | `true`; expected Board reads only | yes |
+| B03 | WHITE BISHOP at (7, 7); to (5, 5); (6, 6) clear | `true`; expected Board reads only | yes |
+| B04 | WHITE BISHOP at (0, 7); to (2, 5); (1, 6) clear | `true`; expected Board reads only | yes |
+| B05 | WHITE BISHOP at (7, 0); to (5, 2); (6, 1) clear | `true`; expected Board reads only | yes |
+| B06 | WHITE BISHOP at (0, 0); to (2, 1) | `false`; expected Board reads only | yes |
+| B07 | WHITE BISHOP at (0, 0); to (0, 2) | `false`; expected Board reads only | yes |
+| B08 | WHITE BISHOP at (0, 0); to (4, 4); (1, 1), (2, 2) clear; (3, 3) occupied | `false`; expected Board reads only | yes |
+
+### queen moves
+
+| ID | State of system | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| Q01 | WHITE QUEEN at (7, 3); to (5, 3); (6, 3) clear | `true`; expected Board reads only | yes |
+| Q02 | WHITE QUEEN at (3, 5); to (3, 3); (3, 4) clear | `true`; expected Board reads only | yes |
+| Q03 | WHITE QUEEN at (3, 3); to (5, 5); (4, 4) clear | `true`; expected Board reads only | yes |
+| Q04 | WHITE QUEEN at (0, 0); to (1, 2) | `false`; expected Board reads only | yes |
+| Q05 | WHITE QUEEN at (0, 0); to (0, 2); (0, 1) occupied | `false`; expected Board reads only | yes |
+| Q06 | WHITE QUEEN at (2, 0); to (5, 3); (3, 1) clear; (4, 2) occupied | `false`; expected Board reads only | yes |
