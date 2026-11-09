@@ -30,6 +30,7 @@
    - Converted Java source and tests to tabs and wrapped long lines, including lines made longer by Checkstyle's tab expansion. Kept separate lowercase commits for each file and rule, with follow-up fixes recorded separately.
    - Reviewed `Game.getBoard()` against the design and BVA G01/G06. Added a method-level `EI_EXPOSE_REP` suppression because the GUI must share the supplied board across resets; documented the exception in the README. Added SpotBugs annotations as a compile-only dependency.
    - Validation: all 110 tests pass with none skipped; Checkstyle and SpotBugs report zero findings in main and test sources. A clean build exposed one final annotation line-length issue; the subsequent build passed after correcting it. No game behavior or test expectations changed.
+4. [done] Youran Ma: Implement rook, bishop, and queen move rules with BVA and tests ([Issue #18](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/issues/18))
 
 
 # Week 7 (11/9/2026-11/15/2026)
