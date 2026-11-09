@@ -24,7 +24,11 @@ N/A
 ### Mutation Testing
 N/A
 ### Others
-N/A
+- SpotBugs `EI_EXPOSE_REP` is suppressed only on `Game.getBoard()`. The design
+  and BVA cases G01/G06 require returning the supplied board so the GUI observes
+  the same board across resets. Returning a defensive copy would break that
+  contract. The method annotation records this reason; other findings still fail
+  the build.
 
 ## Static analysis
 Run `bash ./gradlew check` to run tests, Checkstyle, and SpotBugs. These checks also run
