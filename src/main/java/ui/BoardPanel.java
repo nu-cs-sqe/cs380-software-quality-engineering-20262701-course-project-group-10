@@ -24,7 +24,8 @@ public class BoardPanel extends JPanel {
 	private static final double PIECE_TO_SQUARE_RATIO = 0.75;
 	private static final java.awt.Color LIGHT_SQUARE = new java.awt.Color(240, 217, 181);
 	private static final java.awt.Color DARK_SQUARE = new java.awt.Color(181, 136, 99);
-	private static final java.awt.Color SELECTED_SQUARE = new java.awt.Color(246, 246, 105, 180);
+	private static final java.awt.Color SELECTED_SQUARE =
+			new java.awt.Color(246, 246, 105, 180);
 
 	private final Game game;
 	private final BoardClickHandler clickHandler;
@@ -36,7 +37,8 @@ public class BoardPanel extends JPanel {
 		this.clickHandler = new BoardClickHandler(game);
 		this.onBoardChanged = onBoardChanged;
 		this.onIllegalMove = onIllegalMove;
-		setPreferredSize(new Dimension(SIZE * DEFAULT_SQUARE_SIZE, SIZE * DEFAULT_SQUARE_SIZE));
+		setPreferredSize(new Dimension(SIZE * DEFAULT_SQUARE_SIZE,
+				SIZE * DEFAULT_SQUARE_SIZE));
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent event) {
@@ -73,14 +75,17 @@ public class BoardPanel extends JPanel {
 				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
 		int square = squareSize();
-		// Segoe UI Symbol has the chess glyphs on Windows; Java falls back to Dialog elsewhere.
-		g2.setFont(new Font("Segoe UI Symbol", Font.PLAIN, (int) (square * PIECE_TO_SQUARE_RATIO)));
+		// Segoe UI Symbol has the chess glyphs on Windows; Java falls back to Dialog
+		// elsewhere.
+		g2.setFont(new Font("Segoe UI Symbol", Font.PLAIN,
+				(int) (square * PIECE_TO_SQUARE_RATIO)));
 
 		Board board = game.getBoard();
 		for (int rank = 0; rank < SIZE; rank++) {
 			for (int file = 0; file < SIZE; file++) {
 				Position position = new Position(file, rank);
-				// Rank 8 is drawn on the top row, so screen rows run opposite to ranks.
+				// Rank 8 is drawn on the top row, so screen rows run opposite to
+				// ranks.
 				int x = file * square;
 				int y = (SIZE - 1 - rank) * square;
 
@@ -126,7 +131,8 @@ public class BoardPanel extends JPanel {
 			case PAWN:
 				return white ? "♙" : "♟";
 			default:
-				throw new IllegalStateException("Unknown piece type: " + piece.getType());
+				throw new IllegalStateException(
+						"Unknown piece type: " + piece.getType());
 		}
 	}
 }
