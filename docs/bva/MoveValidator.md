@@ -75,10 +75,10 @@ same piece references. IDs appear in test method names for direct traceability.
 
 | ID | State of system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| P08 | WHITE PAWN at (3, 1); to (3, 2); also WHITE KNIGHT at (3, 2) | `false`; board unchanged | no |
-| P09 | WHITE PAWN at (3, 1); to (3, 2); also BLACK KNIGHT at (3, 2) | `false`; board unchanged | no |
-| P10 | BLACK PAWN at (3, 6); to (3, 5); also WHITE KNIGHT at (3, 5) | `false`; board unchanged | no |
-| P11 | BLACK PAWN at (3, 6); to (3, 5); also BLACK KNIGHT at (3, 5) | `false`; board unchanged | no |
+| P08 | WHITE PAWN at (3, 1); to (3, 2); also WHITE KNIGHT at (3, 2) | `false`; board unchanged | yes |
+| P09 | WHITE PAWN at (3, 1); to (3, 2); also BLACK KNIGHT at (3, 2) | `false`; board unchanged | yes |
+| P10 | BLACK PAWN at (3, 6); to (3, 5); also WHITE KNIGHT at (3, 5) | `false`; board unchanged | yes |
+| P11 | BLACK PAWN at (3, 6); to (3, 5); also BLACK KNIGHT at (3, 5) | `false`; board unchanged | yes |
 
 ### pawn double
 
