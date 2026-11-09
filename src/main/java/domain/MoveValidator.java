@@ -36,6 +36,7 @@ public class MoveValidator {
 	}
 
 	private boolean isPawnMove(Board board, Piece piece, Position from, Position to) {
-		return false;
+		return to.getFile() == from.getFile()
+				&& to.getRank() - from.getRank() == SINGLE_STEP;
 	}
 }
