@@ -12,6 +12,8 @@ public class MoveValidator {
 		switch (piece.getType()) {
 			case ROOK:
 				return isRookMove(board, from, to);
+			case BISHOP:
+				return isBishopMove(board, from, to);
 			default:
 				return false;
 		}
@@ -20,6 +22,12 @@ public class MoveValidator {
 	private boolean isRookMove(Board board, Position from, Position to) {
 		return (from.getFile() == to.getFile() || from.getRank() == to.getRank())
 				&& isPathClear(board, from, to);
+	}
+
+	private boolean isBishopMove(Board board, Position from, Position to) {
+		int fileDistance = Math.abs(to.getFile() - from.getFile());
+		int rankDistance = Math.abs(to.getRank() - from.getRank());
+		return fileDistance == rankDistance && isPathClear(board, from, to);
 	}
 
 	private boolean isPathClear(Board board, Position from, Position to) {
