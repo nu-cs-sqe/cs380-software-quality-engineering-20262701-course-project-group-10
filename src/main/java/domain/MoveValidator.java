@@ -26,27 +26,41 @@ public class MoveValidator {
 			case PAWN:
 				return isPawnMove(board, piece, from, to);
 			case KNIGHT:
-				return fileChange == SINGLE_STEP && rankChange == DOUBLE_STEP
-						|| fileChange == DOUBLE_STEP && rankChange == SINGLE_STEP;
+				return isKnightMove(fileChange, rankChange);
 			case KING:
-				return fileChange <= SINGLE_STEP && rankChange <= SINGLE_STEP;
+				return isKingMove(fileChange, rankChange);
 			default:
 				// Sliding-piece rules are supplied by the separate task.
 				return false;
 		}
 	}
 
+	private boolean isKnightMove(int fileChange, int rankChange) {
+		return fileChange == SINGLE_STEP && rankChange == DOUBLE_STEP
+				|| fileChange == DOUBLE_STEP && rankChange == SINGLE_STEP;
+	}
+
+	private boolean isKingMove(int fileChange, int rankChange) {
+		return fileChange <= SINGLE_STEP && rankChange <= SINGLE_STEP;
+	}
+
 	private boolean isPawnMove(Board board, Piece piece, Position from, Position to) {
 		int direction = piece.getColor() == Color.WHITE ? SINGLE_STEP : -SINGLE_STEP;
 		int forward = (to.getRank() - from.getRank()) * direction;
-		if (Math.abs(to.getFile() - from.getFile()) == SINGLE_STEP && forward == SINGLE_STEP) {
+		int fileChange = Math.abs(to.getFile() - from.getFile());
+		if (fileChange == SINGLE_STEP && forward == SINGLE_STEP) {
 			Piece target = board.getPiece(to);
 			return target != null && target.getColor() != piece.getColor();
 		}
-		int startRank = piece.getColor() == Color.WHITE ? WHITE_PAWN_START : BLACK_PAWN_START;
-		return to.getFile() == from.getFile() && board.isEmpty(to)
-				&& (forward == SINGLE_STEP
-						|| forward == DOUBLE_STEP && from.getRank() == startRank
-						&& board.isEmpty(new Position(from.getFile(), from.getRank() + direction)));
+		if (fileChange != 0 || !board.isEmpty(to)) {
+			return false;
+		}
+		if (forward == SINGLE_STEP) {
+			return true;
+		}
+		int startRank = piece.getColor() == Color.WHITE
+				? WHITE_PAWN_START : BLACK_PAWN_START;
+		return forward == DOUBLE_STEP && from.getRank() == startRank
+				&& board.isEmpty(new Position(from.getFile(), from.getRank() + direction));
 	}
 }
