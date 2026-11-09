@@ -4,7 +4,7 @@ import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class MoveValidatorSlidingTests {
 	private final MoveValidator validator = new MoveValidator();
@@ -27,19 +27,28 @@ public class MoveValidatorSlidingTests {
 
 	@Test
 	public void C01_rejectsNullBoard() {
-		assertFalse(validator.isLegalMove(null, new Position(0, 0), new Position(0, 1)));
+		Position from = new Position(0, 0);
+		Position to = new Position(0, 1);
+		assertThrows(NullPointerException.class,
+				() -> validator.isLegalMove(null, from, to));
 	}
 
 	@Test
 	public void C02_rejectsNullStart() {
 		Board board = EasyMock.createMock(Board.class);
-		assertMove(board, null, new Position(0, 1), false);
+		EasyMock.replay(board);
+		assertThrows(NullPointerException.class,
+				() -> validator.isLegalMove(board, null, new Position(0, 1)));
+		EasyMock.verify(board);
 	}
 
 	@Test
 	public void C03_rejectsNullDestination() {
 		Board board = EasyMock.createMock(Board.class);
-		assertMove(board, new Position(0, 0), null, false);
+		EasyMock.replay(board);
+		assertThrows(NullPointerException.class,
+				() -> validator.isLegalMove(board, new Position(0, 0), null));
+		EasyMock.verify(board);
 	}
 
 	@Test
