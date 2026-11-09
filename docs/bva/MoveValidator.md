@@ -169,16 +169,16 @@ same piece references. IDs appear in test method names for direct traceability.
 
 | ID | State of system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| N09 | BLACK KNIGHT at (3, 3); to (3, 3) | `false`; board unchanged | no |
-| N10 | BLACK KNIGHT at (3, 3); to (3, 4) | `false`; board unchanged | no |
-| N11 | BLACK KNIGHT at (3, 3); to (4, 3) | `false`; board unchanged | no |
-| N12 | BLACK KNIGHT at (3, 3); to (4, 4) | `false`; board unchanged | no |
-| N13 | BLACK KNIGHT at (3, 3); to (5, 5) | `false`; board unchanged | no |
-| N14 | BLACK KNIGHT at (3, 3); to (3, 5) | `false`; board unchanged | no |
-| N15 | BLACK KNIGHT at (3, 3); to (5, 3) | `false`; board unchanged | no |
-| N16 | BLACK KNIGHT at (3, 3); to (4, 6) | `false`; board unchanged | no |
-| N17 | BLACK KNIGHT at (3, 3); to (6, 4) | `false`; board unchanged | no |
-| N18 | BLACK KNIGHT at (0, 0); to (7, 7) | `false`; board unchanged | no |
+| N09 | BLACK KNIGHT at (3, 3); to (3, 3) | `false`; board unchanged | yes |
+| N10 | BLACK KNIGHT at (3, 3); to (3, 4) | `false`; board unchanged | yes |
+| N11 | BLACK KNIGHT at (3, 3); to (4, 3) | `false`; board unchanged | yes |
+| N12 | BLACK KNIGHT at (3, 3); to (4, 4) | `false`; board unchanged | yes |
+| N13 | BLACK KNIGHT at (3, 3); to (5, 5) | `false`; board unchanged | yes |
+| N14 | BLACK KNIGHT at (3, 3); to (3, 5) | `false`; board unchanged | yes |
+| N15 | BLACK KNIGHT at (3, 3); to (5, 3) | `false`; board unchanged | yes |
+| N16 | BLACK KNIGHT at (3, 3); to (4, 6) | `false`; board unchanged | yes |
+| N17 | BLACK KNIGHT at (3, 3); to (6, 4) | `false`; board unchanged | yes |
+| N18 | BLACK KNIGHT at (0, 0); to (7, 7) | `false`; board unchanged | yes |
 
 ### knight edges
 
