@@ -251,10 +251,10 @@ same piece references. IDs appear in test method names for direct traceability.
 | V03 | real board; from (3,3), null to | NullPointerException | yes |
 | V04 | all three arguments null | NullPointerException | yes |
 | V05 | empty board; from (3,3), to (3,4) | false; unchanged | yes |
-| V06 | each owned type/color; same Position reference for from/to | false; unchanged | no |
-| V07 | each owned type/color; distinct Position objects with equal (3,3) coordinates | false; unchanged | no |
-| V08 | white knight at (3,3), to (4,5); strict Board expects only source read | true; no other Board calls | no |
-| V09 | black king at (3,3), to (4,4); strict Board expects only source read | true; no other Board calls | no |
-| V10 | white pawn at (3,1), to (3,3); strict Board supplies empty destination and intermediate square | true; required reads and no writes | no |
-| V11 | white pawn at (3,3), to (4,4); strict Board supplies black rook at destination | true; required reads and no writes | no |
-| V12 | white rook, bishop, queen separately at (3,3), to (3,4) | false pending sliding-piece task; unchanged | no |
+| V06 | each owned type/color; same Position reference for from/to | false; unchanged | yes |
+| V07 | each owned type/color; distinct Position objects with equal (3,3) coordinates | false; unchanged | yes |
+| V08 | white knight at (3,3), to (4,5); strict Board expects only source read | true; no other Board calls | yes |
+| V09 | black king at (3,3), to (4,4); strict Board expects only source read | true; no other Board calls | yes |
+| V10 | white pawn at (3,1), to (3,3); strict Board supplies empty destination and intermediate square | true; required reads and no writes | yes |
+| V11 | white pawn at (3,3), to (4,4); strict Board supplies black rook at destination | true; required reads and no writes | yes |
+| V12 | white rook, bishop, queen separately at (3,3), to (3,4) | false pending sliding-piece task; unchanged | yes |
