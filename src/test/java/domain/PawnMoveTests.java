@@ -240,4 +240,44 @@ public class PawnMoveTests {
 		board.placePiece(new Piece(PieceType.BISHOP, Color.BLACK), new Position(3, 4));
 		MoveRuleAssertions.assertMove(board, from, to, false);
 	}
+
+	@Test
+	public void P26WhitePawnCapturesLeft() {
+		Board board = new Board();
+		Position from = new Position(3, 3);
+		Position to = new Position(2, 4);
+		board.placePiece(new Piece(PieceType.PAWN, Color.WHITE), from);
+		board.placePiece(new Piece(PieceType.ROOK, Color.BLACK), new Position(2, 4));
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
+
+	@Test
+	public void P27WhitePawnCapturesRight() {
+		Board board = new Board();
+		Position from = new Position(3, 3);
+		Position to = new Position(4, 4);
+		board.placePiece(new Piece(PieceType.PAWN, Color.WHITE), from);
+		board.placePiece(new Piece(PieceType.ROOK, Color.BLACK), new Position(4, 4));
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
+
+	@Test
+	public void P28BlackPawnCapturesLeft() {
+		Board board = new Board();
+		Position from = new Position(3, 4);
+		Position to = new Position(2, 3);
+		board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), from);
+		board.placePiece(new Piece(PieceType.ROOK, Color.WHITE), new Position(2, 3));
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
+
+	@Test
+	public void P29BlackPawnCapturesRight() {
+		Board board = new Board();
+		Position from = new Position(3, 4);
+		Position to = new Position(4, 3);
+		board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), from);
+		board.placePiece(new Piece(PieceType.ROOK, Color.WHITE), new Position(4, 3));
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
 }
