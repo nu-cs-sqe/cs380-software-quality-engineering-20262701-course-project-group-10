@@ -365,7 +365,8 @@ class BoardTest {
 			for (int rank = 2; rank <= 5; rank++) {
 				assertTrue(
 						board.isEmpty(new Position(file, rank)),
-						"Expected position (" + file + ", " + rank + ") to be empty"
+						"Expected position (" + file + ", "
+								+ rank + ") to be empty"
 				);
 			}
 		}
