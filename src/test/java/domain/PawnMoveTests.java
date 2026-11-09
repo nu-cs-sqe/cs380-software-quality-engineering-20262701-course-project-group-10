@@ -124,4 +124,40 @@ public class PawnMoveTests {
 		board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), from);
 		MoveRuleAssertions.assertMove(board, from, to, true);
 	}
+
+	@Test
+	public void P14WhitePawnCannotDoubleFromRank0() {
+		Board board = new Board();
+		Position from = new Position(3, 0);
+		Position to = new Position(3, 2);
+		board.placePiece(new Piece(PieceType.PAWN, Color.WHITE), from);
+		MoveRuleAssertions.assertMove(board, from, to, false);
+	}
+
+	@Test
+	public void P15WhitePawnCannotDoubleFromRank2() {
+		Board board = new Board();
+		Position from = new Position(3, 2);
+		Position to = new Position(3, 4);
+		board.placePiece(new Piece(PieceType.PAWN, Color.WHITE), from);
+		MoveRuleAssertions.assertMove(board, from, to, false);
+	}
+
+	@Test
+	public void P16BlackPawnCannotDoubleFromRank5() {
+		Board board = new Board();
+		Position from = new Position(3, 5);
+		Position to = new Position(3, 3);
+		board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, false);
+	}
+
+	@Test
+	public void P17BlackPawnCannotDoubleFromRank7() {
+		Board board = new Board();
+		Position from = new Position(3, 7);
+		Position to = new Position(3, 5);
+		board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), from);
+		MoveRuleAssertions.assertMove(board, from, to, false);
+	}
 }
