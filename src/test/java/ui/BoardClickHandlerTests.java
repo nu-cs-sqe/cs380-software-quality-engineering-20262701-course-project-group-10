@@ -23,7 +23,8 @@ public class BoardClickHandlerTests {
 	private static final int PIXEL_BEFORE_BOARD = -1;
 	private static final int NO_BOARD_SQUARE_SIZE = 0;
 	private static final int SMALLEST_SQUARE_SIZE = 1;
-	private static final int LAST_PIXEL_OF_SMALLEST_BOARD = BOARD_SIZE * SMALLEST_SQUARE_SIZE - 1;
+	private static final int LAST_PIXEL_OF_SMALLEST_BOARD =
+			BOARD_SIZE * SMALLEST_SQUARE_SIZE - 1;
 
 	private static final int FILE_A = 0;
 	private static final int FILE_B = 1;
@@ -72,14 +73,16 @@ public class BoardClickHandlerTests {
 	@Test
 	public void lastPixelOfTopLeftSquareIsStillA8() {
 		assertEquals(A8, handlerWithIdleGame().toPosition(
-				LAST_PIXEL_OF_FIRST_SQUARE, LAST_PIXEL_OF_FIRST_SQUARE, SQUARE_SIZE));
+				LAST_PIXEL_OF_FIRST_SQUARE, LAST_PIXEL_OF_FIRST_SQUARE,
+						SQUARE_SIZE));
 	}
 
 	// C03: first pixel of the next square on both axes.
 	@Test
 	public void firstPixelOfNextSquareIsB7() {
 		assertEquals(B7, handlerWithIdleGame().toPosition(
-				FIRST_PIXEL_OF_SECOND_SQUARE, FIRST_PIXEL_OF_SECOND_SQUARE, SQUARE_SIZE));
+				FIRST_PIXEL_OF_SECOND_SQUARE, FIRST_PIXEL_OF_SECOND_SQUARE,
+						SQUARE_SIZE));
 	}
 
 	// C04: highest pixel on the board on both axes.
@@ -123,7 +126,8 @@ public class BoardClickHandlerTests {
 	@Test
 	public void lastPixelOfSmallestBoardIsH1() {
 		assertEquals(H1, handlerWithIdleGame().toPosition(
-				LAST_PIXEL_OF_SMALLEST_BOARD, LAST_PIXEL_OF_SMALLEST_BOARD, SMALLEST_SQUARE_SIZE));
+				LAST_PIXEL_OF_SMALLEST_BOARD, LAST_PIXEL_OF_SMALLEST_BOARD,
+						SMALLEST_SQUARE_SIZE));
 	}
 
 	// K01: nothing selected; clicking a current-player piece selects it.
@@ -208,7 +212,8 @@ public class BoardClickHandlerTests {
 		handler.click(E2);
 
 		IllegalArgumentException thrown =
-				assertThrows(IllegalArgumentException.class, () -> handler.click(E5));
+				assertThrows(IllegalArgumentException.class,
+						() -> handler.click(E5));
 
 		assertSame(illegalMove, thrown);
 		assertNull(handler.getSelected());
