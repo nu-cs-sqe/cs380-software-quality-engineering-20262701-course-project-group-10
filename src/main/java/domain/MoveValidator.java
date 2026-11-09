@@ -26,7 +26,8 @@ public class MoveValidator {
 			case PAWN:
 				return isPawnMove(board, piece, from, to);
 			case KNIGHT:
-				return false;
+				return fileChange == SINGLE_STEP && rankChange == DOUBLE_STEP
+						|| fileChange == DOUBLE_STEP && rankChange == SINGLE_STEP;
 			case KING:
 				return false;
 			default:

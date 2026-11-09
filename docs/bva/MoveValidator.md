@@ -156,14 +156,14 @@ same piece references. IDs appear in test method names for direct traceability.
 
 | ID | State of system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| N01 | WHITE KNIGHT at (3, 3); to (4, 5) | `true`; board unchanged | no |
-| N02 | WHITE KNIGHT at (3, 3); to (5, 4) | `true`; board unchanged | no |
-| N03 | WHITE KNIGHT at (3, 3); to (2, 5) | `true`; board unchanged | no |
-| N04 | WHITE KNIGHT at (3, 3); to (1, 4) | `true`; board unchanged | no |
-| N05 | WHITE KNIGHT at (3, 3); to (4, 1) | `true`; board unchanged | no |
-| N06 | WHITE KNIGHT at (3, 3); to (5, 2) | `true`; board unchanged | no |
-| N07 | WHITE KNIGHT at (3, 3); to (2, 1) | `true`; board unchanged | no |
-| N08 | WHITE KNIGHT at (3, 3); to (1, 2) | `true`; board unchanged | no |
+| N01 | WHITE KNIGHT at (3, 3); to (4, 5) | `true`; board unchanged | yes |
+| N02 | WHITE KNIGHT at (3, 3); to (5, 4) | `true`; board unchanged | yes |
+| N03 | WHITE KNIGHT at (3, 3); to (2, 5) | `true`; board unchanged | yes |
+| N04 | WHITE KNIGHT at (3, 3); to (1, 4) | `true`; board unchanged | yes |
+| N05 | WHITE KNIGHT at (3, 3); to (4, 1) | `true`; board unchanged | yes |
+| N06 | WHITE KNIGHT at (3, 3); to (5, 2) | `true`; board unchanged | yes |
+| N07 | WHITE KNIGHT at (3, 3); to (2, 1) | `true`; board unchanged | yes |
+| N08 | WHITE KNIGHT at (3, 3); to (1, 2) | `true`; board unchanged | yes |
 
 ### knight bounds
 
