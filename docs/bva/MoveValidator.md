@@ -195,8 +195,8 @@ same piece references. IDs appear in test method names for direct traceability.
 
 | ID | State of system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| N25 | WHITE KNIGHT at (3, 3); to (4, 5); also WHITE PAWN at (3, 4), WHITE PAWN at (4, 3), WHITE ROOK at (4, 4), WHITE BISHOP at (4, 5) | `true`; board unchanged | no |
-| N26 | WHITE KNIGHT at (3, 3); to (4, 5); also BLACK PAWN at (3, 4), BLACK PAWN at (4, 3), BLACK ROOK at (4, 4), BLACK BISHOP at (4, 5) | `true`; board unchanged | no |
+| N25 | WHITE KNIGHT at (3, 3); to (4, 5); also WHITE PAWN at (3, 4), WHITE PAWN at (4, 3), WHITE ROOK at (4, 4), WHITE BISHOP at (4, 5) | `true`; board unchanged | yes |
+| N26 | WHITE KNIGHT at (3, 3); to (4, 5); also BLACK PAWN at (3, 4), BLACK PAWN at (4, 3), BLACK ROOK at (4, 4), BLACK BISHOP at (4, 5) | `true`; board unchanged | yes |
 
 ### king step
 

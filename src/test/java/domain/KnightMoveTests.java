@@ -219,4 +219,30 @@ public class KnightMoveTests {
 		board.placePiece(new Piece(PieceType.KNIGHT, Color.BLACK), from);
 		MoveRuleAssertions.assertMove(board, from, to, true);
 	}
+
+	@Test
+	public void N25KnightIgnoresWhiteBlockersAndDestination() {
+		Board board = new Board();
+		Position from = new Position(3, 3);
+		Position to = new Position(4, 5);
+		board.placePiece(new Piece(PieceType.KNIGHT, Color.WHITE), from);
+		board.placePiece(new Piece(PieceType.PAWN, Color.WHITE), new Position(3, 4));
+		board.placePiece(new Piece(PieceType.PAWN, Color.WHITE), new Position(4, 3));
+		board.placePiece(new Piece(PieceType.ROOK, Color.WHITE), new Position(4, 4));
+		board.placePiece(new Piece(PieceType.BISHOP, Color.WHITE), new Position(4, 5));
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
+
+	@Test
+	public void N26KnightIgnoresBlackBlockersAndDestination() {
+		Board board = new Board();
+		Position from = new Position(3, 3);
+		Position to = new Position(4, 5);
+		board.placePiece(new Piece(PieceType.KNIGHT, Color.WHITE), from);
+		board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), new Position(3, 4));
+		board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), new Position(4, 3));
+		board.placePiece(new Piece(PieceType.ROOK, Color.BLACK), new Position(4, 4));
+		board.placePiece(new Piece(PieceType.BISHOP, Color.BLACK), new Position(4, 5));
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
 }
