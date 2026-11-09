@@ -122,20 +122,20 @@ same piece references. IDs appear in test method names for direct traceability.
 
 | ID | State of system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| P30 | WHITE PAWN at (3, 3); to (2, 4) | `false`; board unchanged | no |
-| P31 | WHITE PAWN at (3, 3); to (4, 4) | `false`; board unchanged | no |
-| P32 | BLACK PAWN at (3, 4); to (2, 3) | `false`; board unchanged | no |
-| P33 | BLACK PAWN at (3, 4); to (4, 3) | `false`; board unchanged | no |
-| P34 | WHITE PAWN at (3, 3); to (2, 4); also WHITE PAWN at (2, 4) | `false`; board unchanged | no |
-| P35 | WHITE PAWN at (3, 3); to (4, 4); also WHITE PAWN at (4, 4) | `false`; board unchanged | no |
-| P36 | BLACK PAWN at (3, 4); to (2, 3); also BLACK PAWN at (2, 3) | `false`; board unchanged | no |
-| P37 | BLACK PAWN at (3, 4); to (4, 3); also BLACK PAWN at (4, 3) | `false`; board unchanged | no |
-| P38 | WHITE PAWN at (3, 3); to (5, 4); also BLACK ROOK at (5, 4) | `false`; board unchanged | no |
-| P39 | WHITE PAWN at (3, 1); to (4, 3); also BLACK ROOK at (4, 3) | `false`; board unchanged | no |
-| P40 | WHITE PAWN at (3, 3); to (4, 2); also BLACK ROOK at (4, 2) | `false`; board unchanged | no |
-| P41 | BLACK PAWN at (3, 4); to (1, 3); also WHITE ROOK at (1, 3) | `false`; board unchanged | no |
-| P42 | BLACK PAWN at (3, 6); to (2, 4); also WHITE ROOK at (2, 4) | `false`; board unchanged | no |
-| P43 | BLACK PAWN at (3, 4); to (2, 5); also WHITE ROOK at (2, 5) | `false`; board unchanged | no |
+| P30 | WHITE PAWN at (3, 3); to (2, 4) | `false`; board unchanged | yes |
+| P31 | WHITE PAWN at (3, 3); to (4, 4) | `false`; board unchanged | yes |
+| P32 | BLACK PAWN at (3, 4); to (2, 3) | `false`; board unchanged | yes |
+| P33 | BLACK PAWN at (3, 4); to (4, 3) | `false`; board unchanged | yes |
+| P34 | WHITE PAWN at (3, 3); to (2, 4); also WHITE PAWN at (2, 4) | `false`; board unchanged | yes |
+| P35 | WHITE PAWN at (3, 3); to (4, 4); also WHITE PAWN at (4, 4) | `false`; board unchanged | yes |
+| P36 | BLACK PAWN at (3, 4); to (2, 3); also BLACK PAWN at (2, 3) | `false`; board unchanged | yes |
+| P37 | BLACK PAWN at (3, 4); to (4, 3); also BLACK PAWN at (4, 3) | `false`; board unchanged | yes |
+| P38 | WHITE PAWN at (3, 3); to (5, 4); also BLACK ROOK at (5, 4) | `false`; board unchanged | yes |
+| P39 | WHITE PAWN at (3, 1); to (4, 3); also BLACK ROOK at (4, 3) | `false`; board unchanged | yes |
+| P40 | WHITE PAWN at (3, 3); to (4, 2); also BLACK ROOK at (4, 2) | `false`; board unchanged | yes |
+| P41 | BLACK PAWN at (3, 4); to (1, 3); also WHITE ROOK at (1, 3) | `false`; board unchanged | yes |
+| P42 | BLACK PAWN at (3, 6); to (2, 4); also WHITE ROOK at (2, 4) | `false`; board unchanged | yes |
+| P43 | BLACK PAWN at (3, 4); to (2, 5); also WHITE ROOK at (2, 5) | `false`; board unchanged | yes |
 
 ### pawn edges
 
