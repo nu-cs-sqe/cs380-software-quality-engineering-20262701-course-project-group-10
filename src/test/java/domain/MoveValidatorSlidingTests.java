@@ -183,4 +183,52 @@ public class MoveValidatorSlidingTests {
 		expectEmpty(board, new Position(3, 3), false);
 		assertMove(board, from, new Position(4, 4), false);
 	}
+
+	@Test
+	public void Q01_horizontal() {
+		Position from = new Position(7, 3);
+		Board board = boardWith(PieceType.QUEEN, from);
+		expectEmpty(board, new Position(6, 3), true);
+		assertMove(board, from, new Position(5, 3), true);
+	}
+
+	@Test
+	public void Q02_vertical() {
+		Position from = new Position(3, 5);
+		Board board = boardWith(PieceType.QUEEN, from);
+		expectEmpty(board, new Position(3, 4), true);
+		assertMove(board, from, new Position(3, 3), true);
+	}
+
+	@Test
+	public void Q03_diagonal() {
+		Position from = new Position(3, 3);
+		Board board = boardWith(PieceType.QUEEN, from);
+		expectEmpty(board, new Position(4, 4), true);
+		assertMove(board, from, new Position(5, 5), true);
+	}
+
+	@Test
+	public void Q04_rejectsKnightShape() {
+		Position from = new Position(0, 0);
+		Board board = boardWith(PieceType.QUEEN, from);
+		assertMove(board, from, new Position(1, 2), false);
+	}
+
+	@Test
+	public void Q05_blockedStraight() {
+		Position from = new Position(0, 0);
+		Board board = boardWith(PieceType.QUEEN, from);
+		expectEmpty(board, new Position(0, 1), false);
+		assertMove(board, from, new Position(0, 2), false);
+	}
+
+	@Test
+	public void Q06_blockedDiagonal() {
+		Position from = new Position(2, 0);
+		Board board = boardWith(PieceType.QUEEN, from);
+		expectEmpty(board, new Position(3, 1), true);
+		expectEmpty(board, new Position(4, 2), false);
+		assertMove(board, from, new Position(5, 3), false);
+	}
 }
