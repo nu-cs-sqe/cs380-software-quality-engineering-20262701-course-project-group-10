@@ -160,4 +160,84 @@ public class PawnMoveTests {
 		board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), from);
 		MoveRuleAssertions.assertMove(board, from, to, false);
 	}
+
+	@Test
+	public void P18WhiteDoubleBlockedByWhiteMidway() {
+		Board board = new Board();
+		Position from = new Position(3, 1);
+		Position to = new Position(3, 3);
+		board.placePiece(new Piece(PieceType.PAWN, Color.WHITE), from);
+		board.placePiece(new Piece(PieceType.BISHOP, Color.WHITE), new Position(3, 2));
+		MoveRuleAssertions.assertMove(board, from, to, false);
+	}
+
+	@Test
+	public void P19WhiteDoubleBlockedByBlackMidway() {
+		Board board = new Board();
+		Position from = new Position(3, 1);
+		Position to = new Position(3, 3);
+		board.placePiece(new Piece(PieceType.PAWN, Color.WHITE), from);
+		board.placePiece(new Piece(PieceType.BISHOP, Color.BLACK), new Position(3, 2));
+		MoveRuleAssertions.assertMove(board, from, to, false);
+	}
+
+	@Test
+	public void P20WhiteDoubleBlockedByWhiteAtDestination() {
+		Board board = new Board();
+		Position from = new Position(3, 1);
+		Position to = new Position(3, 3);
+		board.placePiece(new Piece(PieceType.PAWN, Color.WHITE), from);
+		board.placePiece(new Piece(PieceType.BISHOP, Color.WHITE), new Position(3, 3));
+		MoveRuleAssertions.assertMove(board, from, to, false);
+	}
+
+	@Test
+	public void P21WhiteDoubleBlockedByBlackAtDestination() {
+		Board board = new Board();
+		Position from = new Position(3, 1);
+		Position to = new Position(3, 3);
+		board.placePiece(new Piece(PieceType.PAWN, Color.WHITE), from);
+		board.placePiece(new Piece(PieceType.BISHOP, Color.BLACK), new Position(3, 3));
+		MoveRuleAssertions.assertMove(board, from, to, false);
+	}
+
+	@Test
+	public void P22BlackDoubleBlockedByWhiteMidway() {
+		Board board = new Board();
+		Position from = new Position(3, 6);
+		Position to = new Position(3, 4);
+		board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), from);
+		board.placePiece(new Piece(PieceType.BISHOP, Color.WHITE), new Position(3, 5));
+		MoveRuleAssertions.assertMove(board, from, to, false);
+	}
+
+	@Test
+	public void P23BlackDoubleBlockedByBlackMidway() {
+		Board board = new Board();
+		Position from = new Position(3, 6);
+		Position to = new Position(3, 4);
+		board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), from);
+		board.placePiece(new Piece(PieceType.BISHOP, Color.BLACK), new Position(3, 5));
+		MoveRuleAssertions.assertMove(board, from, to, false);
+	}
+
+	@Test
+	public void P24BlackDoubleBlockedByWhiteAtDestination() {
+		Board board = new Board();
+		Position from = new Position(3, 6);
+		Position to = new Position(3, 4);
+		board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), from);
+		board.placePiece(new Piece(PieceType.BISHOP, Color.WHITE), new Position(3, 4));
+		MoveRuleAssertions.assertMove(board, from, to, false);
+	}
+
+	@Test
+	public void P25BlackDoubleBlockedByBlackAtDestination() {
+		Board board = new Board();
+		Position from = new Position(3, 6);
+		Position to = new Position(3, 4);
+		board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), from);
+		board.placePiece(new Piece(PieceType.BISHOP, Color.BLACK), new Position(3, 4));
+		MoveRuleAssertions.assertMove(board, from, to, false);
+	}
 }
