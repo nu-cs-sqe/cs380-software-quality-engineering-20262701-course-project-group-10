@@ -239,8 +239,8 @@ same piece references. IDs appear in test method names for direct traceability.
 
 | ID | State of system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| K23 | WHITE KING at (3, 3); to (4, 4); also WHITE PAWN at (4, 4) | `true`; board unchanged | no |
-| K24 | WHITE KING at (3, 3); to (4, 4); also BLACK PAWN at (4, 4) | `true`; board unchanged | no |
+| K23 | WHITE KING at (3, 3); to (4, 4); also WHITE PAWN at (4, 4) | `true`; board unchanged | yes |
+| K24 | WHITE KING at (3, 3); to (4, 4); also BLACK PAWN at (4, 4) | `true`; board unchanged | yes |
 
 ### API boundaries and interaction checks
 

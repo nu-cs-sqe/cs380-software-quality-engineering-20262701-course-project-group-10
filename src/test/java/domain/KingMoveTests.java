@@ -201,4 +201,24 @@ public class KingMoveTests {
 		board.placePiece(new Piece(PieceType.KING, Color.BLACK), from);
 		MoveRuleAssertions.assertMove(board, from, to, true);
 	}
+
+	@Test
+	public void K23KingPatternIgnoresWhiteDestination() {
+		Board board = new Board();
+		Position from = new Position(3, 3);
+		Position to = new Position(4, 4);
+		board.placePiece(new Piece(PieceType.KING, Color.WHITE), from);
+		board.placePiece(new Piece(PieceType.PAWN, Color.WHITE), new Position(4, 4));
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
+
+	@Test
+	public void K24KingPatternIgnoresBlackDestination() {
+		Board board = new Board();
+		Position from = new Position(3, 3);
+		Position to = new Position(4, 4);
+		board.placePiece(new Piece(PieceType.KING, Color.WHITE), from);
+		board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), new Position(4, 4));
+		MoveRuleAssertions.assertMove(board, from, to, true);
+	}
 }
