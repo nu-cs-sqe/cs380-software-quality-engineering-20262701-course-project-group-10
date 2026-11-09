@@ -19,7 +19,8 @@ final class MoveRuleAssertions {
 		assertEquals(expected, new MoveValidator().isLegalMove(board, from, to));
 		for (int file = 0; file < BOARD_SIZE; file++) {
 			for (int rank = 0; rank < BOARD_SIZE; rank++) {
-				assertSame(before[file][rank], board.getPiece(new Position(file, rank)));
+				assertSame(before[file][rank], board.getPiece(new Position(file,
+						rank)));
 			}
 		}
 	}
