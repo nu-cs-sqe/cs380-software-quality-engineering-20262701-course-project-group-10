@@ -2,6 +2,8 @@ package domain;
 
 import java.util.Objects;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /** A chess game: owns the board and tracks whose turn it is. */
 public class Game {
 	private final Board board;
@@ -23,6 +25,9 @@ public class Game {
 		throw new IllegalArgumentException("Moves are not available yet.");
 	}
 
+	@SuppressFBWarnings(
+			value = "EI_EXPOSE_REP",
+			justification = "The GUI observes the same board across resets, as required by G01/G06.")
 	public Board getBoard() {
 		return board;
 	}
