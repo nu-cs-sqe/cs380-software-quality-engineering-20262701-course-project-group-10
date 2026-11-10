@@ -35,8 +35,7 @@
 
 # Week 7 (11/9/2026-11/15/2026)
 **Planning and Progress Tracking**:
-- [done] Mengpang Xing: Set up Google-based Checkstyle and fixed all production and test violations ([PR #36](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/36)).
-- [done] Mengpang Xing: Set up JaCoCo and the coverage badge, achieving 100% cyclomatic complexity coverage for all required classes, excluding Views, Main, and enums ([PR #36](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/36)).
+- [done] Mengpang Xing: Set up Google-based Checkstyle and fixed all violations; set up JaCoCo and the coverage badge, achieving 100% cyclomatic complexity coverage for all required classes, excluding Views, Main, and enums ([PR #36](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/36)).
 
 # Week 8 (11/16/2026-11/22/2026)
 **Planning and Progress Tracking**:
