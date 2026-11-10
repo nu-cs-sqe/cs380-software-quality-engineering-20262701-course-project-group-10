@@ -2,11 +2,27 @@ package domain;
 import java.util.Objects;
 
 public class Board {
+	private static final int BOARD_SIZE = 8;
+	private static final int WHITE_BACK_RANK = 0;
+	private static final int WHITE_PAWN_RANK = 1;
+	private static final int BLACK_PAWN_RANK = 6;
+	private static final int BLACK_BACK_RANK = 7;
+
+	private static final PieceType[] BACK_RANK_ORDER = {
+			PieceType.ROOK,
+			PieceType.KNIGHT,
+			PieceType.BISHOP,
+			PieceType.QUEEN,
+			PieceType.KING,
+			PieceType.BISHOP,
+			PieceType.KNIGHT,
+			PieceType.ROOK
+	};
 
 	private Piece[][] squares;
 
 	public Board() {
-		squares = new Piece[8][8];
+		squares = new Piece[BOARD_SIZE][BOARD_SIZE];
 	}
 
 	public Piece getPiece(Position position) {
@@ -23,7 +39,12 @@ public class Board {
 
 	public void setUpStartingPosition() {
 		// Clear the board before setting up the pieces
-		squares = new Piece[8][8];
+		squares = new Piece[BOARD_SIZE][BOARD_SIZE];
+
+		placeBackRank(Color.WHITE, WHITE_BACK_RANK);
+		placePawnRank(Color.WHITE, WHITE_PAWN_RANK);
+		placePawnRank(Color.BLACK, BLACK_PAWN_RANK);
+		placeBackRank(Color.BLACK, BLACK_BACK_RANK);
 
 		// Place white back rank
 		placeBackRank(Color.WHITE, 0);
@@ -48,25 +69,19 @@ public class Board {
 		placeBackRank(Color.BLACK, 7);
 	}
 
+
 	private void placeBackRank(Color color, int rank) {
-
-		PieceType[] backRank = {
-				PieceType.ROOK,
-				PieceType.KNIGHT,
-				PieceType.BISHOP,
-				PieceType.QUEEN,
-				PieceType.KING,
-				PieceType.BISHOP,
-				PieceType.KNIGHT,
-				PieceType.ROOK
-		};
-
-		for (int file = 0; file < 8; file++) {
-			Piece piece = new Piece(backRank[file], color);
-
-			placePiece(piece, new Position(file, rank));
+		for (int file = 0; file < BOARD_SIZE; file++) {
+			placePiece(new Piece(BACK_RANK_ORDER[file], color), new Position(file, rank));
 		}
 	}
+
+	private void placePawnRank(Color color, int rank) {
+		for (int file = 0; file < BOARD_SIZE; file++) {
+			placePiece(new Piece(PieceType.PAWN, color), new Position(file, rank));
+		}
+	}
+	
 
 	public void movePiece(Position from, Position to) {
 		Objects.requireNonNull(from, "from");
