@@ -68,7 +68,14 @@ public class Board {
 	}
 
 	public void movePiece(Position from, Position to) {
-		placePiece(getPiece(from), to);
+		Piece movingPiece = getPiece(from);
+		if (from.equals(to)) {
+			throw new IllegalArgumentException("A piece cannot move to its own square");
+		}
+		if (movingPiece == null) {
+			throw new IllegalArgumentException("No piece on " + from);
+		}
+		placePiece(movingPiece, to);
 		placePiece(null, from);
 	}
 }

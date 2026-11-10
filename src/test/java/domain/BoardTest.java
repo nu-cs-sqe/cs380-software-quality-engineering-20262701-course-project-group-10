@@ -487,4 +487,16 @@ class BoardTest {
 		assertThrows(IllegalArgumentException.class,
 				() -> board.movePiece(new Position(0, 0), new Position(0, 1)));
 	}
+
+	@Test
+	void movePiece_sameSquareIsRejectedAndPieceStays() {
+		Board board = new Board();
+		Piece rook = new Piece(PieceType.ROOK, Color.WHITE);
+		Position square = new Position(3, 3);
+		board.placePiece(rook, square);
+
+		assertThrows(IllegalArgumentException.class, () -> board.movePiece(square, square));
+
+		assertSame(rook, board.getPiece(square));
+	}
 }
