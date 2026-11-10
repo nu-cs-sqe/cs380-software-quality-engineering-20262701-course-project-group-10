@@ -32,8 +32,10 @@ public class Game {
 		board.getPiece(from);
 		validator.isLegalMove(board, from, to);
 		board.movePiece(from, to);
-		currentPlayer = Color.BLACK;
+
+		currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
 	}
+
 
 	@SuppressFBWarnings(
 			value = "EI_EXPOSE_REP",
