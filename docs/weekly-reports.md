@@ -35,10 +35,8 @@
 
 # Week 7 (11/9/2026-11/15/2026)
 **Planning and Progress Tracking**:
-1. [not started] Person: Task (Links to PR)
-2. [not started] Person: Task (Links to PR)
-3. [80% done] Person: Task (Links to PR)
-4. etc.
+- [done] Mengpang Xing: Set up Google-based Checkstyle and fixed all production and test violations.
+- [done] Mengpang Xing: Set up JaCoCo and the coverage badge, achieving 100% cyclomatic complexity coverage for all required classes, excluding Views, Main, and enums.
 
 # Week 8 (11/16/2026-11/22/2026)
 **Planning and Progress Tracking**:
