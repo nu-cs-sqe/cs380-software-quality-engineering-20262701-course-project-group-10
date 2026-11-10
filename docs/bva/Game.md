@@ -65,17 +65,6 @@ unexpected board call fails the test.
 
 ---
 
-## Temporary move stub
-
-`unavailableMoveIsRejectedWithoutChangingGame` characterizes the current GUI
-stub: `makeMove` throws `IllegalArgumentException`, does not call the board, and
-leaves the supplied board reference and current player unchanged. This is not
-acceptance coverage for the One Turn feature. Replace this test with the
-specified move and turn-switching cases when that feature is implemented.
-
-
-
-
 
 ##  `makeMove(Position from, Position to)` in Game
 
