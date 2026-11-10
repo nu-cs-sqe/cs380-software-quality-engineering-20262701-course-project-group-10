@@ -2,6 +2,8 @@
 
 [![Gradle Build](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/actions/workflows/main.yml/badge.svg?branch=main&event=push)](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/actions/workflows/main.yml)
 
+![Missed complexity](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/raw/badges/complexity.svg)
+
 ## Contributors
 - Youran Ma
 - Mengpang Xing
@@ -20,7 +22,12 @@
 ## Exceptions
 Swing view classes, verified manually.
 ### Code Coverage
-N/A
+Run `bash ./gradlew jacocoTestCoverageVerification`, then open the
+[HTML report](build/reports/jacoco/test/html/index.html) locally.
+
+Requires 100% cyclomatic complexity coverage, excluding View classes, `Main`,
+and enums. This check also runs during `build`.
+
 ### Mutation Testing
 N/A
 ### Others
@@ -31,9 +38,8 @@ N/A
   the build.
 
 ## Static analysis
-Run `bash ./gradlew check` to run tests, Checkstyle, and SpotBugs. These checks also run
-with `bash ./gradlew build`, including in CI. Findings fail the build.
+Run `bash ./gradlew check` for tests, Checkstyle, SpotBugs, and coverage.
+`build` runs the same checks; findings fail the build.
 
-Run individual checks with `bash ./gradlew checkstyleMain checkstyleTest spotbugsMain spotbugsTest`.
-HTML reports are generated under `build/reports/checkstyle/` and `build/reports/spotbugs/`.
-Checkstyle rules are defined in `config/checkstyle/checkstyle.xml`.
+Reports: `build/reports/checkstyle/` and `build/reports/spotbugs/`.
+Checkstyle rules: `config/checkstyle/checkstyle.xml`.
