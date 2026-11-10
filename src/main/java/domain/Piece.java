@@ -4,19 +4,19 @@ import java.util.Objects;
 
 /** An immutable piece with a type and a color. */
 public final class Piece {
-	private final PieceType type;
-	private final Color color;
+    private final PieceType type;
+    private final Color color;
 
-	public Piece(PieceType type, Color color) {
-		this.type = Objects.requireNonNull(type, "type");
-		this.color = Objects.requireNonNull(color, "color");
-	}
+    public Piece(PieceType type, Color color) {
+        this.type = Objects.requireNonNull(type, "type");
+        this.color = Objects.requireNonNull(color, "color");
+    }
 
-	public PieceType getType() {
-		return type;
-	}
+    public PieceType getType() {
+        return type;
+    }
 
-	public Color getColor() {
-		return color;
-	}
+    public Color getColor() {
+        return color;
+    }
 }
