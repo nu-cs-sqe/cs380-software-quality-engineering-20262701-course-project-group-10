@@ -1,86 +1,101 @@
 package domain;
 
-import org.easymock.EasyMock;
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.easymock.EasyMock;
+import org.junit.jupiter.api.Test;
+
 public class GameTests {
-	// G01: non-null pointer; the constructor must not touch the board.
-	@Test
-	public void newGameKeepsTheSameBoard() {
-		Board board = EasyMock.createMock(Board.class);
-		EasyMock.replay(board);
+    // G01: non-null pointer; the constructor must not touch the board.
+    @Test
+    public void newGameKeepsTheSameBoard() {
+        Board board = EasyMock.createMock(Board.class);
+        EasyMock.replay(board);
 
-		Game game = new Game(board);
+        Game game = new Game(board);
 
-		assertSame(board, game.getBoard());
-		assertSame(board, game.getBoard());
-		EasyMock.verify(board);
-	}
+        assertSame(board, game.getBoard());
+        assertSame(board, game.getBoard());
+        EasyMock.verify(board);
+    }
 
-	// G02: null pointer boundary.
-	@Test
-	public void nullBoardIsRejected() {
-		assertThrows(NullPointerException.class, () -> new Game(null));
-	}
+    // G02: null pointer boundary.
+    @Test
+    public void nullBoardIsRejected() {
+        assertThrows(NullPointerException.class, () -> new Game(null));
+    }
 
-	// G03: zero startNewGame() calls; White is to move from construction.
-	@Test
-	public void whiteMovesFirstBeforeStartNewGame() {
-		Board board = EasyMock.createMock(Board.class);
-		EasyMock.replay(board);
+    // G03: zero startNewGame() calls; White is to move from construction.
+    @Test
+    public void whiteMovesFirstBeforeStartNewGame() {
+        Board board = EasyMock.createMock(Board.class);
+        EasyMock.replay(board);
 
-		Game game = new Game(board);
+        Game game = new Game(board);
 
-		assertSame(Color.WHITE, game.getCurrentPlayer());
-		assertSame(Color.WHITE, game.getCurrentPlayer());
-		EasyMock.verify(board);
-	}
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+        EasyMock.verify(board);
+    }
 
-	// G04: one startNewGame() call sets up the board exactly once.
-	@Test
-	public void startNewGameSetsUpTheBoardOnce() {
-		Board board = EasyMock.createMock(Board.class);
-		board.setUpStartingPosition();
-		EasyMock.expectLastCall().once();
-		EasyMock.replay(board);
+    // G04: one startNewGame() call sets up the board exactly once.
+    @Test
+    public void startNewGameSetsUpTheBoardOnce() {
+        Board board = EasyMock.createMock(Board.class);
+        board.setUpStartingPosition();
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(board);
 
-		Game game = new Game(board);
-		game.startNewGame();
+        Game game = new Game(board);
+        game.startNewGame();
 
-		assertSame(Color.WHITE, game.getCurrentPlayer());
-		EasyMock.verify(board);
-	}
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+        EasyMock.verify(board);
+    }
 
-	// G05: more than one startNewGame() call sets up the board each time.
-	@Test
-	public void startNewGameTwiceSetsUpTheBoardTwice() {
-		Board board = EasyMock.createMock(Board.class);
-		board.setUpStartingPosition();
-		EasyMock.expectLastCall().times(2);
-		EasyMock.replay(board);
+    // G05: more than one startNewGame() call sets up the board each time.
+    @Test
+    public void startNewGameTwiceSetsUpTheBoardTwice() {
+        Board board = EasyMock.createMock(Board.class);
+        board.setUpStartingPosition();
+        EasyMock.expectLastCall().times(2);
+        EasyMock.replay(board);
 
-		Game game = new Game(board);
-		game.startNewGame();
-		game.startNewGame();
+        Game game = new Game(board);
+        game.startNewGame();
+        game.startNewGame();
 
-		assertSame(Color.WHITE, game.getCurrentPlayer());
-		EasyMock.verify(board);
-	}
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+        EasyMock.verify(board);
+    }
 
-	// G06: startNewGame() resets the same board instead of replacing it.
-	@Test
-	public void startNewGameKeepsTheSameBoard() {
-		Board board = EasyMock.createMock(Board.class);
-		board.setUpStartingPosition();
-		EasyMock.expectLastCall().once();
-		EasyMock.replay(board);
+    // G06: startNewGame() resets the same board instead of replacing it.
+    @Test
+    public void startNewGameKeepsTheSameBoard() {
+        Board board = EasyMock.createMock(Board.class);
+        board.setUpStartingPosition();
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(board);
 
-		Game game = new Game(board);
-		game.startNewGame();
+        Game game = new Game(board);
+        game.startNewGame();
 
-		assertSame(board, game.getBoard());
-		EasyMock.verify(board);
-	}
+        assertSame(board, game.getBoard());
+        EasyMock.verify(board);
+    }
+
+    @Test
+    public void unavailableMoveIsRejectedWithoutChangingGame() {
+        Board board = EasyMock.createStrictMock(Board.class);
+        EasyMock.replay(board);
+        Game game = new Game(board);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> game.makeMove(new Position(0, 1), new Position(0, 2)));
+
+        assertSame(board, game.getBoard());
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+        EasyMock.verify(board);
+    }
 }

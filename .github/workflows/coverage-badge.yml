@@ -1,0 +1,51 @@
+name: Complexity badge
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: complexity-badge
+  cancel-in-progress: false
+
+jobs:
+  badge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad
+        with:
+          distribution: temurin
+          java-version: '11'
+          cache: gradle
+      - name: Generate complexity badge
+        run: bash ./gradlew --no-daemon complexityBadge
+      - name: Render badge SVG
+        run: |
+          curl --fail --silent --show-error --retry 3 -G "https://img.shields.io/static/v1" \
+            --data-urlencode "label=$(jq -r .label build/badges/complexity.json)" \
+            --data-urlencode "message=$(jq -r .message build/badges/complexity.json)" \
+            --data-urlencode "color=$(jq -r .color build/badges/complexity.json)" \
+            -o build/badges/complexity.svg
+      - name: Publish badge
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          publish_dir=$(mktemp -d)
+          cp build/badges/complexity.* "$publish_dir/"
+          cd "$publish_dir"
+          git init --initial-branch=badges
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add complexity.json complexity.svg
+          git commit -m 'update complexity badge'
+          remote="https://github.com/${GITHUB_REPOSITORY}.git"
+          auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w 0)
+          git -c "http.extraheader=AUTHORIZATION: basic $auth" push --force "$remote" HEAD:badges

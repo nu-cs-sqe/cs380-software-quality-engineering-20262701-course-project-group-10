@@ -65,7 +65,19 @@ unexpected board call fails the test.
 
 ---
 
-## 8. `makeMove(Position from, Position to)`
+## Temporary move stub
+
+`unavailableMoveIsRejectedWithoutChangingGame` characterizes the current GUI
+stub: `makeMove` throws `IllegalArgumentException`, does not call the board, and
+leaves the supplied board reference and current player unchanged. This is not
+acceptance coverage for the One Turn feature. Replace this test with the
+specified move and turn-switching cases when that feature is implemented.
+
+
+
+
+
+##  `makeMove(Position from, Position to)` in Game
 
 ### Contract and scope
 
@@ -111,3 +123,4 @@ Each rejection reason gets one case, and each case checks that `movePiece` is no
 | ID | State of the system | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | G07 | current player is `BLACK` (after one legal move) when `startNewGame()` is called | `setUpStartingPosition()` called once; current player resets to `WHITE` | :white_check_mark: |
+
