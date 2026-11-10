@@ -2,7 +2,7 @@ package ui;
 
 import domain.Color;
 import domain.Game;
-
+import java.awt.BorderLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -10,7 +10,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import java.awt.BorderLayout;
 
 /** The main window: shows the board, whose turn it is, and a "New Game" menu item. */
 public class ChessFrame extends JFrame {

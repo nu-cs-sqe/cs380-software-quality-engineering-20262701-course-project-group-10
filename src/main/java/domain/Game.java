@@ -1,8 +1,7 @@
 package domain;
 
-import java.util.Objects;
-
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.util.Objects;
 
 /** A chess game: owns the board and tracks whose turn it is. */
 public class Game {

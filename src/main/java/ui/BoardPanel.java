@@ -5,8 +5,6 @@ import domain.Color;
 import domain.Game;
 import domain.Piece;
 import domain.Position;
-
-import javax.swing.JPanel;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -16,6 +14,7 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
+import javax.swing.JPanel;
 
 /** Draws the board and turns mouse clicks into moves. White is at the bottom. */
 public class BoardPanel extends JPanel {

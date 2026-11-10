@@ -3,7 +3,6 @@ package ui;
 import domain.Board;
 import domain.Game;
 import domain.Position;
-
 import java.util.Objects;
 
 public class BoardClickHandler {

@@ -2,7 +2,6 @@ package ui;
 
 import domain.Board;
 import domain.Game;
-
 import javax.swing.SwingUtilities;
 
 public class Main {
