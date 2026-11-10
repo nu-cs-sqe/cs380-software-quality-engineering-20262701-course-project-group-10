@@ -62,3 +62,11 @@ unexpected board call fails the test.
 | G05 | `new Game(mockBoard)`; `startNewGame()` called 2 times | `setUpStartingPosition()` called exactly twice; `getCurrentPlayer()` is `WHITE` | yes |
 | G06 | `new Game(mockBoard)`; `startNewGame()` called 1 time | `getBoard()` still returns `mockBoard` (same reference) | yes |
 | G07 | current player is `BLACK` when `startNewGame()` is called | current player resets to `WHITE` | CAN'T SET until moves exist |
+
+## Temporary move stub
+
+`unavailableMoveIsRejectedWithoutChangingGame` characterizes the current GUI
+stub: `makeMove` throws `IllegalArgumentException`, does not call the board, and
+leaves the supplied board reference and current player unchanged. This is not
+acceptance coverage for the One Turn feature. Replace this test with the
+specified move and turn-switching cases when that feature is implemented.
