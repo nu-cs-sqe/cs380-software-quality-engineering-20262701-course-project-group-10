@@ -67,5 +67,8 @@ public class Board {
 		}
 	}
 
-
+	public void movePiece(Position from, Position to) {
+		placePiece(getPiece(from), to);
+		placePiece(null, from);
+	}
 }

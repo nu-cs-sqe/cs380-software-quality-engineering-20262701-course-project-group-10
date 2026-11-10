@@ -4,6 +4,8 @@ import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class GameTests {
 	// G01: non-null pointer; the constructor must not touch the board.
@@ -82,5 +84,126 @@ public class GameTests {
 
 		assertSame(board, game.getBoard());
 		EasyMock.verify(board);
+	}
+
+	@Test
+	public void makeMove_movesPieceAndSwitchesPlayer() {
+		Board board = new Board();
+		Piece knight = new Piece(PieceType.KNIGHT, Color.WHITE);
+		Position from = new Position(1, 0);
+		Position to = new Position(2, 2);
+		board.placePiece(knight, from);
+
+		Game game = new Game(board);
+
+		game.makeMove(from, to);
+
+		assertNull(board.getPiece(from));
+		assertSame(knight, board.getPiece(to));
+		assertEquals(Color.BLACK, game.getCurrentPlayer());
+	}
+
+	@Test
+	public void makeMove_rejectsEmptyStartingSquare() {
+		Board board = new Board();
+		Game game = new Game(board);
+		Position from = new Position(0, 0);
+		Position to = new Position(0, 3);
+
+		org.junit.jupiter.api.Assertions.assertThrows(
+				IllegalArgumentException.class,
+				() -> game.makeMove(from, to));
+
+		assertNull(board.getPiece(to));
+		assertEquals(Color.WHITE, game.getCurrentPlayer());
+	}
+
+	@Test
+	public void makeMove_rejectsOpponentPiece() {
+		Board board = new Board();
+		Piece blackKnight = new Piece(PieceType.KNIGHT, Color.BLACK);
+		Position from = new Position(1, 7);
+		Position to = new Position(2, 5);
+		board.placePiece(blackKnight, from);
+		Game game = new Game(board);
+
+		org.junit.jupiter.api.Assertions.assertThrows(
+				IllegalArgumentException.class,
+				() -> game.makeMove(from, to));
+
+		assertSame(blackKnight, board.getPiece(from));
+		assertNull(board.getPiece(to));
+		assertEquals(Color.WHITE, game.getCurrentPlayer());
+	}
+
+	@Test
+	public void makeMove_rejectsDestinationOccupiedByOwnPiece() {
+		Board board = new Board();
+		Piece knight = new Piece(PieceType.KNIGHT, Color.WHITE);
+		Piece ownPiece = new Piece(PieceType.ROOK, Color.WHITE);
+		Position from = new Position(1, 0);
+		Position to = new Position(2, 2);
+		board.placePiece(knight, from);
+		board.placePiece(ownPiece, to);
+		Game game = new Game(board);
+
+		org.junit.jupiter.api.Assertions.assertThrows(
+				IllegalArgumentException.class,
+				() -> game.makeMove(from, to));
+
+		assertSame(knight, board.getPiece(from));
+		assertSame(ownPiece, board.getPiece(to));
+		assertEquals(Color.WHITE, game.getCurrentPlayer());
+	}
+	@Test
+	public void makeMove_capturesOpponentPieceAndSwitchesPlayer() {
+		Board board = new Board();
+		Piece whiteRook = new Piece(PieceType.ROOK, Color.WHITE);
+		Piece blackKnight = new Piece(PieceType.KNIGHT, Color.BLACK);
+		Position from = new Position(0, 0);
+		Position to = new Position(0, 3);
+		board.placePiece(whiteRook, from);
+		board.placePiece(blackKnight, to);
+		Game game = new Game(board);
+
+		game.makeMove(from, to);
+
+		assertNull(board.getPiece(from));
+		assertSame(whiteRook, board.getPiece(to));
+		assertEquals(Color.BLACK, game.getCurrentPlayer());
+	}
+
+	@Test
+	public void makeMove_rejectsIllegalMovementPattern() {
+		Board board = new Board();
+		Piece rook = new Piece(PieceType.ROOK, Color.WHITE);
+		Position from = new Position(0, 0);
+		Position to = new Position(1, 2);
+		board.placePiece(rook, from);
+		Game game = new Game(board);
+
+		org.junit.jupiter.api.Assertions.assertThrows(
+				IllegalArgumentException.class,
+				() -> game.makeMove(from, to));
+
+		assertSame(rook, board.getPiece(from));
+		assertNull(board.getPiece(to));
+		assertEquals(Color.WHITE, game.getCurrentPlayer());
+	}
+
+	@Test
+	public void makeMove_rejectsSameStartingAndDestinationSquare() {
+		Board board = new Board();
+		Piece knight = new Piece(PieceType.KNIGHT, Color.WHITE);
+		Position position = new Position(1, 0);
+		board.placePiece(knight, position);
+		Game game = new Game(board);
+
+		org.junit.jupiter.api.Assertions.assertThrows(
+				IllegalArgumentException.class,
+				() -> game.makeMove(position, position));
+
+		assertSame(knight, board.getPiece(position));
+		assertEquals(Color.WHITE, game.getCurrentPlayer());
 	}
 }

@@ -416,4 +416,20 @@ class BoardTest {
 		assertPawnRank(board, Color.WHITE, 1);
 		assertPawnRank(board, Color.BLACK, 6);
 	}
+
+	@Test
+	void movePiece_fromA1ToH8() {
+		assertMoveToEmptySquare(new Position(0, 0), new Position(7, 7));
+	}
+
+	private void assertMoveToEmptySquare(Position from, Position to) {
+		Board board = new Board();
+		Piece rook = new Piece(PieceType.ROOK, Color.WHITE);
+		board.placePiece(rook, from);
+
+		board.movePiece(from, to);
+
+		assertSame(rook, board.getPiece(to));
+		assertTrue(board.isEmpty(from));
+	}
 }
