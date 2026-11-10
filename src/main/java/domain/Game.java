@@ -33,11 +33,13 @@ public class Game {
 		if (piece == null) {
 			throw new IllegalArgumentException("No piece on " + from);
 		}
+		if (piece.getColor() != currentPlayer) {
+			throw new IllegalArgumentException("It is " + currentPlayer + "'s turn");
+		}
 		validator.isLegalMove(board, from, to);
 		board.movePiece(from, to);
 
 		currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
-
 
 	}
 
