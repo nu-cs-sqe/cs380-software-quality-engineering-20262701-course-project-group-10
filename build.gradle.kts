@@ -37,11 +37,15 @@ tasks.withType<JavaCompile> {
 }
 
 checkstyle {
-    toolVersion = "9.3"
+    toolVersion = "10.12.5"
     isIgnoreFailures = false
 }
 
 tasks.withType<Checkstyle>().configureEach {
+    configProperties = mapOf(
+        "methodNameFormat" to "^[a-z][a-zA-Z0-9]*$",
+        "magicNumberSeverity" to "error"
+    )
     reports {
         xml.required = true
         html.required = true
@@ -61,4 +65,13 @@ tasks.withType<com.github.spotbugs.snom.SpotBugsTask>().configureEach {
         required = true
         setStylesheet("fancy-hist.xsl")
     }
+}
+
+// BVA tests retain case IDs and numeric boundary inputs.
+tasks.named<Checkstyle>("checkstyleTest") {
+    configProperties = mapOf(
+        "methodNameFormat" to ("^(?:[a-z][a-zA-Z0-9]*(?:_[a-zA-Z][a-zA-Z0-9]*)*|"
+            + "[A-Z]{1,3}[0-9]{2,}_?[a-zA-Z][a-zA-Z0-9]*)$"),
+        "magicNumberSeverity" to "ignore"
+    )
 }

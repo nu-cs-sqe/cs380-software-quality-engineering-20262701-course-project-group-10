@@ -13,7 +13,7 @@
 - JUnit 5.10
 - Gradle 8.10
 - EasyMock 5.4.0
-- Checkstyle 9.3
+- Checkstyle 10.12.5
 - SpotBugs Gradle plugin 6.0.25
 
 
