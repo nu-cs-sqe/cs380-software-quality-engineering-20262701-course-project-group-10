@@ -35,12 +35,11 @@ public class MoveValidator {
             case BISHOP:
                 return isBishopMove(fileChange, rankChange)
                         && isPathClear(board, from, to);
-            case QUEEN:
+            default:
+                // Queen is the remaining type in the six-piece enum.
                 return (isRookMove(fileChange, rankChange)
                         || isBishopMove(fileChange, rankChange))
                         && isPathClear(board, from, to);
-            default:
-                return false;
         }
     }
 
