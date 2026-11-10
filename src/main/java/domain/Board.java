@@ -2,70 +2,76 @@ package domain;
 
 public class Board {
 
-	private Piece[][] squares;
+    private static final int BOARD_SIZE = 8;
+    private static final int WHITE_BACK_RANK = 0;
+    private static final int WHITE_PAWN_RANK = 1;
+    private static final int BLACK_PAWN_RANK = 6;
+    private static final int BLACK_BACK_RANK = 7;
 
-	public Board() {
-		squares = new Piece[8][8];
-	}
+    private Piece[][] squares;
 
-	public Piece getPiece(Position position) {
-		return squares[position.getFile()][position.getRank()];
-	}
+    public Board() {
+        squares = new Piece[BOARD_SIZE][BOARD_SIZE];
+    }
 
-	public void placePiece(Piece piece, Position position) {
-		squares[position.getFile()][position.getRank()] = piece;
-	}
+    public Piece getPiece(Position position) {
+        return squares[position.getFile()][position.getRank()];
+    }
 
-	public boolean isEmpty(Position position) {
-		return getPiece(position) == null;
-	}
+    public void placePiece(Piece piece, Position position) {
+        squares[position.getFile()][position.getRank()] = piece;
+    }
 
-	public void setUpStartingPosition() {
-		// Clear the board before setting up the pieces
-		squares = new Piece[8][8];
+    public boolean isEmpty(Position position) {
+        return getPiece(position) == null;
+    }
 
-		// Place white back rank
-		placeBackRank(Color.WHITE, 0);
+    public void setUpStartingPosition() {
+        // Clear the board before setting up the pieces
+        squares = new Piece[BOARD_SIZE][BOARD_SIZE];
 
-		// Place white pawns
-		for (int file = 0; file < 8; file++) {
-			placePiece(
-					new Piece(PieceType.PAWN, Color.WHITE),
-					new Position(file, 1)
-			);
-		}
+        // Place white back rank
+        placeBackRank(Color.WHITE, WHITE_BACK_RANK);
 
-		// Place black pawns
-		for (int file = 0; file < 8; file++) {
-			placePiece(
-					new Piece(PieceType.PAWN, Color.BLACK),
-					new Position(file, 6)
-			);
-		}
+        // Place white pawns
+        for (int file = 0; file < BOARD_SIZE; file++) {
+            placePiece(
+                    new Piece(PieceType.PAWN, Color.WHITE),
+                    new Position(file, WHITE_PAWN_RANK)
+            );
+        }
 
-		// Place black back rank
-		placeBackRank(Color.BLACK, 7);
-	}
+        // Place black pawns
+        for (int file = 0; file < BOARD_SIZE; file++) {
+            placePiece(
+                    new Piece(PieceType.PAWN, Color.BLACK),
+                    new Position(file, BLACK_PAWN_RANK)
+            );
+        }
 
-	private void placeBackRank(Color color, int rank) {
+        // Place black back rank
+        placeBackRank(Color.BLACK, BLACK_BACK_RANK);
+    }
 
-		PieceType[] backRank = {
-				PieceType.ROOK,
-				PieceType.KNIGHT,
-				PieceType.BISHOP,
-				PieceType.QUEEN,
-				PieceType.KING,
-				PieceType.BISHOP,
-				PieceType.KNIGHT,
-				PieceType.ROOK
-		};
+    private void placeBackRank(Color color, int rank) {
 
-		for (int file = 0; file < 8; file++) {
-			Piece piece = new Piece(backRank[file], color);
+        PieceType[] backRank = {
+                PieceType.ROOK,
+                PieceType.KNIGHT,
+                PieceType.BISHOP,
+                PieceType.QUEEN,
+                PieceType.KING,
+                PieceType.BISHOP,
+                PieceType.KNIGHT,
+                PieceType.ROOK
+        };
 
-			placePiece(piece, new Position(file, rank));
-		}
-	}
+        for (int file = 0; file < BOARD_SIZE; file++) {
+            Piece piece = new Piece(backRank[file], color);
+
+            placePiece(piece, new Position(file, rank));
+        }
+    }
 
 
 }
