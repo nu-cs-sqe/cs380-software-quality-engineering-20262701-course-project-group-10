@@ -480,4 +480,11 @@ class BoardTest {
 
 		assertSame(bystander, board.getPiece(bystanderSquare));
 	}
+
+	@Test
+	void movePiece_emptySourceIsRejected() {
+		Board board = new Board();
+		assertThrows(IllegalArgumentException.class,
+				() -> board.movePiece(new Position(0, 0), new Position(0, 1)));
+	}
 }
