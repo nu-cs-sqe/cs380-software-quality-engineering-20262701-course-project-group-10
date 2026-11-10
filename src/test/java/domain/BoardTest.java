@@ -1,8 +1,13 @@
 package domain;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class BoardTest {
 
@@ -217,6 +222,38 @@ class BoardTest {
         return count;
     }
 
+    private int countPieces(Board board, Color color, PieceType type) {
+        int count = 0;
+
+        for (int file = 0; file < 8; file++) {
+            for (int rank = 0; rank < 8; rank++) {
+                Piece piece = board.getPiece(new Position(file, rank));
+
+                if (piece != null
+                        && piece.getColor() == color
+                        && piece.getType() == type) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    private int countPieces(Board board) {
+        int count = 0;
+
+        for (int file = 0; file < 8; file++) {
+            for (int rank = 0; rank < 8; rank++) {
+                if (!board.isEmpty(new Position(file, rank))) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
     @Test
     void setUpStartingPosition_createsExactly32Pieces() {
         Board board = new Board();
@@ -245,24 +282,6 @@ class BoardTest {
         board.setUpStartingPosition();
 
         assertEquals(16, countPieces(board, Color.BLACK));
-    }
-
-    private int countPieces(Board board, Color color, PieceType type) {
-        int count = 0;
-
-        for (int file = 0; file < 8; file++) {
-            for (int rank = 0; rank < 8; rank++) {
-                Piece piece = board.getPiece(new Position(file, rank));
-
-                if (piece != null
-                        && piece.getColor() == color
-                        && piece.getType() == type) {
-                    count++;
-                }
-            }
-        }
-
-        return count;
     }
 
     @Test
@@ -370,20 +389,6 @@ class BoardTest {
                 );
             }
         }
-    }
-
-    private int countPieces(Board board) {
-        int count = 0;
-
-        for (int file = 0; file < 8; file++) {
-            for (int rank = 0; rank < 8; rank++) {
-                if (!board.isEmpty(new Position(file, rank))) {
-                    count++;
-                }
-            }
-        }
-
-        return count;
     }
 
     @Test
