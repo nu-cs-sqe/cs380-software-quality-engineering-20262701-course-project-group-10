@@ -499,4 +499,20 @@ class BoardTest {
 
 		assertSame(rook, board.getPiece(square));
 	}
+
+	@Test
+	void movePiece_nullFromIsRejected() {
+		Board board = new Board();
+		assertThrows(NullPointerException.class,
+				() -> board.movePiece(null, new Position(3, 3)));
+	}
+
+	@Test
+	void movePiece_nullToIsRejected() {
+		Board board = new Board();
+		Position from = new Position(3, 3);
+		board.placePiece(new Piece(PieceType.ROOK, Color.WHITE), from);
+
+		assertThrows(NullPointerException.class, () -> board.movePiece(from, null));
+	}
 }

@@ -1,4 +1,5 @@
 package domain;
+import java.util.Objects;
 
 public class Board {
 
@@ -68,14 +69,26 @@ public class Board {
 	}
 
 	public void movePiece(Position from, Position to) {
-		Piece movingPiece = getPiece(from);
+		Objects.requireNonNull(from, "from");
+		Objects.requireNonNull(to, "to");
+		requireDifferent(from, to);
+		Piece movingPiece = requireOccupied(from);
+
+		placePiece(movingPiece, to);
+		placePiece(null, from);
+	}
+
+	private void requireDifferent(Position from, Position to) {
 		if (from.equals(to)) {
 			throw new IllegalArgumentException("A piece cannot move to its own square");
 		}
-		if (movingPiece == null) {
-			throw new IllegalArgumentException("No piece on " + from);
+	}
+
+	private Piece requireOccupied(Position position) {
+		Piece piece = getPiece(position);
+		if (piece == null) {
+			throw new IllegalArgumentException("No piece on " + position);
 		}
-		placePiece(movingPiece, to);
-		placePiece(null, from);
+		return piece;
 	}
 }
