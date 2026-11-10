@@ -29,11 +29,16 @@ public class Game {
 	// Stub so the click-to-move GUI compiles. The real version, with turn rules
 	// and IllegalArgumentException for illegal moves, comes from the make-move task.
 	public void makeMove(Position from, Position to) {
-		board.getPiece(from);
+		Piece piece = board.getPiece(from);
+		if (piece == null) {
+			throw new IllegalArgumentException("No piece on " + from);
+		}
 		validator.isLegalMove(board, from, to);
 		board.movePiece(from, to);
 
 		currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
+
+
 	}
 
 
