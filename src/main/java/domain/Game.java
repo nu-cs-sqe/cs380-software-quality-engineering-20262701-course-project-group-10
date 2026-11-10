@@ -36,7 +36,10 @@ public class Game {
 		if (piece.getColor() != currentPlayer) {
 			throw new IllegalArgumentException("It is " + currentPlayer + "'s turn");
 		}
-		validator.isLegalMove(board, from, to);
+
+		if (!validator.isLegalMove(board, from, to)) {
+			throw new IllegalArgumentException("Illegal move");
+		}
 		board.movePiece(from, to);
 
 		currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
