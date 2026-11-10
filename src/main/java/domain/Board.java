@@ -46,27 +46,6 @@ public class Board {
 		placePawnRank(Color.BLACK, BLACK_PAWN_RANK);
 		placeBackRank(Color.BLACK, BLACK_BACK_RANK);
 
-		// Place white back rank
-		placeBackRank(Color.WHITE, 0);
-
-		// Place white pawns
-		for (int file = 0; file < 8; file++) {
-			placePiece(
-					new Piece(PieceType.PAWN, Color.WHITE),
-					new Position(file, 1)
-			);
-		}
-
-		// Place black pawns
-		for (int file = 0; file < 8; file++) {
-			placePiece(
-					new Piece(PieceType.PAWN, Color.BLACK),
-					new Position(file, 6)
-			);
-		}
-
-		// Place black back rank
-		placeBackRank(Color.BLACK, 7);
 	}
 
 
@@ -81,7 +60,7 @@ public class Board {
 			placePiece(new Piece(PieceType.PAWN, color), new Position(file, rank));
 		}
 	}
-	
+
 
 	public void movePiece(Position from, Position to) {
 		Objects.requireNonNull(from, "from");

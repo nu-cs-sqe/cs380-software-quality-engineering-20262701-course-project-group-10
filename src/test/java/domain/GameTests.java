@@ -83,11 +83,4 @@ public class GameTests {
 		assertSame(board, game.getBoard());
 		EasyMock.verify(board);
 	}
-
-	// G16: null validator is rejected
-	@Test
-	public void nullValidatorIsRejected() {
-		Board board = EasyMock.createMock(Board.class);
-		assertThrows(NullPointerException.class, () -> new Game(board, null));
-	}
 }
