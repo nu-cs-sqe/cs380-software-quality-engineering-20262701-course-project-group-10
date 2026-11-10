@@ -156,4 +156,25 @@ public class GameMakeMoveTests {
 		assertSame(Color.WHITE, game.getCurrentPlayer());
 		verifyAll();
 	}
+
+	// G16
+	@Test
+	public void nullValidatorIsRejected() {
+		Board board = EasyMock.createMock(Board.class);
+		assertThrows(NullPointerException.class, () -> new Game(board, null));
+	}
+
+	// G17
+	@Test
+	public void capturingOwnPieceIsRejected() {
+		expectPieceOn(FROM, WHITE_PAWN);
+		EasyMock.expect(validator.isLegalMove(board, FROM, TO)).andReturn(true);
+		expectPieceOn(TO, WHITE_PAWN);
+		replayAll();
+
+		assertThrows(IllegalArgumentException.class, () -> game.makeMove(FROM, TO));
+
+		assertSame(Color.WHITE, game.getCurrentPlayer());
+		verifyAll();
+	}
 }

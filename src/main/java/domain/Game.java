@@ -34,9 +34,17 @@ public class Game {
 
 		requireCurrentPlayersPieceOn(from);
 		requireLegalMove(from, to);
+		requireNotCapturingOwnPiece(to);      
 
 		board.movePiece(from, to);
 		passTurn();
+	}
+
+	private void requireNotCapturingOwnPiece(Position to) {
+		Piece target = board.getPiece(to);
+		if (target != null && target.getColor() == currentPlayer) {
+			throw new IllegalArgumentException("Cannot capture your own piece");
+		}
 	}
 
 	private void requireCurrentPlayersPieceOn(Position position) {
