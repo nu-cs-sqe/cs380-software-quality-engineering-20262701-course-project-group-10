@@ -1,11 +1,13 @@
 package domain;
 
 public final class Position {
+    private static final int MAX_COORDINATE = 7;
+
     private final int file;
     private final int rank;
 
     public Position(int file, int rank) {
-        if (file < 0 || file > 7 || rank < 0 || rank > 7) {
+        if (file < 0 || file > MAX_COORDINATE || rank < 0 || rank > MAX_COORDINATE) {
             throw new IllegalArgumentException("Coordinates must be between 0 and 7");
         }
         this.file = file;
