@@ -7,16 +7,11 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 /** A chess game: owns the board and tracks whose turn it is. */
 public class Game {
 	private final Board board;
+	private final MoveValidator validator = new MoveValidator();
 	private Color currentPlayer;
-	private final MoveValidator validator;
 
 	public Game(Board board) {
-		this(board, new MoveValidator());
-	}
-
-	public Game(Board board, MoveValidator validator) {
 		this.board = Objects.requireNonNull(board, "board");
-		this.validator = Objects.requireNonNull(validator, "validator");
 		this.currentPlayer = Color.WHITE;
 	}
 
@@ -34,7 +29,7 @@ public class Game {
 
 		requireCurrentPlayersPieceOn(from);
 		requireLegalMove(from, to);
-		requireNotCapturingOwnPiece(to);      
+		requireNotCapturingOwnPiece(to);
 
 		board.movePiece(from, to);
 		passTurn();

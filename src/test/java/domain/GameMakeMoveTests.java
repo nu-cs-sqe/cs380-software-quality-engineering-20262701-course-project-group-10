@@ -2,179 +2,164 @@ package domain;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.easymock.EasyMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class GameMakeMoveTests {
-	private static final Position FROM = new Position(0, 1);
-	private static final Position TO = new Position(0, 3);
-	private static final Piece WHITE_PAWN = new Piece(PieceType.PAWN, Color.WHITE);
-	private static final Piece BLACK_PAWN = new Piece(PieceType.PAWN, Color.BLACK);
-
 	private Board board;
-	private MoveValidator validator;
 	private Game game;
 
 	@BeforeEach
-	public void createGameWithMocks() {
-		board = EasyMock.createMock(Board.class);
-		validator = EasyMock.createMock(MoveValidator.class);
-		game = new Game(board, validator);
+	public void createGame() {
+		board = new Board();
+		game = new Game(board);
 	}
 
-	private void expectPieceOn(Position position, Piece piece) {
-		EasyMock.expect(board.getPiece(position)).andReturn(piece);
-	}
-
-	private void expectLegalMove(Piece piece, Position from, Position to) {
-		expectPieceOn(from, piece);
-		EasyMock.expect(validator.isLegalMove(board, from, to)).andReturn(true);
-		board.movePiece(from, to);
-		EasyMock.expectLastCall().once();
-	}
-
-	private void replayAll() {
-		EasyMock.replay(board, validator);
-	}
-
-	private void verifyAll() {
-		EasyMock.verify(board, validator);
-	}
-
-	// G14
-	@Test
-	public void legalWhiteMoveMovesPieceAndPassesTurnToBlack() {
-		expectLegalMove(WHITE_PAWN, FROM, TO);
-		replayAll();
-
-		game.makeMove(FROM, TO);
-
-		assertSame(Color.BLACK, game.getCurrentPlayer());
-		verifyAll();
-	}
-
-	// G15
-	@Test
-	public void legalBlackMovePassesTurnBackToWhite() {
-		Position blackFrom = new Position(0, 6);
-		Position blackTo = new Position(0, 4);
-		expectLegalMove(WHITE_PAWN, FROM, TO);
-		expectLegalMove(BLACK_PAWN, blackFrom, blackTo);
-		replayAll();
-
-		game.makeMove(FROM, TO);
-		game.makeMove(blackFrom, blackTo);
-
-		assertSame(Color.WHITE, game.getCurrentPlayer());
-		verifyAll();
-	}
-
-	// G10
-	@Test
-	public void movingFromAnEmptySquareIsRejected() {
-		expectPieceOn(FROM, null);
-		replayAll();
-
-		assertThrows(IllegalArgumentException.class, () -> game.makeMove(FROM, TO));
-
-		assertSame(Color.WHITE, game.getCurrentPlayer());
-		verifyAll();
-	}
-
-	// G11
-	@Test
-	public void whiteCannotMoveABlackPiece() {
-		expectPieceOn(FROM, BLACK_PAWN);
-		replayAll();
-
-		assertThrows(IllegalArgumentException.class, () -> game.makeMove(FROM, TO));
-
-		assertSame(Color.WHITE, game.getCurrentPlayer());
-		verifyAll();
-	}
-
-	// G12
-	@Test
-	public void blackCannotMoveAWhitePiece() {
-		expectLegalMove(WHITE_PAWN, FROM, TO);
-		expectPieceOn(FROM, WHITE_PAWN);
-		replayAll();
-		game.makeMove(FROM, TO);
-
-		assertThrows(IllegalArgumentException.class, () -> game.makeMove(FROM, TO));
-
-		assertSame(Color.BLACK, game.getCurrentPlayer());
-		verifyAll();
-	}
-
-	// G13
-	@Test
-	public void illegalMoveIsRejectedAndTurnStays() {
-		expectPieceOn(FROM, WHITE_PAWN);
-		EasyMock.expect(validator.isLegalMove(board, FROM, TO)).andReturn(false);
-		replayAll();
-
-		assertThrows(IllegalArgumentException.class, () -> game.makeMove(FROM, TO));
-
-		assertSame(Color.WHITE, game.getCurrentPlayer());
-		verifyAll();
-	}
-
-	// G08
+	// G08: null from.
 	@Test
 	public void nullFromIsRejected() {
-		replayAll();
+		game.startNewGame();
 
-		assertThrows(NullPointerException.class, () -> game.makeMove(null, TO));
+		assertThrows(NullPointerException.class,
+				() -> game.makeMove(null, new Position(4, 3)));
 
-		verifyAll();
+		assertSame(Color.WHITE, game.getCurrentPlayer());
 	}
 
-	// G09
+	// G09: null to.
 	@Test
 	public void nullToIsRejected() {
-		replayAll();
+		game.startNewGame();
 
-		assertThrows(NullPointerException.class, () -> game.makeMove(FROM, null));
+		assertThrows(NullPointerException.class,
+				() -> game.makeMove(new Position(4, 1), null));
 
-		verifyAll();
+		assertSame(Color.WHITE, game.getCurrentPlayer());
 	}
 
-	// G07
+	// G10: empty source square (e3 is empty at the start).
 	@Test
-	public void startNewGameAfterAMoveResetsTurnToWhite() {
-		expectLegalMove(WHITE_PAWN, FROM, TO);
-		board.setUpStartingPosition();
-		EasyMock.expectLastCall().once();
-		replayAll();
-		game.makeMove(FROM, TO);
+	public void movingFromAnEmptySquareIsRejected() {
+		game.startNewGame();
+
+		assertThrows(IllegalArgumentException.class,
+				() -> game.makeMove(new Position(4, 2), new Position(4, 3)));
+
+		assertSame(Color.WHITE, game.getCurrentPlayer());
+	}
+
+	// G11: White to move, Black pawn selected. The move itself is a legal
+	// Black pawn move, so only the turn rule can reject it.
+	@Test
+	public void whiteCannotMoveABlackPiece() {
+		game.startNewGame();
+		Piece blackPawn = board.getPiece(new Position(4, 6));
+
+		assertThrows(IllegalArgumentException.class,
+				() -> game.makeMove(new Position(4, 6), new Position(4, 5)));
+
+		assertSame(blackPawn, board.getPiece(new Position(4, 6)));
+		assertTrue(board.isEmpty(new Position(4, 5)));
+		assertSame(Color.WHITE, game.getCurrentPlayer());
+	}
+
+	// G12: Black to move, White pawn selected (d2 to d4 is legal for White).
+	@Test
+	public void blackCannotMoveAWhitePiece() {
+		game.startNewGame();
+		game.makeMove(new Position(4, 1), new Position(4, 3));
+		Piece whitePawn = board.getPiece(new Position(3, 1));
+
+		assertThrows(IllegalArgumentException.class,
+				() -> game.makeMove(new Position(3, 1), new Position(3, 3)));
+
+		assertSame(whitePawn, board.getPiece(new Position(3, 1)));
+		assertSame(Color.BLACK, game.getCurrentPlayer());
+	}
+
+	// G13: a pawn cannot jump three squares.
+	@Test
+	public void illegalMoveIsRejectedAndNothingChanges() {
+		game.startNewGame();
+		Piece pawn = board.getPiece(new Position(4, 1));
+
+		assertThrows(IllegalArgumentException.class,
+				() -> game.makeMove(new Position(4, 1), new Position(4, 4)));
+
+		assertSame(pawn, board.getPiece(new Position(4, 1)));
+		assertTrue(board.isEmpty(new Position(4, 4)));
+		assertSame(Color.WHITE, game.getCurrentPlayer());
+	}
+
+	// G14: legal White move.
+	@Test
+	public void legalWhiteMoveMovesPieceAndPassesTurnToBlack() {
+		game.startNewGame();
+		Piece pawn = board.getPiece(new Position(4, 1));
+
+		game.makeMove(new Position(4, 1), new Position(4, 3));
+
+		assertSame(pawn, board.getPiece(new Position(4, 3)));
+		assertTrue(board.isEmpty(new Position(4, 1)));
+		assertSame(Color.BLACK, game.getCurrentPlayer());
+	}
+
+	// G15: turns alternate.
+	@Test
+	public void legalBlackMovePassesTurnBackToWhite() {
+		game.startNewGame();
+		Piece blackPawn = board.getPiece(new Position(4, 6));
+
+		game.makeMove(new Position(4, 1), new Position(4, 3));
+		game.makeMove(new Position(4, 6), new Position(4, 4));
+
+		assertSame(blackPawn, board.getPiece(new Position(4, 4)));
+		assertTrue(board.isEmpty(new Position(4, 6)));
+		assertSame(Color.WHITE, game.getCurrentPlayer());
+	}
+
+	// G16: a rook may not capture its own pawn.
+	@Test
+	public void capturingOwnPieceIsRejected() {
+		Piece rook = new Piece(PieceType.ROOK, Color.WHITE);
+		Piece pawn = new Piece(PieceType.PAWN, Color.WHITE);
+		board.placePiece(rook, new Position(3, 3));
+		board.placePiece(pawn, new Position(3, 5));
+
+		assertThrows(IllegalArgumentException.class,
+				() -> game.makeMove(new Position(3, 3), new Position(3, 5)));
+
+		assertSame(rook, board.getPiece(new Position(3, 3)));
+		assertSame(pawn, board.getPiece(new Position(3, 5)));
+		assertSame(Color.WHITE, game.getCurrentPlayer());
+	}
+
+	// G17: a rook captures an opposing pawn.
+	@Test
+	public void capturingAnOpposingPieceReplacesIt() {
+		Piece rook = new Piece(PieceType.ROOK, Color.WHITE);
+		board.placePiece(rook, new Position(3, 3));
+		board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), new Position(3, 5));
+
+		game.makeMove(new Position(3, 3), new Position(3, 5));
+
+		assertSame(rook, board.getPiece(new Position(3, 5)));
+		assertTrue(board.isEmpty(new Position(3, 3)));
+		assertSame(Color.BLACK, game.getCurrentPlayer());
+	}
+
+	// G07: startNewGame after a move restores the opening position and White.
+	@Test
+	public void startNewGameAfterAMoveResetsBoardAndTurn() {
+		game.startNewGame();
+		game.makeMove(new Position(4, 1), new Position(4, 3));
 
 		game.startNewGame();
 
+		assertSame(PieceType.PAWN, board.getPiece(new Position(4, 1)).getType());
+		assertTrue(board.isEmpty(new Position(4, 3)));
 		assertSame(Color.WHITE, game.getCurrentPlayer());
-		verifyAll();
-	}
-
-	// G16
-	@Test
-	public void nullValidatorIsRejected() {
-		Board board = EasyMock.createMock(Board.class);
-		assertThrows(NullPointerException.class, () -> new Game(board, null));
-	}
-
-	// G17
-	@Test
-	public void capturingOwnPieceIsRejected() {
-		expectPieceOn(FROM, WHITE_PAWN);
-		EasyMock.expect(validator.isLegalMove(board, FROM, TO)).andReturn(true);
-		expectPieceOn(TO, WHITE_PAWN);
-		replayAll();
-
-		assertThrows(IllegalArgumentException.class, () -> game.makeMove(FROM, TO));
-
-		assertSame(Color.WHITE, game.getCurrentPlayer());
-		verifyAll();
 	}
 }
