@@ -51,7 +51,8 @@ public class Board {
 
 	private void placeBackRank(Color color, int rank) {
 		for (int file = 0; file < BOARD_SIZE; file++) {
-			placePiece(new Piece(BACK_RANK_ORDER[file], color), new Position(file, rank));
+			Piece piece = new Piece(BACK_RANK_ORDER[file], color);
+			placePiece(piece, new Position(file, rank));
 		}
 	}
 
