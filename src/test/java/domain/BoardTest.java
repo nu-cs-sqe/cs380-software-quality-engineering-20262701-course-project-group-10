@@ -432,4 +432,24 @@ class BoardTest {
 		assertSame(rook, board.getPiece(to));
 		assertTrue(board.isEmpty(from));
 	}
+
+	@Test
+	void movePiece_fromH8ToA1() {
+		assertMoveToEmptySquare(new Position(7, 7), new Position(0, 0));
+	}
+
+	@Test
+	void movePiece_fromH1ToA8() {
+		assertMoveToEmptySquare(new Position(7, 0), new Position(0, 7));
+	}
+
+	@Test
+	void movePiece_fromA8ToH1() {
+		assertMoveToEmptySquare(new Position(0, 7), new Position(7, 0));
+	}
+
+	@Test
+	void movePiece_betweenInteriorSquares() {
+		assertMoveToEmptySquare(new Position(3, 3), new Position(3, 4));
+	}
 }
