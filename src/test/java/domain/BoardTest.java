@@ -452,4 +452,32 @@ class BoardTest {
 	void movePiece_betweenInteriorSquares() {
 		assertMoveToEmptySquare(new Position(3, 3), new Position(3, 4));
 	}
+
+	@Test
+	void movePiece_captureReplacesTargetPiece() {
+		Board board = new Board();
+		Piece attacker = new Piece(PieceType.ROOK, Color.WHITE);
+		Position from = new Position(3, 3);
+		Position to = new Position(3, 5);
+		board.placePiece(attacker, from);
+		board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), to);
+
+		board.movePiece(from, to);
+
+		assertSame(attacker, board.getPiece(to));
+		assertTrue(board.isEmpty(from));
+	}
+
+	@Test
+	void movePiece_doesNotTouchOtherSquares() {
+		Board board = new Board();
+		Piece bystander = new Piece(PieceType.KING, Color.BLACK);
+		Position bystanderSquare = new Position(5, 5);
+		board.placePiece(bystander, bystanderSquare);
+		board.placePiece(new Piece(PieceType.ROOK, Color.WHITE), new Position(0, 0));
+
+		board.movePiece(new Position(0, 0), new Position(0, 7));
+
+		assertSame(bystander, board.getPiece(bystanderSquare));
+	}
 }
