@@ -1,9 +1,10 @@
 package domain;
 
-import org.easymock.EasyMock;
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.easymock.EasyMock;
+import org.junit.jupiter.api.Test;
 
 public class GameTests {
     // G01: non-null pointer; the constructor must not touch the board.
