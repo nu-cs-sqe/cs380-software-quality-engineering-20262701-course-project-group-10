@@ -54,4 +54,106 @@ public class GameMakeMoveTests {
 		assertSame(Color.BLACK, game.getCurrentPlayer());
 		verifyAll();
 	}
+
+	// G15
+	@Test
+	public void legalBlackMovePassesTurnBackToWhite() {
+		Position blackFrom = new Position(0, 6);
+		Position blackTo = new Position(0, 4);
+		expectLegalMove(WHITE_PAWN, FROM, TO);
+		expectLegalMove(BLACK_PAWN, blackFrom, blackTo);
+		replayAll();
+
+		game.makeMove(FROM, TO);
+		game.makeMove(blackFrom, blackTo);
+
+		assertSame(Color.WHITE, game.getCurrentPlayer());
+		verifyAll();
+	}
+
+	// G10
+	@Test
+	public void movingFromAnEmptySquareIsRejected() {
+		expectPieceOn(FROM, null);
+		replayAll();
+
+		assertThrows(IllegalArgumentException.class, () -> game.makeMove(FROM, TO));
+
+		assertSame(Color.WHITE, game.getCurrentPlayer());
+		verifyAll();
+	}
+
+	// G11
+	@Test
+	public void whiteCannotMoveABlackPiece() {
+		expectPieceOn(FROM, BLACK_PAWN);
+		replayAll();
+
+		assertThrows(IllegalArgumentException.class, () -> game.makeMove(FROM, TO));
+
+		assertSame(Color.WHITE, game.getCurrentPlayer());
+		verifyAll();
+	}
+
+	// G12
+	@Test
+	public void blackCannotMoveAWhitePiece() {
+		expectLegalMove(WHITE_PAWN, FROM, TO);
+		expectPieceOn(FROM, WHITE_PAWN);
+		replayAll();
+		game.makeMove(FROM, TO);
+
+		assertThrows(IllegalArgumentException.class, () -> game.makeMove(FROM, TO));
+
+		assertSame(Color.BLACK, game.getCurrentPlayer());
+		verifyAll();
+	}
+
+	// G13
+	@Test
+	public void illegalMoveIsRejectedAndTurnStays() {
+		expectPieceOn(FROM, WHITE_PAWN);
+		EasyMock.expect(validator.isLegalMove(board, FROM, TO)).andReturn(false);
+		replayAll();
+
+		assertThrows(IllegalArgumentException.class, () -> game.makeMove(FROM, TO));
+
+		assertSame(Color.WHITE, game.getCurrentPlayer());
+		verifyAll();
+	}
+
+	// G08
+	@Test
+	public void nullFromIsRejected() {
+		replayAll();
+
+		assertThrows(NullPointerException.class, () -> game.makeMove(null, TO));
+
+		verifyAll();
+	}
+
+	// G09
+	@Test
+	public void nullToIsRejected() {
+		replayAll();
+
+		assertThrows(NullPointerException.class, () -> game.makeMove(FROM, null));
+
+		verifyAll();
+	}
+
+	// G07
+	@Test
+	public void startNewGameAfterAMoveResetsTurnToWhite() {
+		expectLegalMove(WHITE_PAWN, FROM, TO);
+		board.setUpStartingPosition();
+		EasyMock.expectLastCall().once();
+		replayAll();
+		game.makeMove(FROM, TO);
+
+		game.startNewGame();
+
+		assertSame(Color.WHITE, game.getCurrentPlayer());
+		verifyAll();
+	}
 }
