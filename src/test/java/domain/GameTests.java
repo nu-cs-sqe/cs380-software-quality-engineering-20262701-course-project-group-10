@@ -85,17 +85,4 @@ public class GameTests {
         EasyMock.verify(board);
     }
 
-    @Test
-    public void unavailableMoveIsRejectedWithoutChangingGame() {
-        Board board = EasyMock.createStrictMock(Board.class);
-        EasyMock.replay(board);
-        Game game = new Game(board);
-
-        assertThrows(IllegalArgumentException.class,
-                () -> game.makeMove(new Position(0, 1), new Position(0, 2)));
-
-        assertSame(board, game.getBoard());
-        assertSame(Color.WHITE, game.getCurrentPlayer());
-        EasyMock.verify(board);
-    }
 }

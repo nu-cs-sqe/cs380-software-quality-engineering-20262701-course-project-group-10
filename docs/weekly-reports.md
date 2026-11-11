@@ -30,6 +30,9 @@
    - Validation: all 110 tests pass with none skipped; Checkstyle and SpotBugs report zero findings in main and test sources. A clean build exposed one final annotation line-length issue; the subsequent build passed after correcting it. No game behavior or test expectations changed.
 4. [done] Mengpang Xing: Implement Pawn, Knight, and King move rules with BVA and tests ([PR #32](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/32)).
 5. [done] Youran Ma: Implement Rook, Bishop, and Queen move rules with BVA and tests ([PR #30](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/30)).
+6. [done] Yurou Quan: Implement Board.movePiece and Game.makeMove (turn rules and captures) with BVA and tests ([PR #37](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/37))
+   - Board.movePiece with capture support; Game.makeMove with turn rules, legality and own-piece capture checks (BOARD-MOVE-01 to 11, G07 to G18).
+   - Replaced magic numbers in Board with named constants.
 
 
 

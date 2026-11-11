@@ -151,3 +151,53 @@ The important conditions are:
 6. The initial board arrangement follows the Game Setup requirements.
 7. The requirements do not specify what should happen when placing a piece on an occupied square or passing `null` arguments. These behaviors are not assumed in this analysis.
 8. The `Implemented` column will be updated as the corresponding tests and implementation are completed.
+
+---
+
+## 7. BVA for `movePiece(Position from, Position to)`
+
+### Method Description
+
+Moves the piece on `from` to `to`. If `to` holds a piece, that piece is captured, meaning it is replaced by the moving piece. `from` becomes empty.
+
+The method only moves pieces. It does not check chess rules, because turn order and legality belong to `Game` and `MoveValidator`.
+
+### Boundary Analysis
+
+**1. Inputs and outputs**
+
+- Inputs: `from` and `to` (a real position or null); the content of the `from` square (empty or occupied); the content of the `to` square (empty or occupied); whether `from` equals `to`.
+- Outputs: the board state after the call (`from`, `to`, and all other squares), or an exception.
+
+**2. Catalog clues**
+
+- **Pointers**: null and a real `Position`, applied to `from` and `to`.
+- **Cases**: `from` is empty / occupied; `to` is empty / occupied by an opposing piece; `from` equals `to` / differs from `to`.
+- **Intervals** (file and rank, 0 to 7): the four corners and one interior square. Out-of-range coordinates belong to `Position`, per the scope note in section 1.
+- **Output state**: the moved piece is the same object, `from` is empty, `to` holds the piece, and the other squares are unchanged.
+
+**3. Concrete cases**
+
+The 64 squares are not combined exhaustively (each-choice strategy). Each corner is used once as a source and once as a destination, which covers every boundary value of file and rank.
+
+### Test Cases
+
+| ID | Method Under Test | State of System Under Test | Expected Output | Implemented |
+|---|---|---|---|---|
+| BOARD-MOVE-01 | `movePiece(from, to)` | `from` is null; `to` is d4 (3, 3). | Throws `NullPointerException`. | :white_check_mark: |
+| BOARD-MOVE-02 | `movePiece(from, to)` | `from` is d4 (3, 3); `to` is null. | Throws `NullPointerException`. | :white_check_mark: |
+| BOARD-MOVE-03 | `movePiece(from, to)` | The board is empty. `from` is a1 (0, 0), `to` is a2 (0, 1). | Throws `IllegalArgumentException`. The board is still empty. | :white_check_mark: |
+| BOARD-MOVE-04 | `movePiece(from, to)` | A piece is at d4 (3, 3). `from` and `to` are both d4. | Throws `IllegalArgumentException`. The piece is still at d4. | :white_check_mark: |
+| BOARD-MOVE-05 | `movePiece(from, to)` | A piece is at a1 (0, 0). `to` is h8 (7, 7), empty. | The same piece object is at h8. a1 is empty. | :white_check_mark: |
+| BOARD-MOVE-06 | `movePiece(from, to)` | A piece is at h8 (7, 7). `to` is a1 (0, 0), empty. | The same piece object is at a1. h8 is empty. | :white_check_mark: |
+| BOARD-MOVE-07 | `movePiece(from, to)` | A piece is at h1 (7, 0). `to` is a8 (0, 7), empty. | The same piece object is at a8. h1 is empty. | :white_check_mark: |
+| BOARD-MOVE-08 | `movePiece(from, to)` | A piece is at a8 (0, 7). `to` is h1 (7, 0), empty. | The same piece object is at h1. a8 is empty. | :white_check_mark: |
+| BOARD-MOVE-09 | `movePiece(from, to)` | A piece is at d4 (3, 3). `to` is d5 (3, 4), empty. | The same piece object is at d5. d4 is empty. | :white_check_mark: |
+| BOARD-MOVE-10 | `movePiece(from, to)` | A White piece is at d4 (3, 3) and a Black piece is at d6 (3, 5). Move d4 to d6. | d6 holds the White piece (the Black piece is gone). d4 is empty. | :white_check_mark: |
+| BOARD-MOVE-11 | `movePiece(from, to)` | A piece is at a1 (0, 0) and an unrelated piece is at f6 (5, 5). Move a1 to a8 (0, 7). | The unrelated piece is still at f6. | :white_check_mark: |
+
+### Assumptions
+
+1. `NullPointerException` for null arguments and `IllegalArgumentException` for an empty source or `from == to` follow the style already used in `Game`. The requirements do not specify them.
+2. Moving onto a square held by a piece of the same color is not tested here. `Board.movePiece` does not check colors; `Game` rejects such a move through `MoveValidator`.
+3. `Board` tests use real `Piece` and `Position` objects. No mocking is needed because `Board` has no external collaborators.

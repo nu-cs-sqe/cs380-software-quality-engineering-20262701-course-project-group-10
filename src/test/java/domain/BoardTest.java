@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -420,5 +421,104 @@ class BoardTest {
         assertBackRank(board, Color.BLACK, 7);
         assertPawnRank(board, Color.WHITE, 1);
         assertPawnRank(board, Color.BLACK, 6);
+    }
+  
+    @Test
+    void movePiece_fromA1ToH8() {
+        assertMoveToEmptySquare(new Position(0, 0), new Position(7, 7));
+    }
+
+    private void assertMoveToEmptySquare(Position from, Position to) {
+        Board board = new Board();
+        Piece rook = new Piece(PieceType.ROOK, Color.WHITE);
+        board.placePiece(rook, from);
+
+        board.movePiece(from, to);
+
+        assertSame(rook, board.getPiece(to));
+        assertTrue(board.isEmpty(from));
+    }
+
+    @Test
+    void movePiece_fromH8ToA1() {
+        assertMoveToEmptySquare(new Position(7, 7), new Position(0, 0));
+    }
+
+    @Test
+    void movePiece_fromH1ToA8() {
+        assertMoveToEmptySquare(new Position(7, 0), new Position(0, 7));
+    }
+
+    @Test
+    void movePiece_fromA8ToH1() {
+        assertMoveToEmptySquare(new Position(0, 7), new Position(7, 0));
+    }
+
+    @Test
+    void movePiece_betweenInteriorSquares() {
+        assertMoveToEmptySquare(new Position(3, 3), new Position(3, 4));
+    }
+
+    @Test
+    void movePiece_captureReplacesTargetPiece() {
+        Board board = new Board();
+        Piece attacker = new Piece(PieceType.ROOK, Color.WHITE);
+        Position from = new Position(3, 3);
+        Position to = new Position(3, 5);
+        board.placePiece(attacker, from);
+        board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), to);
+
+        board.movePiece(from, to);
+
+        assertSame(attacker, board.getPiece(to));
+        assertTrue(board.isEmpty(from));
+    }
+
+    @Test
+    void movePiece_doesNotTouchOtherSquares() {
+        Board board = new Board();
+        Piece bystander = new Piece(PieceType.KING, Color.BLACK);
+        Position bystanderSquare = new Position(5, 5);
+        board.placePiece(bystander, bystanderSquare);
+        board.placePiece(new Piece(PieceType.ROOK, Color.WHITE), new Position(0, 0));
+
+        board.movePiece(new Position(0, 0), new Position(0, 7));
+
+        assertSame(bystander, board.getPiece(bystanderSquare));
+    }
+
+    @Test
+    void movePiece_emptySourceIsRejected() {
+        Board board = new Board();
+        assertThrows(IllegalArgumentException.class,
+                () -> board.movePiece(new Position(0, 0), new Position(0, 1)));
+    }
+
+    @Test
+    void movePiece_sameSquareIsRejectedAndPieceStays() {
+        Board board = new Board();
+        Piece rook = new Piece(PieceType.ROOK, Color.WHITE);
+        Position square = new Position(3, 3);
+        board.placePiece(rook, square);
+
+        assertThrows(IllegalArgumentException.class, () -> board.movePiece(square, square));
+
+        assertSame(rook, board.getPiece(square));
+    }
+
+    @Test
+    void movePiece_nullFromIsRejected() {
+        Board board = new Board();
+        assertThrows(NullPointerException.class,
+                () -> board.movePiece(null, new Position(3, 3)));
+    }
+
+    @Test
+    void movePiece_nullToIsRejected() {
+        Board board = new Board();
+        Position from = new Position(3, 3);
+        board.placePiece(new Piece(PieceType.ROOK, Color.WHITE), from);
+
+        assertThrows(NullPointerException.class, () -> board.movePiece(from, null));
     }
 }
