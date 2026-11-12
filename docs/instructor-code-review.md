@@ -7,6 +7,13 @@ The instructor will perform code review with respect to software design, error h
 The following chapters of the textbook are considered: Chapter 1, 2, 3, 4, 5, 6, 7, 9, and 10. The corresponding lectures are considered, too.
 
 
+## Week 7 Code Review
+I have read every line of production code currently in the main branch.
+
+1. The consistent comments issue from last time doesn't seem to be addressed yet. See Week 6 feedback below.
+
+Otherwise, the code looks good to me!
+
 ## Week 6 Code Review
 I have read every line of production code currently in the main branch.
 
