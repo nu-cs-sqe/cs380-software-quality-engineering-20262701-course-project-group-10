@@ -3,6 +3,7 @@ plugins {
     checkstyle
     jacoco
     id("com.github.spotbugs") version "6.0.25"
+    id("info.solidsoft.pitest") version "1.19.0"
 }
 
 group = "nu.csse.sqe"
@@ -94,6 +95,16 @@ val coverageExclusions = listOf(
 )
 val coverageClasses = sourceSets.main.get().output.asFileTree.matching {
     exclude(coverageExclusions)
+}
+
+pitest {
+    junit5PluginVersion.set("1.2.2")
+    targetClasses.set(setOf("domain.*", "ui.*"))
+    excludedClasses.set(coverageExclusions.map {
+        it.removeSuffix(".class").replace('/', '.')
+    }.toSet())
+    outputFormats.set(setOf("HTML", "XML"))
+    timestampedReports.set(false)
 }
 
 tasks.jacocoTestReport {
