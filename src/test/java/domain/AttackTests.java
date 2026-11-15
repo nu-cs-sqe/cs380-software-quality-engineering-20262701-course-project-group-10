@@ -97,6 +97,29 @@ public class AttackTests {
         MoveRuleAssertions.assertAttack(board, E6, Color.WHITE, true);
     }
 
+    // AT12: knights jump, so pieces in between do not block the attack.
+    @Test
+    public void AT12KnightAttackJumpsOverPieces() {
+        Board board = boardWith(PieceType.KNIGHT, Color.WHITE, D4);
+        board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), D5);
+        board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), E5);
+        MoveRuleAssertions.assertAttack(board, E6, Color.WHITE, true);
+    }
+
+    // AT13: a knight does not attack a diagonal neighbor.
+    @Test
+    public void AT13KnightDoesNotAttackDiagonalNeighbor() {
+        Board board = boardWith(PieceType.KNIGHT, Color.WHITE, D4);
+        MoveRuleAssertions.assertAttack(board, E5, Color.WHITE, false);
+    }
+
+    // AT14: a king attacks a neighboring square.
+    @Test
+    public void AT14KingAttacksNeighbor() {
+        Board board = boardWith(PieceType.KING, Color.WHITE, D4);
+        MoveRuleAssertions.assertAttack(board, E5, Color.WHITE, true);
+    }
+
     private Board boardWith(PieceType type, Color color, Position position) {
         Board board = new Board();
         board.placePiece(new Piece(type, color), position);
