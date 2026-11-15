@@ -59,11 +59,24 @@ public class MoveValidator {
     }
 
     private boolean attacks(Piece piece, Position from, Position square) {
-        int direction = piece.getColor() == Color.WHITE ? SINGLE_STEP : -SINGLE_STEP;
+        int fileChange = Math.abs(square.getFile() - from.getFile());
+        int rankChange = Math.abs(square.getRank() - from.getRank());
+        switch (piece.getType()) {
+            case PAWN:
+                return isPawnAttack(piece, from, square);
+            case KNIGHT:
+                return isKnightMove(fileChange, rankChange);
+            default:
+                return false;
+        }
+    }
+
+    // Unlike a pawn move, an attack covers both forward diagonals even when they are empty.
+    private boolean isPawnAttack(Piece pawn, Position from, Position square) {
+        int direction = pawn.getColor() == Color.WHITE ? SINGLE_STEP : -SINGLE_STEP;
         int fileChange = Math.abs(square.getFile() - from.getFile());
         int forward = (square.getRank() - from.getRank()) * direction;
-        return piece.getType() == PieceType.PAWN
-                && fileChange == SINGLE_STEP && forward == SINGLE_STEP;
+        return fileChange == SINGLE_STEP && forward == SINGLE_STEP;
     }
 
     private boolean isKnightMove(int fileChange, int rankChange) {
