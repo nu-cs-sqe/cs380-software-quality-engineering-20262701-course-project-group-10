@@ -49,7 +49,8 @@ public class MoveValidator {
             for (int rank = 0; rank < BOARD_SIZE; rank++) {
                 Position from = new Position(file, rank);
                 Piece piece = board.getPiece(from);
-                if (piece != null && piece.getColor() == attacker
+                // A piece never attacks its own square, whatever its step rule allows.
+                if (!from.equals(square) && piece != null && piece.getColor() == attacker
                         && attacks(piece, from, square)) {
                     return true;
                 }
