@@ -15,6 +15,7 @@ class BoardTest {
     private static final int BOARD_SIZE = 8;
     private static final int FILE_A = 0;
     private static final int FILE_D = 3;
+    private static final int FILE_E = 4;
     private static final int FILE_H = 7;
     private static final int RANK_1 = 0;
     private static final int RANK_2 = 1;
@@ -26,6 +27,7 @@ class BoardTest {
     private static final Position A8 = new Position(FILE_A, RANK_8);
     private static final Position H8 = new Position(FILE_H, RANK_8);
     private static final Position D4 = new Position(FILE_D, RANK_4);
+    private static final Position E4 = new Position(FILE_E, RANK_4);
 
     // ---------- getPiece() tests ----------
 
@@ -620,6 +622,77 @@ class BoardTest {
         board.copyFrom(other);
 
         assertSameContents(other, board);
+    }
+
+    // BOARD-COPYFROM-03: pieces the other board does not have are removed.
+    @Test
+    void copyFrom_emptyOtherClearsOldPieces() {
+        Board board = new Board();
+        board.placePiece(new Piece(PieceType.ROOK, Color.WHITE), A1);
+        board.placePiece(new Piece(PieceType.ROOK, Color.BLACK), H8);
+
+        board.copyFrom(new Board());
+
+        assertAllSquaresEmpty(board);
+    }
+
+    // BOARD-COPYFROM-04: a piece on the same square is overwritten.
+    @Test
+    void copyFrom_overwritesPieceOnSameSquare() {
+        Board board = new Board();
+        board.placePiece(new Piece(PieceType.ROOK, Color.WHITE), E4);
+        Board other = new Board();
+        Piece knight = new Piece(PieceType.KNIGHT, Color.BLACK);
+        other.placePiece(knight, E4);
+
+        board.copyFrom(other);
+
+        assertSame(knight, board.getPiece(E4));
+    }
+
+    // BOARD-COPYFROM-05: a later change to the other board does not reach this one.
+    @Test
+    void copyFrom_changingOtherLeavesBoardAlone() {
+        Board board = new Board();
+        Board other = new Board();
+        other.placePiece(new Piece(PieceType.ROOK, Color.WHITE), A1);
+        board.copyFrom(other);
+
+        other.placePiece(new Piece(PieceType.KING, Color.BLACK), H8);
+
+        assertTrue(board.isEmpty(H8));
+    }
+
+    // BOARD-COPYFROM-06: a later change to this board does not reach the other one.
+    @Test
+    void copyFrom_changingBoardLeavesOtherAlone() {
+        Board board = new Board();
+        Board other = new Board();
+        Piece rook = new Piece(PieceType.ROOK, Color.WHITE);
+        other.placePiece(rook, A1);
+        board.copyFrom(other);
+
+        board.movePiece(A1, A2);
+
+        assertSame(rook, other.getPiece(A1));
+        assertTrue(other.isEmpty(A2));
+    }
+
+    // BOARD-COPYFROM-07: copying a board onto itself changes nothing.
+    @Test
+    void copyFrom_sameBoardKeepsItsPieces() {
+        Piece rook = new Piece(PieceType.ROOK, Color.WHITE);
+        Piece queen = new Piece(PieceType.QUEEN, Color.WHITE);
+        Board board = new Board();
+        board.placePiece(rook, A1);
+        board.placePiece(queen, D4);
+        Board expected = new Board();
+        expected.placePiece(rook, A1);
+        expected.placePiece(queen, D4);
+
+        board.copyFrom(board);
+
+        assertSameContents(expected, board);
     }
 
     private Board boardWithCornerAndInteriorPieces() {
