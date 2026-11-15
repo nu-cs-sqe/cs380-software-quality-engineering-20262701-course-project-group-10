@@ -597,6 +597,20 @@ class BoardTest {
         assertTrue(copy.isEmpty(H8));
     }
 
+    // ---------- copyFrom() tests ----------
+
+    // BOARD-COPYFROM-01: null pointer boundary; the board is left unchanged.
+    @Test
+    void copyFrom_nullIsRejectedAndBoardStays() {
+        Board board = new Board();
+        Piece queen = new Piece(PieceType.QUEEN, Color.WHITE);
+        board.placePiece(queen, D4);
+
+        assertThrows(NullPointerException.class, () -> board.copyFrom(null));
+
+        assertSame(queen, board.getPiece(D4));
+    }
+
     private Board boardWithCornerAndInteriorPieces() {
         Board board = new Board();
         board.placePiece(new Piece(PieceType.ROOK, Color.WHITE), A1);
