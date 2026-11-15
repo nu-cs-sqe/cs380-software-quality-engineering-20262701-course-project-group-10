@@ -47,6 +47,10 @@ public class Board {
         return copy;
     }
 
+    public void copyFrom(Board other) {
+        Objects.requireNonNull(other, "other");
+    }
+
     public void setUpStartingPosition() {
         // Clear the board before setting up the pieces
         squares = new Piece[BOARD_SIZE][BOARD_SIZE];
