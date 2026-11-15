@@ -299,3 +299,102 @@ references. Mock Board tests check expected calls. IDs appear in test method nam
 | Q04 | WHITE QUEEN at (0, 0); to (1, 2) | `false`; expected Board reads only | yes |
 | Q05 | WHITE QUEEN at (0, 0); to (0, 2); (0, 1) occupied | `false`; expected Board reads only | yes |
 | Q06 | WHITE QUEEN at (2, 0); to (5, 3); (3, 1) clear; (4, 2) occupied | `false`; expected Board reads only | yes |
+
+## 5. Attacks: `isSquareAttacked(Board board, Position square, Color attacker)`
+
+### Contract and scope
+
+Returns `true` when at least one piece of the `attacker` color attacks `square`,
+otherwise `false`. It observes the board and never moves pieces. Null `board`,
+`square`, or `attacker` throws `NullPointerException`.
+
+An attack depends only on piece geometry and on the squares strictly between the
+attacker and `square`. What stands on `square` does not matter: an empty square,
+an opposing piece, and a friendly ("defended") piece can all be attacked. This is
+what lets `Game` stop a king from capturing a defended piece.
+
+Pawns attack the two forward diagonals even when those squares are empty, and
+never attack straight ahead. Kings attack the eight neighboring squares. A pinned
+piece still attacks ([multiple-turns design](../design/multiple-turns.md)).
+A piece does not attack the square it stands on.
+
+### Inputs and outputs
+
+Inputs: board reference, target square, attacking color, and the type, color, and
+position of each piece on the board, plus pieces between an attacker and the target.
+Outputs: `true`, `false`, or a null-argument exception; all board squares keep the
+same piece references.
+
+### Catalog clues
+
+**Cases**: all six piece types, both colors, attacking color equal to or different
+from the piece color. **Boolean**: both outcomes for each piece type. **Intervals**:
+for sliding pieces, a full-length line (0 to 7) and a line blocked one square short;
+for king and pawn, distance 1 against distance 2. **Pointers**: null and real
+references for each argument. **Collections**: an empty board and a board with one,
+two, or three pieces.
+
+### Concrete cases
+
+Real `Board` instances are used, and each case asserts the board is unchanged.
+Coordinates are zero-based `(file, rank)`. Unlisted squares are empty.
+
+### attack basics
+
+| ID | State of system | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| AT01 | Empty board; square (3, 3); attacker WHITE | `false` | no |
+| AT02 | WHITE ROOK at (3, 3); square (3, 3); attacker WHITE | `false` (a piece does not attack its own square) | no |
+
+### attack pawn
+
+| ID | State of system | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| AT03 | WHITE PAWN at (3, 3); square (4, 4), empty; attacker WHITE | `true` | no |
+| AT04 | WHITE PAWN at (3, 3); square (2, 4), empty; attacker WHITE | `true` | no |
+| AT05 | WHITE PAWN at (3, 3); square (3, 4), empty; attacker WHITE | `false` (straight ahead) | no |
+| AT06 | WHITE PAWN at (3, 3); square (4, 2), empty; attacker WHITE | `false` (backward diagonal) | no |
+| AT07 | WHITE PAWN at (3, 3); square (5, 5), empty; attacker WHITE | `false` (two squares diagonally) | no |
+| AT08 | BLACK PAWN at (3, 4); square (4, 3), empty; attacker BLACK | `true` | no |
+| AT09 | BLACK PAWN at (3, 4); square (4, 5), empty; attacker BLACK | `false` (backward for Black) | no |
+| AT10 | WHITE PAWN at (3, 3); WHITE KNIGHT at (4, 4); square (4, 4); attacker WHITE | `true` (defended piece) | no |
+
+### attack knight and king
+
+| ID | State of system | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| AT11 | WHITE KNIGHT at (3, 3); square (4, 5); attacker WHITE | `true` | no |
+| AT12 | WHITE KNIGHT at (3, 3); BLACK PAWN at (3, 4) and (4, 4); square (4, 5); attacker WHITE | `true` (knights jump) | no |
+| AT13 | WHITE KNIGHT at (3, 3); square (4, 4); attacker WHITE | `false` | no |
+| AT14 | WHITE KING at (3, 3); square (4, 4); attacker WHITE | `true` | no |
+| AT15 | WHITE KING at (3, 3); square (5, 3); attacker WHITE | `false` (two squares away) | no |
+
+### attack sliding
+
+| ID | State of system | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| AT16 | WHITE ROOK at (0, 0); square (0, 7); attacker WHITE | `true` (full-length file) | no |
+| AT17 | WHITE ROOK at (0, 0); BLACK PAWN at (0, 6); square (0, 7); attacker WHITE | `false` (blocked one square short) | no |
+| AT18 | WHITE ROOK at (0, 0); BLACK QUEEN at (0, 7); square (0, 7); attacker WHITE | `true` (piece on the target does not block) | no |
+| AT19 | WHITE BISHOP at (0, 0); square (7, 7); attacker WHITE | `true` (full-length diagonal) | no |
+| AT20 | WHITE BISHOP at (0, 0); WHITE PAWN at (3, 3); square (7, 7); attacker WHITE | `false` (blocked by own piece) | no |
+| AT21 | WHITE BISHOP at (0, 0); square (0, 1); attacker WHITE | `false` (not a diagonal) | no |
+| AT22 | WHITE QUEEN at (3, 0); square (3, 7); attacker WHITE | `true` (straight line) | no |
+| AT23 | WHITE QUEEN at (3, 0); square (7, 4); attacker WHITE | `true` (diagonal) | no |
+| AT24 | WHITE QUEEN at (3, 0); square (4, 2); attacker WHITE | `false` (knight shape) | no |
+
+### attack color and pins
+
+| ID | State of system | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| AT25 | BLACK ROOK at (0, 0); square (0, 7); attacker WHITE | `false` (wrong color) | no |
+| AT26 | BLACK ROOK at (0, 0); square (0, 7); attacker BLACK | `true` | no |
+| AT27 | WHITE KING at (4, 0); WHITE ROOK at (4, 1); BLACK ROOK at (4, 7); square (0, 1); attacker WHITE | `true` (the pinned rook still attacks) | no |
+
+### attack null arguments
+
+| ID | State of system | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| AT28 | board `null`; square (3, 3); attacker WHITE | `NullPointerException` | no |
+| AT29 | empty board; square `null`; attacker WHITE | `NullPointerException` | no |
+| AT30 | empty board; square (3, 3); attacker `null` | `NullPointerException` | no |
