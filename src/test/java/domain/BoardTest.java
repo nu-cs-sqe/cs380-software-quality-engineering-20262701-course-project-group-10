@@ -3,6 +3,7 @@ package domain;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -11,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 class BoardTest {
+    private static final int BOARD_SIZE = 8;
 
     // ---------- getPiece() tests ----------
 
@@ -520,5 +522,26 @@ class BoardTest {
         board.placePiece(new Piece(PieceType.ROOK, Color.WHITE), from);
 
         assertThrows(NullPointerException.class, () -> board.movePiece(from, null));
+    }
+
+    // ---------- copy() tests ----------
+
+    // BOARD-COPY-01: an empty board copies to a separate, empty board.
+    @Test
+    void copy_emptyBoardGivesSeparateEmptyBoard() {
+        Board board = new Board();
+
+        Board copy = board.copy();
+
+        assertNotSame(board, copy);
+        assertAllSquaresEmpty(copy);
+    }
+
+    private void assertAllSquaresEmpty(Board board) {
+        for (int file = 0; file < BOARD_SIZE; file++) {
+            for (int rank = 0; rank < BOARD_SIZE; rank++) {
+                assertTrue(board.isEmpty(new Position(file, rank)));
+            }
+        }
     }
 }
