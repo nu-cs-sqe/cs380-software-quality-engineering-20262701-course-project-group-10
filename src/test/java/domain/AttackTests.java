@@ -3,14 +3,19 @@ package domain;
 import org.junit.jupiter.api.Test;
 
 public class AttackTests {
+    private static final int FILE_A = 0;
     private static final int FILE_C = 2;
     private static final int FILE_D = 3;
     private static final int FILE_E = 4;
     private static final int FILE_F = 5;
+    private static final int RANK_1 = 0;
     private static final int RANK_3 = 2;
     private static final int RANK_4 = 3;
     private static final int RANK_5 = 4;
     private static final int RANK_6 = 5;
+    private static final int RANK_8 = 7;
+    private static final Position A1 = new Position(FILE_A, RANK_1);
+    private static final Position A8 = new Position(FILE_A, RANK_8);
     private static final Position C5 = new Position(FILE_C, RANK_5);
     private static final Position D4 = new Position(FILE_D, RANK_4);
     private static final Position D5 = new Position(FILE_D, RANK_5);
@@ -18,6 +23,7 @@ public class AttackTests {
     private static final Position E4 = new Position(FILE_E, RANK_4);
     private static final Position E5 = new Position(FILE_E, RANK_5);
     private static final Position E6 = new Position(FILE_E, RANK_6);
+    private static final Position F4 = new Position(FILE_F, RANK_4);
     private static final Position F6 = new Position(FILE_F, RANK_6);
 
     // AT01: an empty board has no attackers.
@@ -125,6 +131,20 @@ public class AttackTests {
     public void AT14KingAttacksNeighbor() {
         Board board = boardWith(PieceType.KING, Color.WHITE, D4);
         MoveRuleAssertions.assertAttack(board, E5, Color.WHITE, true);
+    }
+
+    // AT15: a king's attack reaches one square, not two.
+    @Test
+    public void AT15KingDoesNotAttackTwoSquaresAway() {
+        Board board = boardWith(PieceType.KING, Color.WHITE, D4);
+        MoveRuleAssertions.assertAttack(board, F4, Color.WHITE, false);
+    }
+
+    // AT16: a rook attacks the far end of an empty file.
+    @Test
+    public void AT16RookAttacksAlongFullFile() {
+        Board board = boardWith(PieceType.ROOK, Color.WHITE, A1);
+        MoveRuleAssertions.assertAttack(board, A8, Color.WHITE, true);
     }
 
     private Board boardWith(PieceType type, Color color, Position position) {

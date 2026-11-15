@@ -368,7 +368,7 @@ Coordinates are zero-based `(file, rank)`. Unlisted squares are empty.
 | AT12 | WHITE KNIGHT at (3, 3); BLACK PAWN at (3, 4) and (4, 4); square (4, 5); attacker WHITE | `true` (knights jump) | yes |
 | AT13 | WHITE KNIGHT at (3, 3); square (4, 4); attacker WHITE | `false` | yes |
 | AT14 | WHITE KING at (3, 3); square (4, 4); attacker WHITE | `true` | yes |
-| AT15 | WHITE KING at (3, 3); square (5, 3); attacker WHITE | `false` (two squares away) | no |
+| AT15 | WHITE KING at (3, 3); square (5, 3); attacker WHITE | `false` (two squares away) | yes |
 
 ### attack sliding
 
