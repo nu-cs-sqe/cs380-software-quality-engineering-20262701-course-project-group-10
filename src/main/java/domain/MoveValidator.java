@@ -72,6 +72,9 @@ public class MoveValidator {
             case ROOK:
                 return isRookMove(fileChange, rankChange)
                         && isPathClear(board, from, square);
+            case BISHOP:
+                return isBishopMove(fileChange, rankChange)
+                        && isPathClear(board, from, square);
             default:
                 return false;
         }
