@@ -51,7 +51,7 @@ public class MoveValidator {
                 Piece piece = board.getPiece(from);
                 // A piece never attacks its own square, whatever its step rule allows.
                 if (!from.equals(square) && piece != null && piece.getColor() == attacker
-                        && attacks(piece, from, square)) {
+                        && attacks(board, piece, from, square)) {
                     return true;
                 }
             }
@@ -59,7 +59,7 @@ public class MoveValidator {
         return false;
     }
 
-    private boolean attacks(Piece piece, Position from, Position square) {
+    private boolean attacks(Board board, Piece piece, Position from, Position square) {
         int fileChange = Math.abs(square.getFile() - from.getFile());
         int rankChange = Math.abs(square.getRank() - from.getRank());
         switch (piece.getType()) {
@@ -69,6 +69,9 @@ public class MoveValidator {
                 return isKnightMove(fileChange, rankChange);
             case KING:
                 return isKingMove(fileChange, rankChange);
+            case ROOK:
+                return isRookMove(fileChange, rankChange)
+                        && isPathClear(board, from, square);
             default:
                 return false;
         }
