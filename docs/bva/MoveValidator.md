@@ -345,6 +345,7 @@ Coordinates are zero-based `(file, rank)`. Unlisted squares are empty.
 | --- | --- | --- | --- |
 | AT01 | Empty board; square (3, 3); attacker WHITE | `false` | yes |
 | AT02 | WHITE ROOK at (3, 3); square (3, 3); attacker WHITE | `false` (a piece does not attack its own square) | yes |
+| AT31 | WHITE KING at (3, 3); square (3, 3); attacker WHITE | `false` (a king's zero-square step is not an attack) | no |
 
 ### attack pawn
 

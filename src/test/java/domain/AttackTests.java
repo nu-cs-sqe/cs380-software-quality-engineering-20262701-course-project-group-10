@@ -33,6 +33,13 @@ public class AttackTests {
         MoveRuleAssertions.assertAttack(board, D4, Color.WHITE, false);
     }
 
+    // AT31: a king, whose step rule allows zero movement, does not attack its own square.
+    @Test
+    public void AT31KingDoesNotAttackItsOwnSquare() {
+        Board board = boardWith(PieceType.KING, Color.WHITE, D4);
+        MoveRuleAssertions.assertAttack(board, D4, Color.WHITE, false);
+    }
+
     // AT03: a White pawn attacks the empty forward-right diagonal.
     @Test
     public void AT03WhitePawnAttacksEmptyForwardRightDiagonal() {
