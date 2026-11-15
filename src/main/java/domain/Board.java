@@ -38,6 +38,10 @@ public class Board {
         return getPiece(position) == null;
     }
 
+    public Board copy() {
+        return new Board();
+    }
+
     public void setUpStartingPosition() {
         // Clear the board before setting up the pieces
         squares = new Piece[BOARD_SIZE][BOARD_SIZE];
