@@ -201,3 +201,82 @@ The 64 squares are not combined exhaustively (each-choice strategy). Each corner
 1. `NullPointerException` for null arguments and `IllegalArgumentException` for an empty source or `from == to` follow the style already used in `Game`. The requirements do not specify them.
 2. Moving onto a square held by a piece of the same color is not tested here. `Board.movePiece` does not check colors; `Game` rejects such a move through `MoveValidator`.
 3. `Board` tests use real `Piece` and `Position` objects. No mocking is needed because `Board` has no external collaborators.
+---
+
+## 8. BVA for `copy()`
+
+### Method Description
+
+Returns a new `Board` with the same piece on every square. The copy has its own square storage, so changing one board never changes the other. The two boards may share `Piece` objects, because `Piece` is immutable.
+
+`Game` uses the copy to try a move and check king safety before changing the real board ([multiple-turns design](../design/multiple-turns.md)).
+
+### Boundary Analysis
+
+**1. Inputs and outputs**
+
+- Inputs: the state of the original board (empty, a few pieces at the corners and interior, the full starting position).
+- Outputs: a new board, its contents on all 64 squares, and whether later changes to either board reach the other.
+
+**2. Catalog clues**
+
+- **Collections**: the board holds zero pieces, a few pieces, or all 32 starting pieces.
+- **Intervals** (file and rank, 0 to 7): the four corners and one interior square, so every boundary value of file and rank is copied.
+- **Pointers**: the result is a different object from the original, while each copied piece is the same object.
+- **Output state**: a change to the copy leaves the original unchanged, and a change to the original leaves the copy unchanged.
+
+**3. Concrete cases**
+
+Contents are compared on all 64 squares, not only the occupied ones, so a stray piece on an empty square is caught.
+
+### Test Cases
+
+| ID | Method Under Test | State of System Under Test | Expected Output | Implemented |
+|---|---|---|---|---|
+| BOARD-COPY-01 | `copy()` | The board is empty. | Returns a board that is not the same object as the original. All 64 squares of the copy are empty. | :x: |
+| BOARD-COPY-02 | `copy()` | Pieces at a1 (0, 0), h1 (7, 0), a8 (0, 7), h8 (7, 7), and d4 (3, 3). All other squares are empty. | Each of the five squares in the copy holds the same piece object as the original. The other 59 squares are empty. | :x: |
+| BOARD-COPY-03 | `copy()` | The board is in the starting position. | All 64 squares of the copy hold the same piece (or `null`) as the original. | :x: |
+| BOARD-COPY-04 | `copy()` | A piece at a1 (0, 0). Copy the board, then move a1 to a2 (0, 1) on the copy. | The original still has the piece at a1 and a2 is empty. | :x: |
+| BOARD-COPY-05 | `copy()` | A piece at a1 (0, 0). Copy the board, then place a second piece at h8 (7, 7) on the original. | The copy's h8 is still empty. | :x: |
+
+---
+
+## 9. BVA for `copyFrom(Board other)`
+
+### Method Description
+
+Replaces the contents of this board with the contents of `other`, square by square. Pieces that were on this board but are not on `other` are removed. Both boards keep their own square storage afterward.
+
+`Game` uses it to commit an accepted move from the trial copy back into the board the GUI already shows. The board object itself is never replaced (see `Game` G06).
+
+### Boundary Analysis
+
+**1. Inputs and outputs**
+
+- Inputs: `other` (null, another board, or this same board); the contents of `other` (empty or occupied); the contents of this board before the call (empty, or holding pieces that `other` does not have, or a different piece on the same square).
+- Outputs: the contents of this board on all 64 squares, an exception for null, and whether later changes to either board reach the other.
+
+**2. Catalog clues**
+
+- **Pointers**: null, a different board, and the same board (`board.copyFrom(board)`).
+- **Collections**: `other` is empty or holds pieces; this board is empty or holds pieces before the call.
+- **Intervals**: the four corners and one interior square, as for `copy()`.
+- **Output state**: old pieces are cleared, matching squares are overwritten, and the two boards stay independent.
+
+### Test Cases
+
+| ID | Method Under Test | State of System Under Test | Expected Output | Implemented |
+|---|---|---|---|---|
+| BOARD-COPYFROM-01 | `copyFrom(other)` | `other` is null. This board has a piece at d4 (3, 3). | Throws `NullPointerException`. The piece is still at d4. | :x: |
+| BOARD-COPYFROM-02 | `copyFrom(other)` | This board is empty. `other` has pieces at a1 (0, 0), h1 (7, 0), a8 (0, 7), h8 (7, 7), and d4 (3, 3). | This board holds the same piece objects on those five squares. The other 59 squares are empty. | :x: |
+| BOARD-COPYFROM-03 | `copyFrom(other)` | This board has pieces at a1 (0, 0) and h8 (7, 7). `other` is empty. | All 64 squares of this board are empty. | :x: |
+| BOARD-COPYFROM-04 | `copyFrom(other)` | This board has a White rook at e4 (4, 3). `other` has a Black knight at e4. | This board's e4 holds the Black knight. | :x: |
+| BOARD-COPYFROM-05 | `copyFrom(other)` | This board copies `other`, which has a piece at a1 (0, 0). Then a piece is placed at h8 (7, 7) on `other`. | This board's h8 is still empty. | :x: |
+| BOARD-COPYFROM-06 | `copyFrom(other)` | This board copies `other`, which has a piece at a1 (0, 0). Then a1 is moved to a2 (0, 1) on this board. | `other` still has the piece at a1 and a2 is empty. | :x: |
+| BOARD-COPYFROM-07 | `copyFrom(other)` | This board has pieces at a1 (0, 0) and d4 (3, 3). Call `board.copyFrom(board)`. | No exception. The pieces are still at a1 and d4, and the other squares are empty. | :x: |
+
+### Assumptions
+
+1. `NullPointerException` for a null `other` follows the style already used in `movePiece`. The design does not specify it.
+2. Sharing `Piece` objects between boards is safe because `Piece` is immutable, so the tests use `assertSame` for copied pieces.
+3. Independence is tested in both directions for both methods, because `Game` relies on a rejected trial move never reaching the real board, and on an accepted move never being changed afterward by edits to the trial copy.
