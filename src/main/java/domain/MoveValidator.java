@@ -66,6 +66,8 @@ public class MoveValidator {
                 return isPawnAttack(piece, from, square);
             case KNIGHT:
                 return isKnightMove(fileChange, rankChange);
+            case KING:
+                return isKingMove(fileChange, rankChange);
             default:
                 return false;
         }
