@@ -17,10 +17,12 @@ class BoardTest {
     private static final int FILE_D = 3;
     private static final int FILE_H = 7;
     private static final int RANK_1 = 0;
+    private static final int RANK_2 = 1;
     private static final int RANK_4 = 3;
     private static final int RANK_8 = 7;
     private static final Position A1 = new Position(FILE_A, RANK_1);
     private static final Position H1 = new Position(FILE_H, RANK_1);
+    private static final Position A2 = new Position(FILE_A, RANK_2);
     private static final Position A8 = new Position(FILE_A, RANK_8);
     private static final Position H8 = new Position(FILE_H, RANK_8);
     private static final Position D4 = new Position(FILE_D, RANK_4);
@@ -556,6 +558,43 @@ class BoardTest {
         Board copy = board.copy();
 
         assertSameContents(board, copy);
+    }
+
+    // BOARD-COPY-03: the full starting position copies square for square.
+    @Test
+    void copy_keepsStartingPosition() {
+        Board board = new Board();
+        board.setUpStartingPosition();
+
+        Board copy = board.copy();
+
+        assertSameContents(board, copy);
+    }
+
+    // BOARD-COPY-04: a move on the copy does not reach the original.
+    @Test
+    void copy_changingCopyLeavesOriginalAlone() {
+        Board board = new Board();
+        Piece rook = new Piece(PieceType.ROOK, Color.WHITE);
+        board.placePiece(rook, A1);
+        Board copy = board.copy();
+
+        copy.movePiece(A1, A2);
+
+        assertSame(rook, board.getPiece(A1));
+        assertTrue(board.isEmpty(A2));
+    }
+
+    // BOARD-COPY-05: a change to the original does not reach the copy.
+    @Test
+    void copy_changingOriginalLeavesCopyAlone() {
+        Board board = new Board();
+        board.placePiece(new Piece(PieceType.ROOK, Color.WHITE), A1);
+        Board copy = board.copy();
+
+        board.placePiece(new Piece(PieceType.KING, Color.BLACK), H8);
+
+        assertTrue(copy.isEmpty(H8));
     }
 
     private Board boardWithCornerAndInteriorPieces() {
