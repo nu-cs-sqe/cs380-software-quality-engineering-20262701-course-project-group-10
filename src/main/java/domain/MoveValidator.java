@@ -4,6 +4,7 @@ import java.util.Objects;
 
 /** Checks movement patterns without changing the board or enforcing turn order. */
 public class MoveValidator {
+    private static final int BOARD_SIZE = 8;
     private static final int SINGLE_STEP = 1;
     private static final int DOUBLE_STEP = 2;
     private static final int WHITE_PAWN_START = 1;
@@ -44,7 +45,24 @@ public class MoveValidator {
     }
 
     public boolean isSquareAttacked(Board board, Position square, Color attacker) {
+        for (int file = 0; file < BOARD_SIZE; file++) {
+            for (int rank = 0; rank < BOARD_SIZE; rank++) {
+                Position from = new Position(file, rank);
+                Piece piece = board.getPiece(from);
+                if (piece != null && piece.getColor() == attacker
+                        && attacks(piece, from, square)) {
+                    return true;
+                }
+            }
+        }
         return false;
+    }
+
+    private boolean attacks(Piece piece, Position from, Position square) {
+        int fileChange = Math.abs(square.getFile() - from.getFile());
+        int rankChange = square.getRank() - from.getRank();
+        return piece.getType() == PieceType.PAWN
+                && fileChange == SINGLE_STEP && rankChange == SINGLE_STEP;
     }
 
     private boolean isKnightMove(int fileChange, int rankChange) {
