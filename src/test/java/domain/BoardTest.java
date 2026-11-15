@@ -13,6 +13,17 @@ import org.junit.jupiter.api.Test;
 
 class BoardTest {
     private static final int BOARD_SIZE = 8;
+    private static final int FILE_A = 0;
+    private static final int FILE_D = 3;
+    private static final int FILE_H = 7;
+    private static final int RANK_1 = 0;
+    private static final int RANK_4 = 3;
+    private static final int RANK_8 = 7;
+    private static final Position A1 = new Position(FILE_A, RANK_1);
+    private static final Position H1 = new Position(FILE_H, RANK_1);
+    private static final Position A8 = new Position(FILE_A, RANK_8);
+    private static final Position H8 = new Position(FILE_H, RANK_8);
+    private static final Position D4 = new Position(FILE_D, RANK_4);
 
     // ---------- getPiece() tests ----------
 
@@ -535,6 +546,36 @@ class BoardTest {
 
         assertNotSame(board, copy);
         assertAllSquaresEmpty(copy);
+    }
+
+    // BOARD-COPY-02: corner and interior pieces copy as the same objects.
+    @Test
+    void copy_keepsCornerAndInteriorPieces() {
+        Board board = boardWithCornerAndInteriorPieces();
+
+        Board copy = board.copy();
+
+        assertSameContents(board, copy);
+    }
+
+    private Board boardWithCornerAndInteriorPieces() {
+        Board board = new Board();
+        board.placePiece(new Piece(PieceType.ROOK, Color.WHITE), A1);
+        board.placePiece(new Piece(PieceType.KNIGHT, Color.WHITE), H1);
+        board.placePiece(new Piece(PieceType.ROOK, Color.BLACK), A8);
+        board.placePiece(new Piece(PieceType.KNIGHT, Color.BLACK), H8);
+        board.placePiece(new Piece(PieceType.QUEEN, Color.WHITE), D4);
+        return board;
+    }
+
+    // Compares all 64 squares, so a missing piece or a stray one both fail.
+    private void assertSameContents(Board expected, Board actual) {
+        for (int file = 0; file < BOARD_SIZE; file++) {
+            for (int rank = 0; rank < BOARD_SIZE; rank++) {
+                Position square = new Position(file, rank);
+                assertSame(expected.getPiece(square), actual.getPiece(square));
+            }
+        }
     }
 
     private void assertAllSquaresEmpty(Board board) {
