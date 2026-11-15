@@ -611,6 +611,17 @@ class BoardTest {
         assertSame(queen, board.getPiece(D4));
     }
 
+    // BOARD-COPYFROM-02: an empty board takes the other board's pieces.
+    @Test
+    void copyFrom_emptyBoardTakesOtherBoardsPieces() {
+        Board board = new Board();
+        Board other = boardWithCornerAndInteriorPieces();
+
+        board.copyFrom(other);
+
+        assertSameContents(other, board);
+    }
+
     private Board boardWithCornerAndInteriorPieces() {
         Board board = new Board();
         board.placePiece(new Piece(PieceType.ROOK, Color.WHITE), A1);
