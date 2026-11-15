@@ -8,14 +8,18 @@ public class AttackTests {
     private static final int FILE_D = 3;
     private static final int FILE_E = 4;
     private static final int FILE_F = 5;
+    private static final int FILE_H = 7;
     private static final int RANK_1 = 0;
     private static final int RANK_3 = 2;
     private static final int RANK_4 = 3;
     private static final int RANK_5 = 4;
     private static final int RANK_6 = 5;
+    private static final int RANK_7 = 6;
     private static final int RANK_8 = 7;
     private static final Position A1 = new Position(FILE_A, RANK_1);
+    private static final Position A7 = new Position(FILE_A, RANK_7);
     private static final Position A8 = new Position(FILE_A, RANK_8);
+    private static final Position H8 = new Position(FILE_H, RANK_8);
     private static final Position C5 = new Position(FILE_C, RANK_5);
     private static final Position D4 = new Position(FILE_D, RANK_4);
     private static final Position D5 = new Position(FILE_D, RANK_5);
@@ -145,6 +149,29 @@ public class AttackTests {
     public void AT16RookAttacksAlongFullFile() {
         Board board = boardWith(PieceType.ROOK, Color.WHITE, A1);
         MoveRuleAssertions.assertAttack(board, A8, Color.WHITE, true);
+    }
+
+    // AT17: a piece one square short of the target blocks a rook.
+    @Test
+    public void AT17RookBlockedOneSquareShort() {
+        Board board = boardWith(PieceType.ROOK, Color.WHITE, A1);
+        board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), A7);
+        MoveRuleAssertions.assertAttack(board, A8, Color.WHITE, false);
+    }
+
+    // AT18: a piece standing on the target square does not block the attack.
+    @Test
+    public void AT18PieceOnTargetDoesNotBlockRook() {
+        Board board = boardWith(PieceType.ROOK, Color.WHITE, A1);
+        board.placePiece(new Piece(PieceType.QUEEN, Color.BLACK), A8);
+        MoveRuleAssertions.assertAttack(board, A8, Color.WHITE, true);
+    }
+
+    // AT19: a bishop attacks the far end of an empty diagonal.
+    @Test
+    public void AT19BishopAttacksAlongFullDiagonal() {
+        Board board = boardWith(PieceType.BISHOP, Color.WHITE, A1);
+        MoveRuleAssertions.assertAttack(board, H8, Color.WHITE, true);
     }
 
     private Board boardWith(PieceType type, Color color, Position position) {

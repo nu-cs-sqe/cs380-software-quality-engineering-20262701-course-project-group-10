@@ -374,9 +374,9 @@ Coordinates are zero-based `(file, rank)`. Unlisted squares are empty.
 
 | ID | State of system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| AT16 | WHITE ROOK at (0, 0); square (0, 7); attacker WHITE | `true` (full-length file) | no |
-| AT17 | WHITE ROOK at (0, 0); BLACK PAWN at (0, 6); square (0, 7); attacker WHITE | `false` (blocked one square short) | no |
-| AT18 | WHITE ROOK at (0, 0); BLACK QUEEN at (0, 7); square (0, 7); attacker WHITE | `true` (piece on the target does not block) | no |
+| AT16 | WHITE ROOK at (0, 0); square (0, 7); attacker WHITE | `true` (full-length file) | yes |
+| AT17 | WHITE ROOK at (0, 0); BLACK PAWN at (0, 6); square (0, 7); attacker WHITE | `false` (blocked one square short) | yes |
+| AT18 | WHITE ROOK at (0, 0); BLACK QUEEN at (0, 7); square (0, 7); attacker WHITE | `true` (piece on the target does not block) | yes |
 | AT19 | WHITE BISHOP at (0, 0); square (7, 7); attacker WHITE | `true` (full-length diagonal) | no |
 | AT20 | WHITE BISHOP at (0, 0); WHITE PAWN at (3, 3); square (7, 7); attacker WHITE | `false` (blocked by own piece) | no |
 | AT21 | WHITE BISHOP at (0, 0); square (0, 1); attacker WHITE | `false` (not a diagonal) | no |
