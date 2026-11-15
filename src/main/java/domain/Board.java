@@ -40,16 +40,14 @@ public class Board {
 
     public Board copy() {
         Board copy = new Board();
-        for (int file = 0; file < BOARD_SIZE; file++) {
-            // Clone each column so the two boards never share storage; Pieces are immutable.
-            copy.squares[file] = squares[file].clone();
-        }
+        copy.copyFrom(this);
         return copy;
     }
 
     public void copyFrom(Board other) {
         Objects.requireNonNull(other, "other");
         for (int file = 0; file < BOARD_SIZE; file++) {
+            // Clone each column so the two boards never share storage; Pieces are immutable.
             squares[file] = other.squares[file].clone();
         }
     }
