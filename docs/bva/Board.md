@@ -268,7 +268,7 @@ Replaces the contents of this board with the contents of `other`, square by squa
 | ID | Method Under Test | State of System Under Test | Expected Output | Implemented |
 |---|---|---|---|---|
 | BOARD-COPYFROM-01 | `copyFrom(other)` | `other` is null. This board has a piece at d4 (3, 3). | Throws `NullPointerException`. The piece is still at d4. | :white_check_mark: |
-| BOARD-COPYFROM-02 | `copyFrom(other)` | This board is empty. `other` has pieces at a1 (0, 0), h1 (7, 0), a8 (0, 7), h8 (7, 7), and d4 (3, 3). | This board holds the same piece objects on those five squares. The other 59 squares are empty. | :x: |
+| BOARD-COPYFROM-02 | `copyFrom(other)` | This board is empty. `other` has pieces at a1 (0, 0), h1 (7, 0), a8 (0, 7), h8 (7, 7), and d4 (3, 3). | This board holds the same piece objects on those five squares. The other 59 squares are empty. | :white_check_mark: |
 | BOARD-COPYFROM-03 | `copyFrom(other)` | This board has pieces at a1 (0, 0) and h8 (7, 7). `other` is empty. | All 64 squares of this board are empty. | :x: |
 | BOARD-COPYFROM-04 | `copyFrom(other)` | This board has a White rook at e4 (4, 3). `other` has a Black knight at e4. | This board's e4 holds the Black knight. | :x: |
 | BOARD-COPYFROM-05 | `copyFrom(other)` | This board copies `other`, which has a piece at a1 (0, 0). Then a piece is placed at h8 (7, 7) on `other`. | This board's h8 is still empty. | :x: |

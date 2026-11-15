@@ -49,6 +49,9 @@ public class Board {
 
     public void copyFrom(Board other) {
         Objects.requireNonNull(other, "other");
+        for (int file = 0; file < BOARD_SIZE; file++) {
+            squares[file] = other.squares[file].clone();
+        }
     }
 
     public void setUpStartingPosition() {
