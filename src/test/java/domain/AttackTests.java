@@ -21,16 +21,20 @@ public class AttackTests {
     private static final Position A2 = new Position(FILE_A, RANK_2);
     private static final Position A7 = new Position(FILE_A, RANK_7);
     private static final Position A8 = new Position(FILE_A, RANK_8);
+    private static final Position H5 = new Position(FILE_H, RANK_5);
     private static final Position H8 = new Position(FILE_H, RANK_8);
     private static final Position C5 = new Position(FILE_C, RANK_5);
     private static final Position D1 = new Position(FILE_D, RANK_1);
     private static final Position D8 = new Position(FILE_D, RANK_8);
     private static final Position D4 = new Position(FILE_D, RANK_4);
     private static final Position D5 = new Position(FILE_D, RANK_5);
+    private static final Position E1 = new Position(FILE_E, RANK_1);
+    private static final Position E2 = new Position(FILE_E, RANK_2);
     private static final Position E3 = new Position(FILE_E, RANK_3);
     private static final Position E4 = new Position(FILE_E, RANK_4);
     private static final Position E5 = new Position(FILE_E, RANK_5);
     private static final Position E6 = new Position(FILE_E, RANK_6);
+    private static final Position E8 = new Position(FILE_E, RANK_8);
     private static final Position F4 = new Position(FILE_F, RANK_4);
     private static final Position F6 = new Position(FILE_F, RANK_6);
 
@@ -198,6 +202,43 @@ public class AttackTests {
     public void AT22QueenAttacksAlongFile() {
         Board board = boardWith(PieceType.QUEEN, Color.WHITE, D1);
         MoveRuleAssertions.assertAttack(board, D8, Color.WHITE, true);
+    }
+
+    // AT23: a queen attacks along an empty diagonal.
+    @Test
+    public void AT23QueenAttacksAlongDiagonal() {
+        Board board = boardWith(PieceType.QUEEN, Color.WHITE, D1);
+        MoveRuleAssertions.assertAttack(board, H5, Color.WHITE, true);
+    }
+
+    // AT24: a queen does not attack a knight-shaped square.
+    @Test
+    public void AT24QueenDoesNotAttackKnightShape() {
+        Board board = boardWith(PieceType.QUEEN, Color.WHITE, D1);
+        MoveRuleAssertions.assertAttack(board, E3, Color.WHITE, false);
+    }
+
+    // AT25: only pieces of the attacking color count.
+    @Test
+    public void AT25OpponentPieceDoesNotCountForAttacker() {
+        Board board = boardWith(PieceType.ROOK, Color.BLACK, A1);
+        MoveRuleAssertions.assertAttack(board, A8, Color.WHITE, false);
+    }
+
+    // AT26: the same piece counts when its own color is the attacker.
+    @Test
+    public void AT26PieceCountsForItsOwnColor() {
+        Board board = boardWith(PieceType.ROOK, Color.BLACK, A1);
+        MoveRuleAssertions.assertAttack(board, A8, Color.BLACK, true);
+    }
+
+    // AT27: a pinned piece still attacks; pins only limit moves, not attacks.
+    @Test
+    public void AT27PinnedPieceStillAttacks() {
+        Board board = boardWith(PieceType.KING, Color.WHITE, E1);
+        board.placePiece(new Piece(PieceType.ROOK, Color.WHITE), E2);
+        board.placePiece(new Piece(PieceType.ROOK, Color.BLACK), E8);
+        MoveRuleAssertions.assertAttack(board, A2, Color.WHITE, true);
     }
 
     private Board boardWith(PieceType type, Color color, Position position) {

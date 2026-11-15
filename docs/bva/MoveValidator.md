@@ -381,16 +381,16 @@ Coordinates are zero-based `(file, rank)`. Unlisted squares are empty.
 | AT20 | WHITE BISHOP at (0, 0); WHITE PAWN at (3, 3); square (7, 7); attacker WHITE | `false` (blocked by own piece) | yes |
 | AT21 | WHITE BISHOP at (0, 0); square (0, 1); attacker WHITE | `false` (not a diagonal) | yes |
 | AT22 | WHITE QUEEN at (3, 0); square (3, 7); attacker WHITE | `true` (straight line) | yes |
-| AT23 | WHITE QUEEN at (3, 0); square (7, 4); attacker WHITE | `true` (diagonal) | no |
-| AT24 | WHITE QUEEN at (3, 0); square (4, 2); attacker WHITE | `false` (knight shape) | no |
+| AT23 | WHITE QUEEN at (3, 0); square (7, 4); attacker WHITE | `true` (diagonal) | yes |
+| AT24 | WHITE QUEEN at (3, 0); square (4, 2); attacker WHITE | `false` (knight shape) | yes |
 
 ### attack color and pins
 
 | ID | State of system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| AT25 | BLACK ROOK at (0, 0); square (0, 7); attacker WHITE | `false` (wrong color) | no |
-| AT26 | BLACK ROOK at (0, 0); square (0, 7); attacker BLACK | `true` | no |
-| AT27 | WHITE KING at (4, 0); WHITE ROOK at (4, 1); BLACK ROOK at (4, 7); square (0, 1); attacker WHITE | `true` (the pinned rook still attacks) | no |
+| AT25 | BLACK ROOK at (0, 0); square (0, 7); attacker WHITE | `false` (wrong color) | yes |
+| AT26 | BLACK ROOK at (0, 0); square (0, 7); attacker BLACK | `true` | yes |
+| AT27 | WHITE KING at (4, 0); WHITE ROOK at (4, 1); BLACK ROOK at (4, 7); square (0, 1); attacker WHITE | `true` (the pinned rook still attacks) | yes |
 
 ### attack null arguments
 
