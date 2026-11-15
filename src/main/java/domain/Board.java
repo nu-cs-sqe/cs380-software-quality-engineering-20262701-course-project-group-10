@@ -39,7 +39,12 @@ public class Board {
     }
 
     public Board copy() {
-        return new Board();
+        Board copy = new Board();
+        for (int file = 0; file < BOARD_SIZE; file++) {
+            // Clone each column so the two boards never share storage; Pieces are immutable.
+            copy.squares[file] = squares[file].clone();
+        }
+        return copy;
     }
 
     public void setUpStartingPosition() {
