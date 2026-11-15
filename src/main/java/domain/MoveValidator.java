@@ -59,10 +59,11 @@ public class MoveValidator {
     }
 
     private boolean attacks(Piece piece, Position from, Position square) {
+        int direction = piece.getColor() == Color.WHITE ? SINGLE_STEP : -SINGLE_STEP;
         int fileChange = Math.abs(square.getFile() - from.getFile());
-        int rankChange = square.getRank() - from.getRank();
+        int forward = (square.getRank() - from.getRank()) * direction;
         return piece.getType() == PieceType.PAWN
-                && fileChange == SINGLE_STEP && rankChange == SINGLE_STEP;
+                && fileChange == SINGLE_STEP && forward == SINGLE_STEP;
     }
 
     private boolean isKnightMove(int fileChange, int rankChange) {
