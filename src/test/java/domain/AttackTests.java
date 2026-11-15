@@ -17,6 +17,7 @@ public class AttackTests {
     private static final Position E3 = new Position(FILE_E, RANK_3);
     private static final Position E4 = new Position(FILE_E, RANK_4);
     private static final Position E5 = new Position(FILE_E, RANK_5);
+    private static final Position E6 = new Position(FILE_E, RANK_6);
     private static final Position F6 = new Position(FILE_F, RANK_6);
 
     // AT01: an empty board has no attackers.
@@ -72,6 +73,28 @@ public class AttackTests {
     public void AT08BlackPawnAttacksDownward() {
         Board board = boardWith(PieceType.PAWN, Color.BLACK, D5);
         MoveRuleAssertions.assertAttack(board, E4, Color.BLACK, true);
+    }
+
+    // AT09: a Black pawn does not attack backward (toward rank 8).
+    @Test
+    public void AT09BlackPawnDoesNotAttackBackward() {
+        Board board = boardWith(PieceType.PAWN, Color.BLACK, D5);
+        MoveRuleAssertions.assertAttack(board, E6, Color.BLACK, false);
+    }
+
+    // AT10: a square holding a friendly piece still counts as attacked (defended).
+    @Test
+    public void AT10PawnAttacksDefendedSquare() {
+        Board board = boardWith(PieceType.PAWN, Color.WHITE, D4);
+        board.placePiece(new Piece(PieceType.KNIGHT, Color.WHITE), E5);
+        MoveRuleAssertions.assertAttack(board, E5, Color.WHITE, true);
+    }
+
+    // AT11: a knight attacks an L-shaped square.
+    @Test
+    public void AT11KnightAttacksLShape() {
+        Board board = boardWith(PieceType.KNIGHT, Color.WHITE, D4);
+        MoveRuleAssertions.assertAttack(board, E6, Color.WHITE, true);
     }
 
     private Board boardWith(PieceType type, Color color, Position position) {

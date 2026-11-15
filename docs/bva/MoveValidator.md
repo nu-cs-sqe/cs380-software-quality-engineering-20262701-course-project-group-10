@@ -356,8 +356,8 @@ Coordinates are zero-based `(file, rank)`. Unlisted squares are empty.
 | AT06 | WHITE PAWN at (3, 3); square (4, 2), empty; attacker WHITE | `false` (backward diagonal) | yes |
 | AT07 | WHITE PAWN at (3, 3); square (5, 5), empty; attacker WHITE | `false` (two squares diagonally) | yes |
 | AT08 | BLACK PAWN at (3, 4); square (4, 3), empty; attacker BLACK | `true` | yes |
-| AT09 | BLACK PAWN at (3, 4); square (4, 5), empty; attacker BLACK | `false` (backward for Black) | no |
-| AT10 | WHITE PAWN at (3, 3); WHITE KNIGHT at (4, 4); square (4, 4); attacker WHITE | `true` (defended piece) | no |
+| AT09 | BLACK PAWN at (3, 4); square (4, 5), empty; attacker BLACK | `false` (backward for Black) | yes |
+| AT10 | WHITE PAWN at (3, 3); WHITE KNIGHT at (4, 4); square (4, 4); attacker WHITE | `true` (defended piece) | yes |
 
 ### attack knight and king
 
