@@ -343,7 +343,7 @@ Coordinates are zero-based `(file, rank)`. Unlisted squares are empty.
 
 | ID | State of system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| AT01 | Empty board; square (3, 3); attacker WHITE | `false` | no |
+| AT01 | Empty board; square (3, 3); attacker WHITE | `false` | yes |
 | AT02 | WHITE ROOK at (3, 3); square (3, 3); attacker WHITE | `false` (a piece does not attack its own square) | no |
 
 ### attack pawn

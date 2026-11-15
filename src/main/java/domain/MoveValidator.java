@@ -43,6 +43,10 @@ public class MoveValidator {
         }
     }
 
+    public boolean isSquareAttacked(Board board, Position square, Color attacker) {
+        return false;
+    }
+
     private boolean isKnightMove(int fileChange, int rankChange) {
         return fileChange == SINGLE_STEP && rankChange == DOUBLE_STEP
                 || fileChange == DOUBLE_STEP && rankChange == SINGLE_STEP;
