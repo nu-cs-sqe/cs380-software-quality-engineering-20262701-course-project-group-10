@@ -350,11 +350,11 @@ Coordinates are zero-based `(file, rank)`. Unlisted squares are empty.
 
 | ID | State of system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| AT03 | WHITE PAWN at (3, 3); square (4, 4), empty; attacker WHITE | `true` | no |
-| AT04 | WHITE PAWN at (3, 3); square (2, 4), empty; attacker WHITE | `true` | no |
-| AT05 | WHITE PAWN at (3, 3); square (3, 4), empty; attacker WHITE | `false` (straight ahead) | no |
-| AT06 | WHITE PAWN at (3, 3); square (4, 2), empty; attacker WHITE | `false` (backward diagonal) | no |
-| AT07 | WHITE PAWN at (3, 3); square (5, 5), empty; attacker WHITE | `false` (two squares diagonally) | no |
+| AT03 | WHITE PAWN at (3, 3); square (4, 4), empty; attacker WHITE | `true` | yes |
+| AT04 | WHITE PAWN at (3, 3); square (2, 4), empty; attacker WHITE | `true` | yes |
+| AT05 | WHITE PAWN at (3, 3); square (3, 4), empty; attacker WHITE | `false` (straight ahead) | yes |
+| AT06 | WHITE PAWN at (3, 3); square (4, 2), empty; attacker WHITE | `false` (backward diagonal) | yes |
+| AT07 | WHITE PAWN at (3, 3); square (5, 5), empty; attacker WHITE | `false` (two squares diagonally) | yes |
 | AT08 | BLACK PAWN at (3, 4); square (4, 3), empty; attacker BLACK | `true` | no |
 | AT09 | BLACK PAWN at (3, 4); square (4, 5), empty; attacker BLACK | `false` (backward for Black) | no |
 | AT10 | WHITE PAWN at (3, 3); WHITE KNIGHT at (4, 4); square (4, 4); attacker WHITE | `true` (defended piece) | no |
