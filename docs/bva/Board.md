@@ -232,8 +232,8 @@ Contents are compared on all 64 squares, not only the occupied ones, so a stray 
 ### Test Cases
 
 | ID | Method Under Test | State of System Under Test | Expected Output | Implemented |
-|---|---|---|---|---|
-| BOARD-COPY-01 | `copy()` | The board is empty. | Returns a board that is not the same object as the original. All 64 squares of the copy are empty. | :x: |
+|---|---|---|---|---|v
+| BOARD-COPY-01 | `copy()` | The board is empty. | Returns a board that is not the same object as the original. All 64 squares of the copy are empty. | :white_check_mark: |
 | BOARD-COPY-02 | `copy()` | Pieces at a1 (0, 0), h1 (7, 0), a8 (0, 7), h8 (7, 7), and d4 (3, 3). All other squares are empty. | Each of the five squares in the copy holds the same piece object as the original. The other 59 squares are empty. | :x: |
 | BOARD-COPY-03 | `copy()` | The board is in the starting position. | All 64 squares of the copy hold the same piece (or `null`) as the original. | :x: |
 | BOARD-COPY-04 | `copy()` | A piece at a1 (0, 0). Copy the board, then move a1 to a2 (0, 1) on the copy. | The original still has the piece at a1 and a2 is empty. | :x: |
