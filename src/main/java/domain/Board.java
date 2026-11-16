@@ -2,6 +2,7 @@ package domain;
 
 import java.util.Objects;
 
+/** Stores pieces on the chessboard and supports setup, copying, and moves. */
 public class Board {
     private static final int BOARD_SIZE = 8;
     private static final int WHITE_BACK_RANK = 0;

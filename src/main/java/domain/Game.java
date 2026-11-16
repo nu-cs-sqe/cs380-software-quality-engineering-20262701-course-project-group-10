@@ -3,6 +3,7 @@ package domain;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.Objects;
 
+/** Manages turns, legal moves, king safety, and castling rights. */
 public class Game {
     private static final int QUEEN_SIDE_ROOK_FILE = 0;
     private static final int KING_SIDE_ROOK_FILE = 7;
