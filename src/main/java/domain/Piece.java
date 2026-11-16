@@ -2,6 +2,7 @@ package domain;
 
 import java.util.Objects;
 
+/** An immutable chess piece with a type and a color. */
 public final class Piece {
     private final PieceType type;
     private final Color color;
