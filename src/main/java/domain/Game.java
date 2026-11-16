@@ -262,4 +262,8 @@ public class Game {
     public boolean isCurrentPlayerInCheck() {
         return validator.isInCheck(board, currentPlayer);
     }
+
+    public boolean hasAnyLegalMove() {
+        return false;
+    }
 }
