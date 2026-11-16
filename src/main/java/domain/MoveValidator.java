@@ -21,27 +21,10 @@ public class MoveValidator {
         if (piece == null) {
             return false;
         }
-        int fileChange = Math.abs(to.getFile() - from.getFile());
-        int rankChange = Math.abs(to.getRank() - from.getRank());
-        switch (piece.getType()) {
-            case PAWN:
-                return isPawnMove(board, piece, from, to);
-            case KNIGHT:
-                return isKnightMove(fileChange, rankChange);
-            case KING:
-                return isKingMove(fileChange, rankChange);
-            case ROOK:
-                return isRookMove(fileChange, rankChange)
-                        && isPathClear(board, from, to);
-            case BISHOP:
-                return isBishopMove(fileChange, rankChange)
-                        && isPathClear(board, from, to);
-            default:
-                // Queen is the remaining type in the six-piece enum.
-                return (isRookMove(fileChange, rankChange)
-                        || isBishopMove(fileChange, rankChange))
-                        && isPathClear(board, from, to);
+        if (piece.getType() == PieceType.PAWN) {
+            return isPawnMove(board, piece, from, to);
         }
+        return matchesPieceShape(board, piece.getType(), from, to);
     }
 
     public boolean isSquareAttacked(Board board, Position square, Color attacker) {
@@ -63,32 +46,43 @@ public class MoveValidator {
     }
 
     private boolean attacks(Board board, Piece piece, Position from, Position square) {
-        int fileChange = Math.abs(square.getFile() - from.getFile());
-        int rankChange = Math.abs(square.getRank() - from.getRank());
-        switch (piece.getType()) {
-            case PAWN:
-                return isPawnAttack(piece, from, square);
+        if (piece.getType() == PieceType.PAWN) {
+            return isPawnAttack(piece, from, square);
+        }
+        return matchesPieceShape(board, piece.getType(), from, square);
+    }
+
+    // Shared by moves and attacks: every piece except the pawn moves the way it attacks.
+    // Callers handle pawns first, so they never reach this switch.
+    private boolean matchesPieceShape(Board board, PieceType type, Position from, Position to) {
+        int fileChange = Math.abs(to.getFile() - from.getFile());
+        int rankChange = Math.abs(to.getRank() - from.getRank());
+        switch (type) {
             case KNIGHT:
                 return isKnightMove(fileChange, rankChange);
             case KING:
                 return isKingMove(fileChange, rankChange);
             case ROOK:
                 return isRookMove(fileChange, rankChange)
-                        && isPathClear(board, from, square);
+                        && isPathClear(board, from, to);
             case BISHOP:
                 return isBishopMove(fileChange, rankChange)
-                        && isPathClear(board, from, square);
+                        && isPathClear(board, from, to);
             default:
-                // Queen is the remaining type in the six-piece enum.
+                // Queen is the remaining non-pawn type in the six-piece enum.
                 return (isRookMove(fileChange, rankChange)
                         || isBishopMove(fileChange, rankChange))
-                        && isPathClear(board, from, square);
+                        && isPathClear(board, from, to);
         }
+    }
+
+    private int pawnDirection(Color color) {
+        return color == Color.WHITE ? SINGLE_STEP : -SINGLE_STEP;
     }
 
     // Unlike a pawn move, an attack covers both forward diagonals even when they are empty.
     private boolean isPawnAttack(Piece pawn, Position from, Position square) {
-        int direction = pawn.getColor() == Color.WHITE ? SINGLE_STEP : -SINGLE_STEP;
+        int direction = pawnDirection(pawn.getColor());
         int fileChange = Math.abs(square.getFile() - from.getFile());
         int forward = (square.getRank() - from.getRank()) * direction;
         return fileChange == SINGLE_STEP && forward == SINGLE_STEP;
@@ -104,7 +98,7 @@ public class MoveValidator {
     }
 
     private boolean isPawnMove(Board board, Piece piece, Position from, Position to) {
-        int direction = piece.getColor() == Color.WHITE ? SINGLE_STEP : -SINGLE_STEP;
+        int direction = pawnDirection(piece.getColor());
         int forward = (to.getRank() - from.getRank()) * direction;
         int fileChange = Math.abs(to.getFile() - from.getFile());
         if (fileChange == SINGLE_STEP && forward == SINGLE_STEP) {
