@@ -3,6 +3,7 @@ package domain;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -11,6 +12,22 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 class BoardTest {
+    private static final int BOARD_SIZE = 8;
+    private static final int FILE_A = 0;
+    private static final int FILE_D = 3;
+    private static final int FILE_E = 4;
+    private static final int FILE_H = 7;
+    private static final int RANK_1 = 0;
+    private static final int RANK_2 = 1;
+    private static final int RANK_4 = 3;
+    private static final int RANK_8 = 7;
+    private static final Position A1 = new Position(FILE_A, RANK_1);
+    private static final Position H1 = new Position(FILE_H, RANK_1);
+    private static final Position A2 = new Position(FILE_A, RANK_2);
+    private static final Position A8 = new Position(FILE_A, RANK_8);
+    private static final Position H8 = new Position(FILE_H, RANK_8);
+    private static final Position D4 = new Position(FILE_D, RANK_4);
+    private static final Position E4 = new Position(FILE_E, RANK_4);
 
     // ---------- getPiece() tests ----------
 
@@ -520,5 +537,189 @@ class BoardTest {
         board.placePiece(new Piece(PieceType.ROOK, Color.WHITE), from);
 
         assertThrows(NullPointerException.class, () -> board.movePiece(from, null));
+    }
+
+    // ---------- copy() tests ----------
+
+    // BOARD-COPY-01: an empty board copies to a separate, empty board.
+    @Test
+    void copy_emptyBoardGivesSeparateEmptyBoard() {
+        Board board = new Board();
+
+        Board copy = board.copy();
+
+        assertNotSame(board, copy);
+        assertAllSquaresEmpty(copy);
+    }
+
+    // BOARD-COPY-02: corner and interior pieces copy as the same objects.
+    @Test
+    void copy_keepsCornerAndInteriorPieces() {
+        Board board = boardWithCornerAndInteriorPieces();
+
+        Board copy = board.copy();
+
+        assertSameContents(board, copy);
+    }
+
+    // BOARD-COPY-03: the full starting position copies square for square.
+    @Test
+    void copy_keepsStartingPosition() {
+        Board board = new Board();
+        board.setUpStartingPosition();
+
+        Board copy = board.copy();
+
+        assertSameContents(board, copy);
+    }
+
+    // BOARD-COPY-04: a move on the copy does not reach the original.
+    @Test
+    void copy_changingCopyLeavesOriginalAlone() {
+        Board board = new Board();
+        Piece rook = new Piece(PieceType.ROOK, Color.WHITE);
+        board.placePiece(rook, A1);
+        Board copy = board.copy();
+
+        copy.movePiece(A1, A2);
+
+        assertSame(rook, board.getPiece(A1));
+        assertTrue(board.isEmpty(A2));
+    }
+
+    // BOARD-COPY-05: a change to the original does not reach the copy.
+    @Test
+    void copy_changingOriginalLeavesCopyAlone() {
+        Board board = new Board();
+        board.placePiece(new Piece(PieceType.ROOK, Color.WHITE), A1);
+        Board copy = board.copy();
+
+        board.placePiece(new Piece(PieceType.KING, Color.BLACK), H8);
+
+        assertTrue(copy.isEmpty(H8));
+    }
+
+    // ---------- copyFrom() tests ----------
+
+    // BOARD-COPYFROM-01: null pointer boundary; the board is left unchanged.
+    @Test
+    void copyFrom_nullIsRejectedAndBoardStays() {
+        Board board = new Board();
+        Piece queen = new Piece(PieceType.QUEEN, Color.WHITE);
+        board.placePiece(queen, D4);
+
+        assertThrows(NullPointerException.class, () -> board.copyFrom(null));
+
+        assertSame(queen, board.getPiece(D4));
+    }
+
+    // BOARD-COPYFROM-02: an empty board takes the other board's pieces.
+    @Test
+    void copyFrom_emptyBoardTakesOtherBoardsPieces() {
+        Board board = new Board();
+        Board other = boardWithCornerAndInteriorPieces();
+
+        board.copyFrom(other);
+
+        assertSameContents(other, board);
+    }
+
+    // BOARD-COPYFROM-03: pieces the other board does not have are removed.
+    @Test
+    void copyFrom_emptyOtherClearsOldPieces() {
+        Board board = new Board();
+        board.placePiece(new Piece(PieceType.ROOK, Color.WHITE), A1);
+        board.placePiece(new Piece(PieceType.ROOK, Color.BLACK), H8);
+
+        board.copyFrom(new Board());
+
+        assertAllSquaresEmpty(board);
+    }
+
+    // BOARD-COPYFROM-04: a piece on the same square is overwritten.
+    @Test
+    void copyFrom_overwritesPieceOnSameSquare() {
+        Board board = new Board();
+        board.placePiece(new Piece(PieceType.ROOK, Color.WHITE), E4);
+        Board other = new Board();
+        Piece knight = new Piece(PieceType.KNIGHT, Color.BLACK);
+        other.placePiece(knight, E4);
+
+        board.copyFrom(other);
+
+        assertSame(knight, board.getPiece(E4));
+    }
+
+    // BOARD-COPYFROM-05: a later change to the other board does not reach this one.
+    @Test
+    void copyFrom_changingOtherLeavesBoardAlone() {
+        Board board = new Board();
+        Board other = new Board();
+        other.placePiece(new Piece(PieceType.ROOK, Color.WHITE), A1);
+        board.copyFrom(other);
+
+        other.placePiece(new Piece(PieceType.KING, Color.BLACK), H8);
+
+        assertTrue(board.isEmpty(H8));
+    }
+
+    // BOARD-COPYFROM-06: a later change to this board does not reach the other one.
+    @Test
+    void copyFrom_changingBoardLeavesOtherAlone() {
+        Board board = new Board();
+        Board other = new Board();
+        Piece rook = new Piece(PieceType.ROOK, Color.WHITE);
+        other.placePiece(rook, A1);
+        board.copyFrom(other);
+
+        board.movePiece(A1, A2);
+
+        assertSame(rook, other.getPiece(A1));
+        assertTrue(other.isEmpty(A2));
+    }
+
+    // BOARD-COPYFROM-07: copying a board onto itself changes nothing.
+    @Test
+    void copyFrom_sameBoardKeepsItsPieces() {
+        Piece rook = new Piece(PieceType.ROOK, Color.WHITE);
+        Piece queen = new Piece(PieceType.QUEEN, Color.WHITE);
+        Board board = new Board();
+        board.placePiece(rook, A1);
+        board.placePiece(queen, D4);
+        Board expected = new Board();
+        expected.placePiece(rook, A1);
+        expected.placePiece(queen, D4);
+
+        board.copyFrom(board);
+
+        assertSameContents(expected, board);
+    }
+
+    private Board boardWithCornerAndInteriorPieces() {
+        Board board = new Board();
+        board.placePiece(new Piece(PieceType.ROOK, Color.WHITE), A1);
+        board.placePiece(new Piece(PieceType.KNIGHT, Color.WHITE), H1);
+        board.placePiece(new Piece(PieceType.ROOK, Color.BLACK), A8);
+        board.placePiece(new Piece(PieceType.KNIGHT, Color.BLACK), H8);
+        board.placePiece(new Piece(PieceType.QUEEN, Color.WHITE), D4);
+        return board;
+    }
+
+    // Compares all 64 squares, so a missing piece or a stray one both fail.
+    private void assertSameContents(Board expected, Board actual) {
+        for (int file = 0; file < BOARD_SIZE; file++) {
+            for (int rank = 0; rank < BOARD_SIZE; rank++) {
+                Position square = new Position(file, rank);
+                assertSame(expected.getPiece(square), actual.getPiece(square));
+            }
+        }
+    }
+
+    private void assertAllSquaresEmpty(Board board) {
+        for (int file = 0; file < BOARD_SIZE; file++) {
+            for (int rank = 0; rank < BOARD_SIZE; rank++) {
+                assertTrue(board.isEmpty(new Position(file, rank)));
+            }
+        }
     }
 }

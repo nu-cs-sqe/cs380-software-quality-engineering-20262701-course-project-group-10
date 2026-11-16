@@ -38,6 +38,20 @@ public class Board {
         return getPiece(position) == null;
     }
 
+    public Board copy() {
+        Board copy = new Board();
+        copy.copyFrom(this);
+        return copy;
+    }
+
+    public void copyFrom(Board other) {
+        Objects.requireNonNull(other, "other");
+        for (int file = 0; file < BOARD_SIZE; file++) {
+            // Clone each column so the two boards never share storage; Pieces are immutable.
+            squares[file] = other.squares[file].clone();
+        }
+    }
+
     public void setUpStartingPosition() {
         // Clear the board before setting up the pieces
         squares = new Piece[BOARD_SIZE][BOARD_SIZE];

@@ -39,6 +39,7 @@
 # Week 7 (11/9/2026-11/15/2026)
 **Planning and Progress Tracking**:
 - [done] Mengpang Xing: Set up Google-based Checkstyle and fixed all violations; set up JaCoCo and the coverage badge, achieving 100% cyclomatic complexity coverage for all required classes, excluding Views, Main, and enums ([PR #36](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/36)).
+- [done] Naman Dua: Check detection, no moving into check, and castling with TDD and BV. Board copy, attack and check detection; `makeMove` rejects moves that leave the king in check; castling rights and the castling move (BOARD-COPY, AT, CK, G18 to G64)([PR #45](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/45)). 
 - [done] Youran Ma: Set up PIT and added a Position hash test (#28).
 
 # Week 8 (11/16/2026-11/22/2026)
