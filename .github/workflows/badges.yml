@@ -1,4 +1,4 @@
-name: Complexity badge
+name: Quality badges
 
 on:
   push:
@@ -25,27 +25,29 @@ jobs:
           distribution: temurin
           java-version: '11'
           cache: gradle
-      - name: Generate complexity badge
-        run: bash ./gradlew --no-daemon complexityBadge
-      - name: Render badge SVG
+      - name: Generate badge data
+        run: bash ./gradlew --no-daemon complexityBadge mutationBadge
+      - name: Render badge SVGs
         run: |
-          curl --fail --silent --show-error --retry 3 -G "https://img.shields.io/static/v1" \
-            --data-urlencode "label=$(jq -r .label build/badges/complexity.json)" \
-            --data-urlencode "message=$(jq -r .message build/badges/complexity.json)" \
-            --data-urlencode "color=$(jq -r .color build/badges/complexity.json)" \
-            -o build/badges/complexity.svg
+          for badge in complexity mutation; do
+            curl --fail --silent --show-error --retry 3 -G "https://img.shields.io/static/v1" \
+              --data-urlencode "label=$(jq -r .label build/badges/$badge.json)" \
+              --data-urlencode "message=$(jq -r .message build/badges/$badge.json)" \
+              --data-urlencode "color=$(jq -r .color build/badges/$badge.json)" \
+              -o "build/badges/$badge.svg"
+          done
       - name: Publish badge
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           publish_dir=$(mktemp -d)
-          cp build/badges/complexity.* "$publish_dir/"
+          cp build/badges/complexity.* build/badges/mutation.* "$publish_dir/"
           cd "$publish_dir"
           git init --initial-branch=badges
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add complexity.json complexity.svg
-          git commit -m 'update complexity badge'
+          git add complexity.json complexity.svg mutation.json mutation.svg
+          git commit -m 'update quality badges'
           remote="https://github.com/${GITHUB_REPOSITORY}.git"
           auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w 0)
           git -c "http.extraheader=AUTHORIZATION: basic $auth" push --force "$remote" HEAD:badges

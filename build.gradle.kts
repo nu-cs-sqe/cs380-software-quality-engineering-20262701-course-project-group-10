@@ -178,3 +178,5 @@ tasks.register("complexityBadge") {
         println("Badge: $json")
     }
 }
+
+apply(from = "gradle/mutation-verification.gradle.kts")

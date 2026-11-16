@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<equivalentMutants>
+  <mutant>
+    <mutatedClass>domain.MoveValidator</mutatedClass>
+    <mutatedMethod>isPawnAttack</mutatedMethod>
+    <methodDescription>(Ldomain/Piece;Ldomain/Position;Ldomain/Position;)Z</methodDescription>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.MathMutator</mutator>
+    <lineNumber>109</lineNumber>
+    <description>Replaced integer multiplication with division</description>
+    <indexes>25</indexes>
+    <sourceSha256>f45e9cbf6f21d8f854f0a04b8e456db49970826f684686a0bb31db576ac957ea</sourceSha256>
+    <reason>direction is always 1 or -1; integer multiplication and division by either value are identical for bounded rank differences (-7 through 7).</reason>
+  </mutant>
+  <mutant>
+    <mutatedClass>domain.MoveValidator</mutatedClass>
+    <mutatedMethod>isPawnMove</mutatedMethod>
+    <methodDescription>(Ldomain/Board;Ldomain/Piece;Ldomain/Position;Ldomain/Position;)Z</methodDescription>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.MathMutator</mutator>
+    <lineNumber>124</lineNumber>
+    <description>Replaced integer multiplication with division</description>
+    <indexes>16</indexes>
+    <sourceSha256>f45e9cbf6f21d8f854f0a04b8e456db49970826f684686a0bb31db576ac957ea</sourceSha256>
+    <reason>direction is always 1 or -1; integer multiplication and division by either value are identical for bounded rank differences (-7 through 7).</reason>
+  </mutant>
+  <mutant>
+    <mutatedClass>domain.Game</mutatedClass>
+    <mutatedMethod>isKingSideCastle</mutatedMethod>
+    <methodDescription>(Ldomain/Position;Ldomain/Position;)Z</methodDescription>
+    <mutator>org.pitest.mutationtest.engine.gregor.mutators.ConditionalsBoundaryMutator</mutator>
+    <lineNumber>91</lineNumber>
+    <description>changed conditional boundary</description>
+    <indexes>7</indexes>
+    <sourceSha256>fc7f375c87f2c0ffa0711b4f5ed070a88c49007336ce1b9a09899d6a776cdfe3</sourceSha256>
+    <reason>All callers operate on castling attempts validated as a two-file king displacement. Source and destination files cannot be equal, so &gt; and &gt;= have identical results.</reason>
+  </mutant>
+</equivalentMutants>

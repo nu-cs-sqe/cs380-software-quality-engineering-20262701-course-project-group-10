@@ -4,6 +4,8 @@
 
 ![Missed complexity](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/raw/badges/complexity.svg)
 
+[![Mutants killed](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/raw/badges/mutation.svg)](config/pitest/equivalent-mutants.xml)
+
 ## Contributors
 - Youran Ma
 - Mengpang Xing
@@ -33,6 +35,11 @@ and enums. This check also runs during `build`.
 Run `bash ./gradlew pitest` (or `.\gradlew.bat pitest` on Windows) with JDK 11.
 Open the [HTML report](build/reports/pitest/index.html) locally. PIT uses the same
 class exclusions as JaCoCo.
+`bash ./gradlew mutationVerification` requires every non-equivalent mutant to be
+killed; this also runs during `check` and `build`. Equivalence proofs are recorded
+in `config/pitest/equivalent-mutants.xml` and must be reviewed after source changes.
+The badge shows killed/eligible mutants, excluding only reviewed equivalents;
+it updates on `main` alongside the complexity badge.
 
 ### Others
 - SpotBugs `EI_EXPOSE_REP` is suppressed only on `Game.getBoard()`. The design
@@ -42,7 +49,7 @@ class exclusions as JaCoCo.
   the build.
 
 ## Static analysis
-Run `bash ./gradlew check` for tests, Checkstyle, SpotBugs, and coverage.
+Run `bash ./gradlew check` for tests, Checkstyle, SpotBugs, coverage, and mutation verification.
 `build` runs the same checks; findings fail the build.
 
 Reports: `build/reports/checkstyle/` and `build/reports/spotbugs/`.
