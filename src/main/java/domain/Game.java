@@ -281,8 +281,9 @@ public class Game {
     private boolean hasLegalMoveFrom(Position from) {
         for (int file = 0; file < BOARD_SIZE; file++) {
             for (int rank = 0; rank < BOARD_SIZE; rank++) {
+                Position to = new Position(file, rank);
                 try {
-                    trialMove(from, new Position(file, rank));
+                    trialMove(from, to);
                     return true;
                 } catch (IllegalArgumentException expected) {
                     // A rejected candidate does not end the search for a legal reply.
