@@ -399,3 +399,55 @@ Coordinates are zero-based `(file, rank)`. Unlisted squares are empty.
 | AT28 | board `null`; square (3, 3); attacker WHITE | `NullPointerException` | yes |
 | AT29 | empty board; square `null`; attacker WHITE | `NullPointerException` | yes |
 | AT30 | empty board; square (3, 3); attacker `null` | `NullPointerException` | yes |
+
+## 6. Check: `isInCheck(Board board, Color color)`
+
+### Contract and scope
+
+Finds the king of `color` and returns `isSquareAttacked(board, kingSquare,
+opponent)`, where the opponent is the other color. It observes the board and never
+moves pieces. Null `board` or `color` throws `NullPointerException`.
+
+A board with no king of `color` is an invalid game state
+([multiple-turns design](../design/multiple-turns.md)) and throws
+`IllegalStateException`. A board with two kings of the same color is also invalid,
+but it cannot happen through `Game`, so it is not tested (CAN'T SET in practice).
+Which pieces attack which squares is already covered by section 5; these cases
+check that the right king is found and the right color is asked about.
+
+### Inputs and outputs
+
+Inputs: board reference, the color to check, where that color's king stands
+(including the first and last squares the search visits), and the opponent's and
+friendly pieces around it. Outputs: `true`, `false`, `IllegalStateException`, or
+`NullPointerException`; all board squares keep the same piece references.
+
+### Catalog clues
+
+**Boolean**: in check and not in check. **Cases**: both colors; an opponent's
+attacker, a friendly piece on the same line, and a blocked line. **Intervals**:
+the king on a1 (0, 0) and h8 (7, 7), the first and last squares of the search.
+**Collections**: an empty board, and a board missing only the requested king.
+**Pointers**: null and real references for each argument.
+
+### check cases
+
+| ID | State of system | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| CK01 | WHITE KING at (4, 0) only; color WHITE | `false` | no |
+| CK02 | WHITE KING at (4, 0); BLACK ROOK at (4, 7); color WHITE | `true` | no |
+| CK03 | WHITE KING at (4, 0); WHITE PAWN at (4, 1); BLACK ROOK at (4, 7); color WHITE | `false` (blocked) | no |
+| CK04 | WHITE KING at (4, 0); WHITE ROOK at (4, 7); color WHITE | `false` (own pieces never give check) | no |
+| CK05 | BLACK KING at (4, 7); WHITE QUEEN at (4, 0); color BLACK | `true` | no |
+| CK06 | WHITE KING at (0, 0); BLACK KING at (7, 7); BLACK ROOK at (0, 7); color BLACK | `false` (only the Black king is checked, and it is safe) | no |
+| CK07 | WHITE KING at (0, 0); BLACK KNIGHT at (1, 2); color WHITE | `true` (king on the first square searched) | no |
+| CK08 | BLACK KING at (7, 7); WHITE KNIGHT at (6, 5); color BLACK | `true` (king on the last square searched) | no |
+
+### check invalid states and null arguments
+
+| ID | State of system | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| CK09 | BLACK KING at (4, 7) only; color WHITE | `IllegalStateException` (no White king) | no |
+| CK10 | Empty board; color WHITE | `IllegalStateException` | no |
+| CK11 | board `null`; color WHITE | `NullPointerException` | no |
+| CK12 | WHITE KING at (4, 0); color `null` | `NullPointerException` | no |
