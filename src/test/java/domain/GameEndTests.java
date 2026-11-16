@@ -188,4 +188,23 @@ public class GameEndTests {
         setUp("WHITE KING h1", "BLACK KING a8");
         assertSearch(true);
     }
+
+    @Test
+    public void GE20SearchingDoesNotConsumeTheRightToCastle() {
+        setUp("WHITE KING e1", "WHITE ROOK h1", "BLACK KING a8");
+        assertSearch(true);
+        move("e1", "g1");
+        assertSame(PieceType.KING, board.getPiece(square("g1")).getType());
+        assertSame(PieceType.ROOK, board.getPiece(square("f1")).getType());
+        assertSame(Color.BLACK, game.getCurrentPlayer());
+    }
+
+    @Test
+    public void GE21SearchingDoesNotRestoreLostCastlingRights() {
+        setUp("WHITE KING e1", "WHITE ROOK h1", "BLACK KING a8");
+        move("e1", "f1");
+        move("a8", "a7");
+        assertFalse(game.canCastleKingSide(Color.WHITE));
+        assertSearch(true);
+    }
 }
