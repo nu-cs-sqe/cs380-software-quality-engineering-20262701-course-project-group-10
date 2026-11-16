@@ -47,6 +47,7 @@ public class MoveValidator {
     public boolean isSquareAttacked(Board board, Position square, Color attacker) {
         Objects.requireNonNull(board, "board");
         Objects.requireNonNull(square, "square");
+        Objects.requireNonNull(attacker, "attacker");
         for (int file = 0; file < BOARD_SIZE; file++) {
             for (int rank = 0; rank < BOARD_SIZE; rank++) {
                 Position from = new Position(file, rank);

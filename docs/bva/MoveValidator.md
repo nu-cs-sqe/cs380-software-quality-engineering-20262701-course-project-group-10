@@ -398,4 +398,4 @@ Coordinates are zero-based `(file, rank)`. Unlisted squares are empty.
 | --- | --- | --- | --- |
 | AT28 | board `null`; square (3, 3); attacker WHITE | `NullPointerException` | yes |
 | AT29 | empty board; square `null`; attacker WHITE | `NullPointerException` | yes |
-| AT30 | empty board; square (3, 3); attacker `null` | `NullPointerException` | no |
+| AT30 | empty board; square (3, 3); attacker `null` | `NullPointerException` | yes |
