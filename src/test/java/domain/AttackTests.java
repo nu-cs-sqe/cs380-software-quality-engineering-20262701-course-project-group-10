@@ -1,5 +1,7 @@
 package domain;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.junit.jupiter.api.Test;
 
 public class AttackTests {
@@ -239,6 +241,20 @@ public class AttackTests {
         board.placePiece(new Piece(PieceType.ROOK, Color.WHITE), E2);
         board.placePiece(new Piece(PieceType.ROOK, Color.BLACK), E8);
         MoveRuleAssertions.assertAttack(board, A2, Color.WHITE, true);
+    }
+
+    // AT28: null pointer boundary for the board.
+    @Test
+    public void AT28NullBoardIsRejected() {
+        assertThrows(NullPointerException.class,
+                () -> new MoveValidator().isSquareAttacked(null, D4, Color.WHITE));
+    }
+
+    // AT29: null pointer boundary for the square.
+    @Test
+    public void AT29NullSquareIsRejected() {
+        assertThrows(NullPointerException.class,
+                () -> new MoveValidator().isSquareAttacked(new Board(), null, Color.WHITE));
     }
 
     private Board boardWith(PieceType type, Color color, Position position) {
