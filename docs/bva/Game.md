@@ -106,7 +106,43 @@ Each rejection reason gets one case, and each case checks that `movePiece` is no
 | G14 | White to move; the piece on `from` is White; validator returns true | `movePiece(from, to)` called exactly once; current player is `BLACK` | :white_check_mark: |
 | G15 | One legal White move, then one legal Black move | `movePiece` called once per move; current player is `WHITE` again | :white_check_mark: |
 | G16 | White to move; the piece on from is White; validator returns true; the piece on to is also White | IllegalArgumentException; movePiece not called; current player is still WHITE | :white_check_mark: |
-| G17 | White to move; a White rook on d4 (3, 3) and a Black pawn on d6 (3, 5); White moves d4 to d6 (real `Board` and `MoveValidator`) | The White rook is on d6 and d4 is empty (the Black pawn is captured); current player is `BLACK` | :white_check_mark: |
+| G17 | White to move; a White rook on d4 (3, 3) and a Black pawn on d6 (3, 5); White king on a1 (0, 0) and Black king on h8 (7, 7), added for the king-safety check; White moves d4 to d6 (real `Board` and `MoveValidator`) | The White rook is on d6 and d4 is empty (the Black pawn is captured); current player is `BLACK` | :white_check_mark: |
+### Method under test: `makeMove(from, to)`, king safety
+
+**Contract.** After the checks above, `makeMove` also rejects capturing a king, then
+tries the move on `board.copy()`. If `MoveValidator.isInCheck(copy, mover)` is true,
+it throws `IllegalArgumentException`. Otherwise it commits with `board.copyFrom(copy)`
+and passes the turn. A rejected move changes no square and keeps the current player.
+The board object is never replaced (G06), so the GUI keeps drawing the same board.
+The new checks run last, so earlier rejections (G08–G16) never reach them.
+
+**Inputs and outputs.** Inputs: where both kings stand, enemy pieces that attack the
+mover's king before or after the move, a friendly piece pinned to its king, and a
+destination holding a king. Outputs: an exception or none, all 64 squares, the current
+player, and the board reference.
+
+**Catalog clues.** **Boolean**: the mover's king is attacked after the move or not.
+**Cases**: the moving piece is the king, a blocker, a capturer, or a pinned piece;
+the destination holds a king or not. **Intervals**: a pinned piece moving along its pin
+line to the far end (capturing the pinner) versus one square off the line. **Counts**:
+a rejected move followed by one legal move advances the turn exactly once.
+Every case uses a real `Board` and `MoveValidator` with both kings on the board.
+
+| ID | State of the system | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| G18 | White to move; White king e1 (4, 0); Black king h8 (7, 7); Black rook d8 (3, 7); White moves e1 to d1 (3, 0) | `IllegalArgumentException` (moving into check); all 64 squares unchanged; current player `WHITE` | :x: |
+| G19 | White to move; White king e1 (4, 0); Black king h8 (7, 7); Black rook e8 (4, 7); White pawn a2 (0, 1); White moves a2 to a3 (0, 2) | `IllegalArgumentException` (king left in check); all 64 squares unchanged; current player `WHITE` | :x: |
+| G20 | Same as G19; White moves e1 to d1 (3, 0) | King on d1, e1 empty; current player `BLACK` (escape by moving the king) | :x: |
+| G21 | White to move; White king e1 (4, 0); Black king h8 (7, 7); Black rook e8 (4, 7); White rook a4 (0, 3); White moves a4 to e4 (4, 3) | Rook on e4; current player `BLACK` (escape by blocking) | :x: |
+| G22 | White to move; White king e1 (4, 0); Black king h8 (7, 7); Black rook e8 (4, 7); White rook a8 (0, 7); White moves a8 to e8 | White rook on e8, Black rook gone; current player `BLACK` (escape by capturing) | :x: |
+| G23 | White to move; White king e1 (4, 0); White rook e2 (4, 1); Black rook e8 (4, 7); Black king h8 (7, 7); White moves e2 to a2 (0, 1) | `IllegalArgumentException` (pinned piece leaves the pin line); all 64 squares unchanged; current player `WHITE` | :x: |
+| G24 | Same as G23; White moves e2 to e5 (4, 4) | Rook on e5; current player `BLACK` (moving along the pin line) | :x: |
+| G25 | Same as G23; White moves e2 to e8 | White rook on e8, Black rook gone; current player `BLACK` (far end of the pin line: capturing the pinner) | :x: |
+| G26 | White to move; White king e1 (4, 0); White rook a1 (0, 0); Black king a8 (0, 7); White moves a1 to a8 | `IllegalArgumentException` (a king cannot be captured); all 64 squares unchanged; current player `WHITE` | :x: |
+| G27 | Black to move with the White king capturable | CAN'T SET: reaching it needs White to have left its king attacked, which G19 forbids, and `Game` has no way to start with Black to move | n/a |
+| G28 | Same as G18; after the rejected move, White moves e1 to f1 (5, 0) | King on f1; current player `BLACK` (one turn advance after a rejection) | :x: |
+| G29 | Same as G20 | `getBoard()` returns the same `Board` object as before the move (commit copies into it) | :x: |
+
 ### Method under test: `startNewGame()` (update)
 
 | ID | State of the system | Expected output | Implemented? |
