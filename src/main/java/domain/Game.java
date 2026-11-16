@@ -99,6 +99,9 @@ public class Game {
             throw new IllegalArgumentException("No rook to castle with");
         }
         requireEmptyBetween(from, rookSquare);
+        if (validator.isInCheck(board, currentPlayer)) {
+            throw new IllegalArgumentException("You cannot castle out of check");
+        }
     }
 
     // Checks every square strictly between the king and the rook on their shared rank.
