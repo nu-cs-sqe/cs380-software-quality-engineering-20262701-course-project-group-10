@@ -367,6 +367,6 @@ The real-board special-move integration cases above remain deferred.
 | ID | Methods / state | Catalog boundary | Expected output | Implemented? |
 | --- | --- | --- | --- | --- |
 | GE38 | makeMove: White Kc6 Qb6, Black Ka8; Qb6-b7; mocked search reports true once | checked + simulated future reply available | IN_PROGRESS, no winner, not over; real Black king in check; only intended queen move committed | yes |
-| GE39 | makeMove: White Kc6 Qb5, Black Ka8; Qb5-b6; mocked search reports true once | not checked + simulated future reply available | IN_PROGRESS, no winner, not over; real Black king not in check; only intended queen move committed | no |
+| GE39 | makeMove: White Kc6 Qb5, Black Ka8; Qb5-b6; mocked search reports true once | not checked + simulated future reply available | IN_PROGRESS, no winner, not over; real Black king not in check; only intended queen move committed | yes |
 | GE40 | GE38 board and move; mocked search reports false once | checked + no reported reply | CHECKMATE, winner WHITE, over; only intended queen move committed | no |
 | GE41 | GE39 board and move; mocked search reports false once | not checked + no reported reply | STALEMATE, no winner, over; only intended queen move committed | no |
