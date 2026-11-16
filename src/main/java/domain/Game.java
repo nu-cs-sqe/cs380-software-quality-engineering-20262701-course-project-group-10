@@ -10,6 +10,7 @@ public class Game {
     private static final int KING_SIDE_ROOK_TARGET_FILE = 5;
     private static final int QUEEN_SIDE_ROOK_TARGET_FILE = 3;
     private static final int CASTLING_KING_STEP = 2;
+    private static final int KING_START_FILE = 4;
     private static final int WHITE_HOME_RANK = 0;
     private static final int BLACK_HOME_RANK = 7;
     private static final Position WHITE_QUEEN_SIDE_ROOK =
@@ -74,10 +75,17 @@ public class Game {
         passTurn();
     }
 
-    // A king stepping two files is castling; the normal king rule would reject it.
+    // A king stepping two files from its original square is castling; the normal king
+    // rule would reject it. Any other two-file king move stays illegal.
     private boolean isCastlingAttempt(Piece moving, Position from, Position to) {
         return moving.getType() == PieceType.KING
+                && from.equals(kingStartSquare(moving.getColor()))
                 && Math.abs(to.getFile() - from.getFile()) == CASTLING_KING_STEP;
+    }
+
+    private Position kingStartSquare(Color color) {
+        int rank = color == Color.WHITE ? WHITE_HOME_RANK : BLACK_HOME_RANK;
+        return new Position(KING_START_FILE, rank);
     }
 
     private boolean isKingSideCastle(Position from, Position to) {
