@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 
 public class CastlingTests {
     private static final int FILE_A = 0;
+    private static final int FILE_C = 2;
+    private static final int FILE_D = 3;
     private static final int FILE_E = 4;
     private static final int FILE_F = 5;
     private static final int FILE_G = 6;
@@ -16,6 +18,8 @@ public class CastlingTests {
     private static final int RANK_1 = 0;
     private static final int RANK_8 = 7;
     private static final Position A1 = new Position(FILE_A, RANK_1);
+    private static final Position C1 = new Position(FILE_C, RANK_1);
+    private static final Position D1 = new Position(FILE_D, RANK_1);
     private static final Position E1 = new Position(FILE_E, RANK_1);
     private static final Position F1 = new Position(FILE_F, RANK_1);
     private static final Position G1 = new Position(FILE_G, RANK_1);
@@ -50,6 +54,24 @@ public class CastlingTests {
         assertFalse(game.canCastleQueenSide(Color.WHITE));
         assertTrue(game.canCastleKingSide(Color.BLACK));
         assertTrue(game.canCastleQueenSide(Color.BLACK));
+        assertSame(Color.BLACK, game.getCurrentPlayer());
+    }
+
+    // G45: White castles queen side; the a1 rook lands on d1.
+    @Test
+    public void G45WhiteCastlesQueenSide() {
+        setUpCastlingPosition();
+        Piece king = board.getPiece(E1);
+        Piece rook = board.getPiece(A1);
+
+        game.makeMove(E1, C1);
+
+        assertSame(king, board.getPiece(C1));
+        assertSame(rook, board.getPiece(D1));
+        assertTrue(board.isEmpty(E1));
+        assertTrue(board.isEmpty(A1));
+        assertFalse(game.canCastleKingSide(Color.WHITE));
+        assertFalse(game.canCastleQueenSide(Color.WHITE));
         assertSame(Color.BLACK, game.getCurrentPlayer());
     }
 
