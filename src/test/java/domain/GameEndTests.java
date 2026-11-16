@@ -40,4 +40,14 @@ public class GameEndTests {
         assertSame(GameStatus.IN_PROGRESS, fresh.getStatus());
         EasyMock.verify(mock);
     }
+
+    @Test
+    public void GE03NewWinnerReadsDoNotTouchTheBoard() {
+        Board mock = EasyMock.createStrictMock(Board.class);
+        EasyMock.replay(mock);
+        Game fresh = new Game(mock);
+        assertTrue(fresh.getWinner().isEmpty());
+        assertTrue(fresh.getWinner().isEmpty());
+        EasyMock.verify(mock);
+    }
 }
