@@ -316,7 +316,7 @@ implemented by the method with its GE ID in GameEndTests unless noted.
 
 | ID | Methods / state | Catalog boundary | Expected output | Implemented? |
 | --- | --- | --- | --- | --- |
-| GE01 | GameStatus.values(): exact five design values | enum declaration | IN_PROGRESS, CHECKMATE, STALEMATE, RESIGNED, DRAW_AGREED | yes |
+| GE01 | GameStatus.values() in GameStatusTests: exact five design values | enum declaration | IN_PROGRESS, CHECKMATE, STALEMATE, RESIGNED, DRAW_AGREED | yes |
 | GE02 | getStatus(): new Game(mockBoard); no Board calls | cases: initial status | IN_PROGRESS on repeated reads | yes |
 | GE03 | getWinner(): new Game(mockBoard); no Board calls | pointers: no result | Optional.empty on repeated reads | yes |
 | GE04 | isGameOver(): new Game(mockBoard); no Board calls | boolean false | false on repeated reads | yes |
@@ -350,3 +350,6 @@ implemented by the method with its GE ID in GameEndTests unless noted.
 | GE32 | hasAnyLegalMove(): snapshot then actual move on original board | trial does not commit or consume turn | same source references before move; real move accepted once | yes |
 | GE33 | hasAnyLegalMove(): mock Board has a legal source before unread later squares | continued searching / early match | true; later source squares never read | yes |
 | GE34 | hasAnyLegalMove(): mock Board throws IllegalStateException while copying a legal trial | unexpected failure inside trial | same exception propagates; no commit | yes |
+| GE35 | hasAnyLegalMove(): White Ka1 Ph2; Black Kc3 Qb3 | trapped king with a quiet pawn reply | true; unchanged | no |
+| GE36 | hasAnyLegalMove(): White Ka1; Black Kc4 Qb2 | exactly one escape, capturing the unprotected checker on b2 | true; unchanged; real Kxb2 still succeeds | no |
+| GE37 | makeMove(): White Ka2 Ph2; Black Kc3 Qb4; Ka2-a1 then Qb4-b3 | king trapped, but pawn can advance | IN_PROGRESS, no winner; not in check; legal reply exists | no |
