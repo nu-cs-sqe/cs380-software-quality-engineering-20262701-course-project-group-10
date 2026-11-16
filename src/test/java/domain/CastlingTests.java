@@ -16,6 +16,7 @@ public class CastlingTests {
     private static final int FILE_G = 6;
     private static final int FILE_H = 7;
     private static final int RANK_1 = 0;
+    private static final int RANK_2 = 1;
     private static final int RANK_8 = 7;
     private static final Position A1 = new Position(FILE_A, RANK_1);
     private static final Position C1 = new Position(FILE_C, RANK_1);
@@ -24,8 +25,14 @@ public class CastlingTests {
     private static final Position F1 = new Position(FILE_F, RANK_1);
     private static final Position G1 = new Position(FILE_G, RANK_1);
     private static final Position H1 = new Position(FILE_H, RANK_1);
+    private static final Position A2 = new Position(FILE_A, RANK_2);
+    private static final Position H2 = new Position(FILE_H, RANK_2);
     private static final Position A8 = new Position(FILE_A, RANK_8);
+    private static final Position C8 = new Position(FILE_C, RANK_8);
+    private static final Position D8 = new Position(FILE_D, RANK_8);
     private static final Position E8 = new Position(FILE_E, RANK_8);
+    private static final Position F8 = new Position(FILE_F, RANK_8);
+    private static final Position G8 = new Position(FILE_G, RANK_8);
     private static final Position H8 = new Position(FILE_H, RANK_8);
 
     private Board board;
@@ -73,6 +80,44 @@ public class CastlingTests {
         assertFalse(game.canCastleKingSide(Color.WHITE));
         assertFalse(game.canCastleQueenSide(Color.WHITE));
         assertSame(Color.BLACK, game.getCurrentPlayer());
+    }
+
+    // G46: Black castles king side on its own home rank.
+    @Test
+    public void G46BlackCastlesKingSide() {
+        setUpCastlingPosition();
+        game.makeMove(A1, A2);
+        Piece king = board.getPiece(E8);
+        Piece rook = board.getPiece(H8);
+
+        game.makeMove(E8, G8);
+
+        assertSame(king, board.getPiece(G8));
+        assertSame(rook, board.getPiece(F8));
+        assertTrue(board.isEmpty(E8));
+        assertTrue(board.isEmpty(H8));
+        assertFalse(game.canCastleKingSide(Color.BLACK));
+        assertFalse(game.canCastleQueenSide(Color.BLACK));
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+    }
+
+    // G47: Black castles queen side on its own home rank.
+    @Test
+    public void G47BlackCastlesQueenSide() {
+        setUpCastlingPosition();
+        game.makeMove(H1, H2);
+        Piece king = board.getPiece(E8);
+        Piece rook = board.getPiece(A8);
+
+        game.makeMove(E8, C8);
+
+        assertSame(king, board.getPiece(C8));
+        assertSame(rook, board.getPiece(D8));
+        assertTrue(board.isEmpty(E8));
+        assertTrue(board.isEmpty(A8));
+        assertFalse(game.canCastleKingSide(Color.BLACK));
+        assertFalse(game.canCastleQueenSide(Color.BLACK));
+        assertSame(Color.WHITE, game.getCurrentPlayer());
     }
 
     // Only the two kings and four rooks, all on their original squares.
