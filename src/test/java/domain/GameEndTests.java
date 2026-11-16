@@ -90,4 +90,13 @@ public class GameEndTests {
         assertFalse(game.hasAnyLegalMove());
         MoveRuleAssertions.assertSameSquares(before, board);
     }
+
+    @Test
+    public void GE08OneKingHasLegalRepliesWithoutMoving() {
+        setUp("WHITE KING a1", "BLACK KING h8");
+        Board before = board.copy();
+        assertTrue(game.hasAnyLegalMove());
+        MoveRuleAssertions.assertSameSquares(before, board);
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+    }
 }
