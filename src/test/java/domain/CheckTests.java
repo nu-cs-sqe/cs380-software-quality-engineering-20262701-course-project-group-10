@@ -1,5 +1,7 @@
 package domain;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.junit.jupiter.api.Test;
 
 public class CheckTests {
@@ -93,6 +95,15 @@ public class CheckTests {
         place(board, PieceType.KING, Color.BLACK, H8);
         place(board, PieceType.KNIGHT, Color.WHITE, G6);
         MoveRuleAssertions.assertCheck(board, Color.BLACK, true);
+    }
+
+    // CK09: a board missing the requested king is an invalid game state.
+    @Test
+    public void CK09MissingKingIsInvalidState() {
+        Board board = new Board();
+        place(board, PieceType.KING, Color.BLACK, E8);
+        assertThrows(IllegalStateException.class,
+                () -> new MoveValidator().isInCheck(board, Color.WHITE));
     }
 
     private void place(Board board, PieceType type, Color color, Position position) {
