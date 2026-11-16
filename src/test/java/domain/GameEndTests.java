@@ -244,4 +244,17 @@ public class GameEndTests {
         assertFalse(game.isCurrentPlayerInCheck());
         assertSearch(false);
     }
+
+    @Test
+    public void GE25BlackStalematesTheWhiteKing() {
+        setUp("WHITE KING a2", "BLACK KING c3", "BLACK QUEEN b4");
+        move("a2", "a1");
+        move("b4", "b3");
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+        assertSame(GameStatus.STALEMATE, game.getStatus());
+        assertTrue(game.getWinner().isEmpty());
+        assertTrue(game.isGameOver());
+        assertFalse(game.isCurrentPlayerInCheck());
+        assertSearch(false);
+    }
 }
