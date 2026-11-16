@@ -353,3 +353,20 @@ implemented by the method with its GE ID in GameEndTests unless noted.
 | GE35 | hasAnyLegalMove(): White Ka1 Ph2; Black Kc3 Qb3 | trapped king with a quiet pawn reply | true; unchanged | yes |
 | GE36 | hasAnyLegalMove(): White Ka1; Black Kc4 Qb2 | exactly one escape, capturing the unprotected checker on b2 | true; unchanged; real Kxb2 still succeeds | yes |
 | GE37 | makeMove(): White Ka2 Ph2; Black Kc3 Qb4; Ka2-a1 then Qb4-b3 | king trapped, but pawn can advance | IN_PROGRESS, no winner; not in check; legal reply exists | yes |
+
+### Mocked future-reply contract
+
+These tests live in `GameEndReplyContractTests`. An EasyMock partial mock replaces
+only `hasAnyLegalMove()`; `makeMove`, the board-copy and commit paths, check
+detection, and status/winner queries run normally. A reported reply stands in for
+an eventual special-move reply, without pretending to execute that rule.
+The fixtures deliberately have no ordinary reply. Reporting true is a synthetic
+search contract, not a claim that an en passant or promotion move exists there.
+The real-board special-move integration cases above remain deferred.
+
+| ID | Methods / state | Catalog boundary | Expected output | Implemented? |
+| --- | --- | --- | --- | --- |
+| GE38 | makeMove: White Kc6 Qb6, Black Ka8; Qb6-b7; mocked search reports true once | checked + simulated future reply available | IN_PROGRESS, no winner, not over; real Black king in check; only intended queen move committed | no |
+| GE39 | makeMove: White Kc6 Qb5, Black Ka8; Qb5-b6; mocked search reports true once | not checked + simulated future reply available | IN_PROGRESS, no winner, not over; real Black king not in check; only intended queen move committed | no |
+| GE40 | GE38 board and move; mocked search reports false once | checked + no reported reply | CHECKMATE, winner WHITE, over; only intended queen move committed | no |
+| GE41 | GE39 board and move; mocked search reports false once | not checked + no reported reply | STALEMATE, no winner, over; only intended queen move committed | no |
