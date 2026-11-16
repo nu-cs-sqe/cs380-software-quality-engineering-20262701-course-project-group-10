@@ -82,4 +82,12 @@ public class GameEndTests {
         assertSame(Color.BLACK, game.getCurrentPlayer());
         MoveRuleAssertions.assertSameSquares(before, board);
     }
+
+    @Test
+    public void GE07EmptyBoardHasNoLegalMove() {
+        setUp();
+        Board before = board.copy();
+        assertFalse(game.hasAnyLegalMove());
+        MoveRuleAssertions.assertSameSquares(before, board);
+    }
 }
