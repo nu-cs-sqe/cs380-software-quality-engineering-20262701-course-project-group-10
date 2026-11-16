@@ -25,6 +25,7 @@ public class Game {
     private final Board board;
     private final MoveValidator validator = new MoveValidator();
     private Color currentPlayer;
+    private GameStatus status = GameStatus.IN_PROGRESS;
     private boolean whiteKingSide = true;
     private boolean whiteQueenSide = true;
     private boolean blackKingSide = true;
@@ -232,5 +233,9 @@ public class Game {
     public boolean canCastleQueenSide(Color color) {
         Objects.requireNonNull(color, "color");
         return color == Color.WHITE ? whiteQueenSide : blackQueenSide;
+    }
+
+    public GameStatus getStatus() {
+        return status;
     }
 }

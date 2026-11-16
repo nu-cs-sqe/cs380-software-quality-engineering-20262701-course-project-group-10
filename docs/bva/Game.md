@@ -317,7 +317,7 @@ implemented by the method with its GE ID in GameEndTests unless noted.
 | ID | Methods / state | Catalog boundary | Expected output | Implemented? |
 | --- | --- | --- | --- | --- |
 | GE01 | GameStatus.values(): exact five design values | enum declaration | IN_PROGRESS, CHECKMATE, STALEMATE, RESIGNED, DRAW_AGREED | yes |
-| GE02 | getStatus(): new Game(mockBoard); no Board calls | cases: initial status | IN_PROGRESS on repeated reads | no |
+| GE02 | getStatus(): new Game(mockBoard); no Board calls | cases: initial status | IN_PROGRESS on repeated reads | yes |
 | GE03 | getWinner(): new Game(mockBoard); no Board calls | pointers: no result | Optional.empty on repeated reads | no |
 | GE04 | isGameOver(): new Game(mockBoard); no Board calls | boolean false | false on repeated reads | no |
 | GE05 | isCurrentPlayerInCheck(): White Ke1; Black Ka8, Re8 | check true | true; all state unchanged | no |
