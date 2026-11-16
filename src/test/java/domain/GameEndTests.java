@@ -1,11 +1,13 @@
 package domain;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Optional;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 
@@ -64,7 +66,7 @@ public class GameEndTests {
     @Test
     public void GE05WhiteCheckQueryDoesNotMovePieces() {
         setUp("WHITE KING e1", "BLACK KING a8", "BLACK ROOK e8");
-        Board before = board.copy();
+        final Board before = board.copy();
         assertTrue(game.isCurrentPlayerInCheck());
         assertTrue(game.isCurrentPlayerInCheck());
         MoveRuleAssertions.assertSameSquares(before, board);
@@ -77,7 +79,7 @@ public class GameEndTests {
         game.startNewGame();
         assertFalse(game.isCurrentPlayerInCheck());
         move("e2", "e4");
-        Board before = board.copy();
+        final Board before = board.copy();
         assertFalse(game.isCurrentPlayerInCheck());
         assertSame(Color.BLACK, game.getCurrentPlayer());
         MoveRuleAssertions.assertSameSquares(before, board);
@@ -86,7 +88,7 @@ public class GameEndTests {
     @Test
     public void GE07EmptyBoardHasNoLegalMove() {
         setUp();
-        Board before = board.copy();
+        final Board before = board.copy();
         assertFalse(game.hasAnyLegalMove());
         MoveRuleAssertions.assertSameSquares(before, board);
     }
@@ -94,7 +96,7 @@ public class GameEndTests {
     @Test
     public void GE08OneKingHasLegalRepliesWithoutMoving() {
         setUp("WHITE KING a1", "BLACK KING h8");
-        Board before = board.copy();
+        final Board before = board.copy();
         assertTrue(game.hasAnyLegalMove());
         MoveRuleAssertions.assertSameSquares(before, board);
         assertSame(Color.WHITE, game.getCurrentPlayer());
@@ -107,18 +109,18 @@ public class GameEndTests {
     }
 
     private void assertSearch(boolean expected) {
-        Board before = board.copy();
-        Color player = game.getCurrentPlayer();
-        GameStatus status = game.getStatus();
-        java.util.Optional<Color> winner = game.getWinner();
-        boolean[] beforeRights = rights();
+        final Board before = board.copy();
+        final Color player = game.getCurrentPlayer();
+        final GameStatus status = game.getStatus();
+        final Optional<Color> winner = game.getWinner();
+        final boolean[] beforeRights = rights();
         assertEquals(expected, game.hasAnyLegalMove());
         assertEquals(expected, game.hasAnyLegalMove());
         MoveRuleAssertions.assertSameSquares(before, board);
         assertSame(player, game.getCurrentPlayer());
         assertSame(status, game.getStatus());
         assertEquals(winner, game.getWinner());
-        org.junit.jupiter.api.Assertions.assertArrayEquals(beforeRights, rights());
+        assertArrayEquals(beforeRights, rights());
     }
 
     @Test
@@ -214,7 +216,7 @@ public class GameEndTests {
         move("b6", "b7");
         assertSame(Color.BLACK, game.getCurrentPlayer());
         assertSame(GameStatus.CHECKMATE, game.getStatus());
-        assertEquals(java.util.Optional.of(Color.WHITE), game.getWinner());
+        assertEquals(Optional.of(Color.WHITE), game.getWinner());
         assertTrue(game.isGameOver());
         assertTrue(game.isCurrentPlayerInCheck());
         assertSearch(false);
@@ -227,7 +229,7 @@ public class GameEndTests {
         move("b3", "b2");
         assertSame(Color.WHITE, game.getCurrentPlayer());
         assertSame(GameStatus.CHECKMATE, game.getStatus());
-        assertEquals(java.util.Optional.of(Color.BLACK), game.getWinner());
+        assertEquals(Optional.of(Color.BLACK), game.getWinner());
         assertTrue(game.isGameOver());
         assertTrue(game.isCurrentPlayerInCheck());
         assertSearch(false);
@@ -267,7 +269,7 @@ public class GameEndTests {
         move("g2", "g4");
         move("d8", "h4");
         assertSame(GameStatus.CHECKMATE, game.getStatus());
-        assertEquals(java.util.Optional.of(Color.BLACK), game.getWinner());
+        assertEquals(Optional.of(Color.BLACK), game.getWinner());
     }
 
     @Test
@@ -299,11 +301,11 @@ public class GameEndTests {
     public void GE29RejectedMovesDoNotChangeTheResultOrState() {
         setUp();
         game.startNewGame();
-        Board before = board.copy();
-        boolean[] beforeRights = rights();
+        final Board before = board.copy();
+        final boolean[] beforeRights = rights();
         assertThrows(IllegalArgumentException.class, () -> move("e2", "e5"));
         MoveRuleAssertions.assertSameSquares(before, board);
-        org.junit.jupiter.api.Assertions.assertArrayEquals(beforeRights, rights());
+        assertArrayEquals(beforeRights, rights());
         assertSame(Color.WHITE, game.getCurrentPlayer());
         assertSame(GameStatus.IN_PROGRESS, game.getStatus());
         assertTrue(game.getWinner().isEmpty());
@@ -323,7 +325,7 @@ public class GameEndTests {
     @Test
     public void GE31MissingKingIsAnInvariantErrorRatherThanAResult() {
         setUp();
-        Board before = board.copy();
+        final Board before = board.copy();
         assertThrows(IllegalStateException.class, game::isCurrentPlayerInCheck);
         MoveRuleAssertions.assertSameSquares(before, board);
         assertSame(GameStatus.IN_PROGRESS, game.getStatus());
@@ -345,7 +347,7 @@ public class GameEndTests {
     @Test
     public void GE19SearchSkipsRejectedDestinationsWithoutCommitting() {
         setUp("WHITE KING b2", "BLACK KING h8", "BLACK ROOK a8");
-        Board before = board.copy();
+        final Board before = board.copy();
         Board mock = EasyMock.createStrictMock(Board.class);
         EasyMock.expect(mock.getPiece(EasyMock.anyObject(Position.class)))
                 .andStubAnswer(() -> board.getPiece((Position) EasyMock.getCurrentArguments()[0]));
