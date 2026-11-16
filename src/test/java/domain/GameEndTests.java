@@ -389,4 +389,11 @@ public class GameEndTests {
                 () -> new Game(mock).hasAnyLegalMove()));
         EasyMock.verify(mock);
     }
+
+    @Test
+    public void GE35AQuietPawnReplyPreventsStalemate() {
+        setUp("WHITE KING a1", "WHITE PAWN h2", "BLACK KING c3", "BLACK QUEEN b3");
+        assertFalse(game.isCurrentPlayerInCheck());
+        assertSearch(true);
+    }
 }
