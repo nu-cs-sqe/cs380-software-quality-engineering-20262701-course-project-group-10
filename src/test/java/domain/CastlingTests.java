@@ -19,6 +19,7 @@ public class CastlingTests {
     private static final int FILE_H = 7;
     private static final int RANK_1 = 0;
     private static final int RANK_2 = 1;
+    private static final int RANK_3 = 2;
     private static final int RANK_4 = 3;
     private static final int RANK_7 = 6;
     private static final int RANK_8 = 7;
@@ -32,6 +33,7 @@ public class CastlingTests {
     private static final Position H1 = new Position(FILE_H, RANK_1);
     private static final Position A2 = new Position(FILE_A, RANK_2);
     private static final Position G2 = new Position(FILE_G, RANK_2);
+    private static final Position E3 = new Position(FILE_E, RANK_3);
     private static final Position H2 = new Position(FILE_H, RANK_2);
     private static final Position B4 = new Position(FILE_B, RANK_4);
     private static final Position D4 = new Position(FILE_D, RANK_4);
@@ -259,6 +261,22 @@ public class CastlingTests {
         place(PieceType.KING, Color.BLACK, E8);
 
         assertCastlingRejected(D1, F1);
+    }
+
+    // G61: three files is never castling, even with an empty path.
+    @Test
+    public void G61ThreeFileKingMoveIsNotCastling() {
+        setUpCastlingPosition();
+
+        assertCastlingRejected(E1, B1);
+    }
+
+    // G62: two ranks is never castling.
+    @Test
+    public void G62TwoRankKingMoveIsNotCastling() {
+        setUpCastlingPosition();
+
+        assertCastlingRejected(E1, E3);
     }
 
     // G63: the rook on h1 must be the mover's own color.
