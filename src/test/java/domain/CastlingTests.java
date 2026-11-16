@@ -249,6 +249,17 @@ public class CastlingTests {
         assertSame(Color.BLACK, game.getCurrentPlayer());
     }
 
+    // G60: a two-file king move that does not start on e1 is not castling.
+    @Test
+    public void G60TwoFileKingMoveNotFromHomeSquareIsRejected() {
+        place(PieceType.KING, Color.WHITE, D1);
+        place(PieceType.ROOK, Color.WHITE, A1);
+        place(PieceType.ROOK, Color.WHITE, H1);
+        place(PieceType.KING, Color.BLACK, E8);
+
+        assertCastlingRejected(D1, F1);
+    }
+
     // G63: the rook on h1 must be the mover's own color.
     @Test
     public void G63CastlingWithAnEnemyRookIsRejected() {

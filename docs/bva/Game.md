@@ -253,7 +253,7 @@ the Black rooks on a8 and h8 attack a1 and h1 down the empty files.
 | G57 | Castling setup plus a Black rook on g4 (6, 3); White e1 to g1 | `IllegalArgumentException` (king lands on attacked g1); board, turn and rights unchanged | :white_check_mark: |
 | G58 | Castling setup plus a Black rook on d4 (3, 3); White e1 to c1 | `IllegalArgumentException` (king crosses attacked d1); board, turn and rights unchanged | :white_check_mark: |
 | G59 | Castling setup plus a Black rook on b4 (1, 3); White e1 to c1 | Accepted as G45 (b1 attacked, but the king never crosses it) | :white_check_mark: |
-| G60 | Castling setup without the White king on e1 and with it on d1 (3, 0) instead; White d1 to f1 (5, 0) | `IllegalArgumentException` (two-file king move not from e1); board unchanged | :x: |
+| G60 | White king d1 (3, 0), White rooks a1 and h1, Black king e8; White d1 to f1 (5, 0) | `IllegalArgumentException` (two-file king move not from e1); board unchanged | :x: |
 | G61 | Castling setup; White e1 to b1 (1, 0), with c1 and d1 empty | `IllegalArgumentException` (three files is never castling); board unchanged | :x: |
 | G62 | Castling setup; White e1 to e3 (4, 2) | `IllegalArgumentException` (two ranks is never castling); board unchanged | :x: |
 | G63 | Castling setup with a Black rook on h1 instead of the White one; White e1 to g1 | `IllegalArgumentException` (rook square holds an enemy rook); board, turn and rights unchanged | :white_check_mark: |
