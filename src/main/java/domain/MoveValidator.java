@@ -45,6 +45,10 @@ public class MoveValidator {
         return false;
     }
 
+    public boolean isInCheck(Board board, Color color) {
+        return false;
+    }
+
     private boolean attacks(Board board, Piece piece, Position from, Position square) {
         if (piece.getType() == PieceType.PAWN) {
             return isPawnAttack(piece, from, square);

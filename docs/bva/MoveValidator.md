@@ -434,7 +434,7 @@ the king on a1 (0, 0) and h8 (7, 7), the first and last squares of the search.
 
 | ID | State of system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| CK01 | WHITE KING at (4, 0) only; color WHITE | `false` | no |
+| CK01 | WHITE KING at (4, 0) only; color WHITE | `false` | yes |
 | CK02 | WHITE KING at (4, 0); BLACK ROOK at (4, 7); color WHITE | `true` | no |
 | CK03 | WHITE KING at (4, 0); WHITE PAWN at (4, 1); BLACK ROOK at (4, 7); color WHITE | `false` (blocked) | no |
 | CK04 | WHITE KING at (4, 0); WHITE ROOK at (4, 7); color WHITE | `false` (own pieces never give check) | no |
