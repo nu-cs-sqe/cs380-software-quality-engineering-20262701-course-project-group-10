@@ -154,6 +154,15 @@ public class CastlingTests {
         assertCastlingRejected(E1, G1);
     }
 
+    // G63: the rook on h1 must be the mover's own color.
+    @Test
+    public void G63CastlingWithAnEnemyRookIsRejected() {
+        setUpCastlingPositionWithoutKingSideRook();
+        place(PieceType.ROOK, Color.BLACK, H1);
+
+        assertCastlingRejected(E1, G1);
+    }
+
     // A rejected castle changes no square and keeps the turn.
     private void assertCastlingRejected(Position from, Position to) {
         Board before = board.copy();
