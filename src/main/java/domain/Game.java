@@ -248,4 +248,8 @@ public class Game {
     public boolean isGameOver() {
         return status != GameStatus.IN_PROGRESS;
     }
+
+    public boolean isCurrentPlayerInCheck() {
+        return validator.isInCheck(board, currentPlayer);
+    }
 }
