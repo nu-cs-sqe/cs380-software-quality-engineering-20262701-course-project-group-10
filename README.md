@@ -17,6 +17,7 @@
 - EasyMock 5.4.0
 - Checkstyle 10.12.5
 - SpotBugs Gradle plugin 6.0.25
+- PIT Gradle plugin 1.19.0
 
 
 ## Exceptions
@@ -29,7 +30,10 @@ Requires 100% cyclomatic complexity coverage, excluding View classes, `Main`,
 and enums. This check also runs during `build`.
 
 ### Mutation Testing
-N/A
+Run `bash ./gradlew pitest` (or `.\gradlew.bat pitest` on Windows) with JDK 11.
+Open the [HTML report](build/reports/pitest/index.html) locally. PIT uses the same
+class exclusions as JaCoCo.
+
 ### Others
 - SpotBugs `EI_EXPOSE_REP` is suppressed only on `Game.getBoard()`. The design
   and BVA cases G01/G06 require returning the supplied board so the GUI observes

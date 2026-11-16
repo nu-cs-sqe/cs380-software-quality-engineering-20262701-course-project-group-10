@@ -10,7 +10,7 @@ coordinates. The object is immutable.
 `equals(Object)` compares both coordinates. It is reflexive, symmetric,
 transitive, and consistent. It returns false for null and other types.
 Equal positions have equal `hashCode()` results, and repeated reads are stable.
-Different positions are not required to have different hash codes.
+The 64 squares on the board have distinct hashes.
 
 This follows the Position contract in [the setup design](../design/game-setup.md).
 Chess notation parsing, movement rules, and ordering are outside this issue.
@@ -108,6 +108,7 @@ call must throw `IllegalArgumentException`.
 | PH03 | Hash two separate `(7, 7)` objects | equal hashes | yes |
 | PH04 | Hash two separate `(3, 4)` objects | equal hashes | yes |
 | PH05 | Add two separate `(3, 4)` objects to a `HashSet`, then add `(4, 3)` | duplicate rejected; different coordinate added; size 2 | yes |
+| PH06 | Hash every valid coordinate from `(0, 0)` through `(7, 7)` | 64 distinct hashes | yes |
 
 ### EasyMock caller contracts
 

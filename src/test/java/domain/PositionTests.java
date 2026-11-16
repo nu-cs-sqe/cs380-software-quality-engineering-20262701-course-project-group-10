@@ -235,4 +235,15 @@ public class PositionTests {
         assertTrue(positions.add(new Position(4, 3)));
         assertEquals(2, positions.size());
     }
+
+    @Test
+    public void PH06_boardSquaresHaveDistinctHashes() {
+        HashSet<Integer> hashes = new HashSet<>();
+
+        for (int file = 0; file < 8; file++) {
+            for (int rank = 0; rank < 8; rank++) {
+                assertTrue(hashes.add(new Position(file, rank).hashCode()));
+            }
+        }
+    }
 }
