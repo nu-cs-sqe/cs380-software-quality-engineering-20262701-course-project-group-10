@@ -308,4 +308,37 @@ public class GameEndTests {
         assertSame(GameStatus.IN_PROGRESS, game.getStatus());
         assertTrue(game.getWinner().isEmpty());
     }
+
+    @Test
+    public void GE30UnexpectedBoardFailureIsNotTreatedAsNoLegalMoves() {
+        Board mock = EasyMock.createStrictMock(Board.class);
+        IllegalStateException failure = new IllegalStateException("board read failed");
+        EasyMock.expect(mock.getPiece(square("a1"))).andThrow(failure);
+        EasyMock.replay(mock);
+        Game fresh = new Game(mock);
+        assertSame(failure, assertThrows(IllegalStateException.class, fresh::hasAnyLegalMove));
+        EasyMock.verify(mock);
+    }
+
+    @Test
+    public void GE31MissingKingIsAnInvariantErrorRatherThanAResult() {
+        setUp();
+        Board before = board.copy();
+        assertThrows(IllegalStateException.class, game::isCurrentPlayerInCheck);
+        MoveRuleAssertions.assertSameSquares(before, board);
+        assertSame(GameStatus.IN_PROGRESS, game.getStatus());
+    }
+
+    @Test
+    public void GE32QueriesDoNotCommitTheMoveOrAdvanceTheTurn() {
+        setUp();
+        game.startNewGame();
+        Piece pawn = board.getPiece(square("e2"));
+        assertSearch(true);
+        assertSame(pawn, board.getPiece(square("e2")));
+        move("e2", "e4");
+        assertSame(pawn, board.getPiece(square("e4")));
+        assertTrue(board.isEmpty(square("e2")));
+        assertSame(Color.BLACK, game.getCurrentPlayer());
+    }
 }

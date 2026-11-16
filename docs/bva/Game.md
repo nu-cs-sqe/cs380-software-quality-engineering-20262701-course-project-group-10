@@ -345,7 +345,7 @@ implemented by the method with its GE ID in GameEndTests unless noted.
 | GE27 | makeMove(): White Ke1 Ra1, Black Ke8; Ra1-a8 | check with a king escape | IN_PROGRESS; winner empty; current BLACK; in check and has legal move | yes |
 | GE28 | makeMove(): initial position; e2-e4, e7-e5 | not check with legal replies | IN_PROGRESS after both moves; winner empty; isGameOver false | yes |
 | GE29 | makeMove(): initial position; e2-e5 rejected | rejected move before status update | IllegalArgumentException; board, turn, rights, status, winner unchanged | yes |
-| GE30 | hasAnyLegalMove(): strict mock Board throws IllegalStateException on source read | unexpected collaborator error | same error propagates; no writes | no |
-| GE31 | isCurrentPlayerInCheck(): empty board | missing king invariant | IllegalStateException; board unchanged | no |
-| GE32 | hasAnyLegalMove(): snapshot then actual move on original board | trial does not commit or consume turn | same source references before move; real move accepted once | no |
+| GE30 | hasAnyLegalMove(): strict mock Board throws IllegalStateException on source read | unexpected collaborator error | same error propagates; no writes | yes |
+| GE31 | isCurrentPlayerInCheck(): empty board | missing king invariant | IllegalStateException; board unchanged | yes |
+| GE32 | hasAnyLegalMove(): snapshot then actual move on original board | trial does not commit or consume turn | same source references before move; real move accepted once | yes |
 | GE33 | hasAnyLegalMove(): mock Board has a legal source before unread later squares | continued searching / early match | true; later source squares never read | no |
