@@ -45,8 +45,6 @@ public class Game {
         blackQueenSide = true;
     }
 
-    // Stub so the click-to-move GUI compiles. The real version, with turn rules
-    // and IllegalArgumentException for illegal moves, comes from the make-move task.
     public void makeMove(Position from, Position to) {
         Objects.requireNonNull(from, "from");
         Objects.requireNonNull(to, "to");
