@@ -257,6 +257,13 @@ public class AttackTests {
                 () -> new MoveValidator().isSquareAttacked(new Board(), null, Color.WHITE));
     }
 
+    // AT30: null pointer boundary for the attacking color.
+    @Test
+    public void AT30NullAttackerIsRejected() {
+        assertThrows(NullPointerException.class,
+                () -> new MoveValidator().isSquareAttacked(new Board(), D4, null));
+    }
+
     private Board boardWith(PieceType type, Color color, Position position) {
         Board board = new Board();
         board.placePiece(new Piece(type, color), position);
