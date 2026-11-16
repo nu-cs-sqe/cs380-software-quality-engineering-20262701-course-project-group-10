@@ -338,7 +338,7 @@ implemented by the method with its GE ID in GameEndTests unless noted.
 | GE20 | hasAnyLegalMove(): White Ke1 Rh1, Black Ka8 | king-side castling available | true; unchanged; later real castle still works | yes |
 | GE21 | hasAnyLegalMove(): query after king/rook rights lost | rights false preserved during trial searches | same four rights before and after | yes |
 | GE22 | makeMove(): White Kc6 Qb6, Black Ka8; Qb6-b7 | Black checkmated | CHECKMATE; winner WHITE; current BLACK; isGameOver true; no legal move | yes |
-| GE23 | makeMove(): White Ka2, Black Kc3 Qb3; Ka2-a1 then Qb3-b2 | White checkmated | CHECKMATE; winner BLACK; current WHITE; isGameOver true | no |
+| GE23 | makeMove(): White Ka2, Black Kc3 Qb3; Ka2-a1 then Qb3-b2 | White checkmated | CHECKMATE; winner BLACK; current WHITE; isGameOver true | yes |
 | GE24 | makeMove(): White Kc6 Qb5, Black Ka8; Qb5-b6 | Black stalemated | STALEMATE; winner empty; current BLACK; isGameOver true; not in check | no |
 | GE25 | makeMove(): White Ka2, Black Kc3 Qb4; Ka2-a1 then Qb4-b3 | White stalemated | STALEMATE; winner empty; current WHITE; isGameOver true | no |
 | GE26 | makeMove(): initial position; f2-f3, e7-e5, g2-g4, Qd8-h4 | real move sequence and diagonal mate | CHECKMATE; winner BLACK | no |
