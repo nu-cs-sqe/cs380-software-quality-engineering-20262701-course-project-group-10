@@ -2,6 +2,7 @@ package domain;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.Objects;
+import java.util.Optional;
 
 /** Manages turns, legal moves, king safety, and castling rights. */
 public class Game {
@@ -26,6 +27,7 @@ public class Game {
     private final MoveValidator validator = new MoveValidator();
     private Color currentPlayer;
     private GameStatus status = GameStatus.IN_PROGRESS;
+    private Color winner;
     private boolean whiteKingSide = true;
     private boolean whiteQueenSide = true;
     private boolean blackKingSide = true;
@@ -237,5 +239,9 @@ public class Game {
 
     public GameStatus getStatus() {
         return status;
+    }
+
+    public Optional<Color> getWinner() {
+        return Optional.ofNullable(winner);
     }
 }
