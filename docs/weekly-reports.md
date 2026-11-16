@@ -47,6 +47,7 @@
 # Week 8 (11/16/2026-11/22/2026)
 **Planning and Progress Tracking**:
 1. [done] Mengpang Xing: Game end conditions, start screen, and i18n requirements and design docs ([PR #55](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/55))
+2. [done] Mengpang Xing: Checkmate and stalemate detection with BVA and test-first commits; documented the pending en passant and promotion integration.
 
 
 
