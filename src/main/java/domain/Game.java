@@ -102,6 +102,13 @@ public class Game {
         if (validator.isInCheck(board, currentPlayer)) {
             throw new IllegalArgumentException("You cannot castle out of check");
         }
+        // Use the real board: on the trial board the rook stands here and hides the attack.
+        int step = Integer.compare(to.getFile(), from.getFile());
+        Position crossing = new Position(from.getFile() + step, from.getRank());
+        if (validator.isSquareAttacked(board, crossing, opponent())) {
+            throw new IllegalArgumentException(
+                    "Your king cannot castle through an attacked square");
+        }
     }
 
     // Checks every square strictly between the king and the rook on their shared rank.
@@ -191,7 +198,11 @@ public class Game {
     }
 
     private void passTurn() {
-        currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
+        currentPlayer = opponent();
+    }
+
+    private Color opponent() {
+        return currentPlayer == Color.WHITE ? Color.BLACK : Color.WHITE;
     }
 
 
