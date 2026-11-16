@@ -8,6 +8,10 @@ public class Game {
     private final Board board;
     private final MoveValidator validator = new MoveValidator();
     private Color currentPlayer;
+    private boolean whiteKingSide = true;
+    private boolean whiteQueenSide = true;
+    private boolean blackKingSide = true;
+    private boolean blackQueenSide = true;
 
     public Game(Board board) {
         this.board = Objects.requireNonNull(board, "board");
@@ -31,13 +35,27 @@ public class Game {
         requireNotCapturingOwnPiece(to);
         requireNotCapturingKing(to);
 
+        Piece moving = board.getPiece(from);
         // Try the move on a copy so a rejected move never touches the real board.
         Board trial = board.copy();
         trial.movePiece(from, to);
         requireKingSafe(trial);
 
         board.copyFrom(trial);
+        updateCastlingRights(moving);
         passTurn();
+    }
+
+    private void updateCastlingRights(Piece moving) {
+        if (moving.getType() == PieceType.KING) {
+            if (currentPlayer == Color.WHITE) {
+                whiteKingSide = false;
+                whiteQueenSide = false;
+            } else {
+                blackKingSide = false;
+                blackQueenSide = false;
+            }
+        }
     }
 
     private void requireKingSafe(Board trial) {
@@ -93,10 +111,10 @@ public class Game {
     }
 
     public boolean canCastleKingSide(Color color) {
-        return true;
+        return color == Color.WHITE ? whiteKingSide : blackKingSide;
     }
 
     public boolean canCastleQueenSide(Color color) {
-        return true;
+        return color == Color.WHITE ? whiteQueenSide : blackQueenSide;
     }
 }

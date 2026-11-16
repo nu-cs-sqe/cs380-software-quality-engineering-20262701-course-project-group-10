@@ -186,8 +186,8 @@ a8 (0, 7) and h8 (7, 7). White moves first.
 | ID | State of the system | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | G30 | New `Game`; no moves | All four rights `true` | :white_check_mark: |
-| G31 | `startNewGame()`; no moves | All four rights `true` | :x: |
-| G32 | Castling setup; White king e1 to f1 (5, 0) | White king side and queen side `false`; both Black rights `true` | :x: |
+| G31 | `startNewGame()`; no moves | All four rights `true` | :white_check_mark: |
+| G32 | Castling setup; White king e1 to f1 (5, 0) | White king side and queen side `false`; both Black rights `true` | :white_check_mark: |
 | G33 | Castling setup; White rook h1 to h4 (7, 3) | White king side `false`; White queen side `true`; both Black rights `true` | :x: |
 | G34 | Castling setup; White rook a1 to a4 (0, 3) | White queen side `false`; White king side `true` | :x: |
 | G35 | Castling setup; White rook a1 to a2 (0, 1), then Black king e8 to d8 (3, 7) | Black king side and queen side `false` | :x: |

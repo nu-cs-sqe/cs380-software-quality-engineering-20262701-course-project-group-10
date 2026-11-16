@@ -11,11 +11,13 @@ public class CastlingRightsTests {
     private static final int FILE_F = 5;
     private static final int FILE_H = 7;
     private static final int RANK_1 = 0;
+    private static final int RANK_4 = 3;
     private static final int RANK_8 = 7;
     private static final Position A1 = new Position(FILE_A, RANK_1);
     private static final Position E1 = new Position(FILE_E, RANK_1);
     private static final Position F1 = new Position(FILE_F, RANK_1);
     private static final Position H1 = new Position(FILE_H, RANK_1);
+    private static final Position H4 = new Position(FILE_H, RANK_4);
     private static final Position A8 = new Position(FILE_A, RANK_8);
     private static final Position E8 = new Position(FILE_E, RANK_8);
     private static final Position H8 = new Position(FILE_H, RANK_8);
@@ -51,6 +53,16 @@ public class CastlingRightsTests {
         game.makeMove(E1, F1);
 
         assertRights(false, false, true, true);
+    }
+
+    // G33: moving the h1 rook loses only White's king-side right.
+    @Test
+    public void G33KingSideRookMoveLosesKingSideRight() {
+        setUpCastlingPosition();
+
+        game.makeMove(H1, H4);
+
+        assertRights(false, true, true, true);
     }
 
     // Only the two kings and four rooks, all on their original squares.
