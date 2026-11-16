@@ -16,6 +16,7 @@ import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
 import javax.swing.JPanel;
 
+/** Draws the chessboard, pieces, and selection, and forwards mouse clicks. */
 public class BoardPanel extends JPanel {
     private static final int SIZE = 8;
     private static final int DEFAULT_SQUARE_SIZE = 64;
