@@ -53,7 +53,9 @@ public class Game {
         requireCurrentPlayersPieceOn(from);
         Piece moving = board.getPiece(from);
         boolean castling = isCastlingAttempt(moving, from, to);
-        if (!castling) {
+        if (castling) {
+            requireCastlingAllowed(from, to);
+        } else {
             requireLegalMove(from, to);
             requireNotCapturingOwnPiece(to);
             requireNotCapturingKing(to);
@@ -78,10 +80,23 @@ public class Game {
                 && Math.abs(to.getFile() - from.getFile()) == CASTLING_KING_STEP;
     }
 
+    private boolean isKingSideCastle(Position from, Position to) {
+        return to.getFile() > from.getFile();
+    }
+
+    private void requireCastlingAllowed(Position from, Position to) {
+        boolean hasRight = isKingSideCastle(from, to)
+                ? canCastleKingSide(currentPlayer)
+                : canCastleQueenSide(currentPlayer);
+        if (!hasRight) {
+            throw new IllegalArgumentException("You can no longer castle on that side");
+        }
+    }
+
     // The rook jumps to the square the king crossed, on the king's own home rank.
     private void moveCastlingRook(Board trial, Position from, Position to) {
         int rank = from.getRank();
-        if (to.getFile() > from.getFile()) {
+        if (isKingSideCastle(from, to)) {
             trial.movePiece(new Position(KING_SIDE_ROOK_FILE, rank),
                     new Position(KING_SIDE_ROOK_TARGET_FILE, rank));
         } else {

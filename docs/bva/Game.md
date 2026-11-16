@@ -239,9 +239,9 @@ the Black rooks on a8 and h8 attack a1 and h1 down the empty files.
 | --- | --- | --- | --- |
 | G44 | Castling setup; White e1 to g1 (6, 0) | King g1, rook f1 (5, 0), e1 and h1 empty; both White rights `false`, both Black rights `true`; current player `BLACK` (h1 rook is attacked by h8, castling still allowed) | :white_check_mark: |
 | G45 | Castling setup; White e1 to c1 (2, 0) | King c1, rook d1 (3, 0), e1 and a1 empty; both White rights `false`; current player `BLACK` | :white_check_mark: |
-| G46 | Castling setup; White a1 to a2 (0, 1), then Black e8 to g8 (6, 7) | King g8, rook f8 (5, 7), e8 and h8 empty; both Black rights `false`; current player `WHITE` | :x: |
-| G47 | Castling setup; White h1 to h2 (7, 1), then Black e8 to c8 (2, 7) | King c8, rook d8 (3, 7), e8 and a8 empty; both Black rights `false`; current player `WHITE` | :x: |
-| G48 | Castling setup; White h1 to h2, Black a8 to a7 (0, 6), White h2 to h1, Black a7 to a8; then White e1 to g1 | `IllegalArgumentException` (right lost, rook back on h1); board, turn and rights unchanged | :x: |
+| G46 | Castling setup; White a1 to a2 (0, 1), then Black e8 to g8 (6, 7) | King g8, rook f8 (5, 7), e8 and h8 empty; both Black rights `false`; current player `WHITE` | :white_check_mark: |
+| G47 | Castling setup; White h1 to h2 (7, 1), then Black e8 to c8 (2, 7) | King c8, rook d8 (3, 7), e8 and a8 empty; both Black rights `false`; current player `WHITE` | :white_check_mark: |
+| G48 | Castling setup; White h1 to h2, Black a8 to a7 (0, 6), White h2 to h1, Black a7 to a8; then White e1 to g1 | `IllegalArgumentException` (right lost, rook back on h1); board, turn and rights unchanged | :white_check_mark: |
 | G49 | Castling setup without the h1 rook (right still `true`); White e1 to g1 | `IllegalArgumentException` (no rook); board, turn and rights unchanged | :x: |
 | G50 | Castling setup with a Black rook on h1 instead of the White one; White e1 to g1 | `IllegalArgumentException` (rook square holds an enemy rook); board, turn and rights unchanged | :x: |
 | G51 | Castling setup plus a White knight on f1 (5, 0); White e1 to g1 | `IllegalArgumentException` (square next to the king blocked); board, turn and rights unchanged | :x: |
