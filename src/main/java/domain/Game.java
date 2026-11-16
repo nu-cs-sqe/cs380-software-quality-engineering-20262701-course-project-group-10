@@ -6,6 +6,7 @@ import java.util.Optional;
 
 /** Manages turns, legal moves, king safety, and castling rights. */
 public class Game {
+    private static final int BOARD_SIZE = 8;
     private static final int QUEEN_SIDE_ROOK_FILE = 0;
     private static final int KING_SIDE_ROOK_FILE = 7;
     private static final int KING_SIDE_ROOK_TARGET_FILE = 5;
@@ -264,6 +265,29 @@ public class Game {
     }
 
     public boolean hasAnyLegalMove() {
+        for (int file = 0; file < BOARD_SIZE; file++) {
+            for (int rank = 0; rank < BOARD_SIZE; rank++) {
+                Position from = new Position(file, rank);
+                Piece piece = board.getPiece(from);
+                if (piece != null && piece.getColor() == currentPlayer && hasLegalMoveFrom(from)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean hasLegalMoveFrom(Position from) {
+        for (int file = 0; file < BOARD_SIZE; file++) {
+            for (int rank = 0; rank < BOARD_SIZE; rank++) {
+                try {
+                    trialMove(from, new Position(file, rank));
+                    return true;
+                } catch (IllegalArgumentException expected) {
+                    // A rejected candidate does not end the search for a legal reply.
+                }
+            }
+        }
         return false;
     }
 }
