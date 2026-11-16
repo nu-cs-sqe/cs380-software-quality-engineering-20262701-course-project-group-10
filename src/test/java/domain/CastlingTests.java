@@ -154,6 +154,15 @@ public class CastlingTests {
         assertCastlingRejected(E1, G1);
     }
 
+    // G51: the square next to the king on the king side must be empty.
+    @Test
+    public void G51BlockedSquareNextToKingStopsKingSideCastling() {
+        setUpCastlingPosition();
+        place(PieceType.KNIGHT, Color.WHITE, F1);
+
+        assertCastlingRejected(E1, G1);
+    }
+
     // G63: the rook on h1 must be the mover's own color.
     @Test
     public void G63CastlingWithAnEnemyRookIsRejected() {
