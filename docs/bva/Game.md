@@ -243,7 +243,7 @@ the Black rooks on a8 and h8 attack a1 and h1 down the empty files.
 | G47 | Castling setup; White h1 to h2 (7, 1), then Black e8 to c8 (2, 7) | King c8, rook d8 (3, 7), e8 and a8 empty; both Black rights `false`; current player `WHITE` | :white_check_mark: |
 | G48 | Castling setup; White h1 to h2, Black a8 to a7 (0, 6), White h2 to h1, Black a7 to a8; then White e1 to g1 | `IllegalArgumentException` (right lost, rook back on h1); board, turn and rights unchanged | :white_check_mark: |
 | G49 | Castling setup without the h1 rook (right still `true`); White e1 to g1 | `IllegalArgumentException` (no rook); board, turn and rights unchanged | :white_check_mark: |
-| G50 | Castling setup with a White knight on h1 instead of the rook (right still `true`); White e1 to g1 | `IllegalArgumentException` (rook square holds another piece); board, turn and rights unchanged. An enemy rook on h1 is G63 | :x: |
+| G50 | Castling setup with a White knight on h1 instead of the rook (right still `true`); White e1 to g1 | `IllegalArgumentException` (rook square holds another piece); board, turn and rights unchanged. An enemy rook on h1 is G63 | :white_check_mark: |
 | G51 | Castling setup plus a White knight on f1 (5, 0); White e1 to g1 | `IllegalArgumentException` (square next to the king blocked); board, turn and rights unchanged | :white_check_mark: |
 | G52 | Castling setup plus a White knight on g1 (6, 0); White e1 to g1 | `IllegalArgumentException` (destination blocked); board, turn and rights unchanged | :white_check_mark: |
 | G53 | Castling setup plus a White knight on b1 (1, 0); White e1 to c1 | `IllegalArgumentException` (b1 blocked; only the rook crosses it); board, turn and rights unchanged | :white_check_mark: |
