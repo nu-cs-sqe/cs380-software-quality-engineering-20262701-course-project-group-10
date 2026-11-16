@@ -1,6 +1,7 @@
 package domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,10 +17,20 @@ public class CastlingRightsTests {
     private static final int RANK_2 = 1;
     private static final int RANK_4 = 3;
     private static final int RANK_5 = 4;
+    private static final int RANK_7 = 6;
     private static final int RANK_8 = 7;
     private static final Position A1 = new Position(FILE_A, RANK_1);
     private static final Position A2 = new Position(FILE_A, RANK_2);
     private static final Position A4 = new Position(FILE_A, RANK_4);
+    private static final Position A7 = new Position(FILE_A, RANK_7);
+    private static final Position B4 = new Position(FILE_B, RANK_4);
+    private static final Position B5 = new Position(FILE_B, RANK_5);
+    private static final Position D1 = new Position(FILE_D, RANK_1);
+    private static final Position D7 = new Position(FILE_D, RANK_7);
+    private static final Position E2 = new Position(FILE_E, RANK_2);
+    private static final Position E4 = new Position(FILE_E, RANK_4);
+    private static final Position E5 = new Position(FILE_E, RANK_5);
+    private static final Position E7 = new Position(FILE_E, RANK_7);
     private static final Position E1 = new Position(FILE_E, RANK_1);
     private static final Position F1 = new Position(FILE_F, RANK_1);
     private static final Position H1 = new Position(FILE_H, RANK_1);
@@ -115,6 +126,53 @@ public class CastlingRightsTests {
         game.makeMove(B8, A8);
 
         assertRights(true, true, true, false);
+    }
+
+    // G38: a rook that did not start on an original square changes no right.
+    @Test
+    public void G38OtherRookMoveKeepsAllRights() {
+        setUpCastlingPosition();
+        place(PieceType.ROOK, Color.WHITE, B4);
+
+        game.makeMove(B4, B5);
+
+        assertRights(true, true, true, true);
+    }
+
+    // G39: moving the rook back to its original square does not restore the right.
+    @Test
+    public void G39ReturningRookDoesNotRestoreRight() {
+        setUpCastlingPosition();
+        game.makeMove(H1, H4);
+        game.makeMove(A8, A7);
+
+        game.makeMove(H4, H1);
+
+        assertRights(false, true, true, false);
+    }
+
+    // G40: a rejected king move keeps every right.
+    @Test
+    public void G40RejectedKingMoveKeepsAllRights() {
+        setUpCastlingPosition();
+        place(PieceType.ROOK, Color.BLACK, D7);
+
+        assertThrows(IllegalArgumentException.class, () -> game.makeMove(E1, D1));
+
+        assertRights(true, true, true, true);
+    }
+
+    // G41: starting a new game restores rights that were lost.
+    @Test
+    public void G41StartNewGameRestoresLostRights() {
+        game.startNewGame();
+        game.makeMove(E2, E4);
+        game.makeMove(E7, E5);
+        game.makeMove(E1, E2);
+
+        game.startNewGame();
+
+        assertRights(true, true, true, true);
     }
 
     // Only the two kings and four rooks, all on their original squares.
