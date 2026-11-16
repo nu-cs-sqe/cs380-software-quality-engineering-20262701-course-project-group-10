@@ -2,6 +2,7 @@ package domain;
 
 import java.util.Objects;
 
+/** Checks piece movement, attacked squares, and whether a king is in check. */
 public class MoveValidator {
     private static final int BOARD_SIZE = 8;
     private static final int SINGLE_STEP = 1;

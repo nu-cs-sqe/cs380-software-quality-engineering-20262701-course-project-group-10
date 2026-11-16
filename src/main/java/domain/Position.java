@@ -2,6 +2,7 @@ package domain;
 
 import java.util.Objects;
 
+/** An immutable board square with file and rank coordinates from zero to seven. */
 public final class Position {
     private static final int MAX_COORDINATE = 7;
 

@@ -11,6 +11,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
+/** Displays the chessboard, turn label, and new-game controls. */
 public class ChessFrame extends JFrame {
     private static final String WHITE_TO_MOVE = "White to move";
     private static final String BLACK_TO_MOVE = "Black to move";

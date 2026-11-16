@@ -54,3 +54,8 @@ Run `bash ./gradlew check` for tests, Checkstyle, SpotBugs, coverage, and mutati
 
 Reports: `build/reports/checkstyle/` and `build/reports/spotbugs/`.
 Checkstyle rules: `config/checkstyle/checkstyle.xml`.
+
+## Comment style
+Every production class and enum starts with a short Javadoc comment describing
+its responsibility. Keep implementation comments where they explain a reason or
+constraint that is not clear from the code; avoid comments that repeat the code.

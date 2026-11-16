@@ -5,6 +5,7 @@ import domain.Game;
 import domain.Position;
 import java.util.Objects;
 
+/** Translates board clicks into square selection and move requests. */
 public class BoardClickHandler {
     private static final int BOARD_SIZE = 8;
 
