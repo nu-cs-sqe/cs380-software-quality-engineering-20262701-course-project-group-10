@@ -331,9 +331,9 @@ implemented by the method with its GE ID in GameEndTests unless noted.
 | GE13 | hasAnyLegalMove(): White Ka1, Bb3; Black Kc2, Ra8 | king trapped; another piece can block at a2 | true; unchanged | yes |
 | GE14 | hasAnyLegalMove(): White Ka1, Rh8; Black Kc2, Ra8 | king trapped; another piece can capture a8 | true; unchanged | yes |
 | GE15 | hasAnyLegalMove(): White Ka1, Rb1; Black Kc3, Qb2, Rh1 | apparent rook capture exposes king to Rh1 | false; unchanged | yes |
-| GE16 | hasAnyLegalMove(): initial position queried twice | many pieces, repeated search | true twice; board, turn, rights, status, winner unchanged | no |
-| GE17 | hasAnyLegalMove(): White Kh8, Black Ka1 | last source file/rank and inward destinations | true; unchanged | no |
-| GE18 | hasAnyLegalMove(): White Kh1, Black Ka8 | source rank 0 / file 7 boundary | true; unchanged | no |
+| GE16 | hasAnyLegalMove(): initial position queried twice | many pieces, repeated search | true twice; board, turn, rights, status, winner unchanged | yes |
+| GE17 | hasAnyLegalMove(): White Kh8, Black Ka1 | last source file/rank and inward destinations | true; unchanged | yes |
+| GE18 | hasAnyLegalMove(): White Kh1, Black Ka8 | source rank 0 / file 7 boundary | true; unchanged | yes |
 | GE19 | hasAnyLegalMove(): White Kb2, Black Kh8; mock Board delegates reads and trial copies to a real position | rejected candidates before a later legal destination | true; strict mock rejects any commit or state writes | no |
 | GE20 | hasAnyLegalMove(): White Ke1 Rh1, Black Ka8 | king-side castling available | true; unchanged; later real castle still works | no |
 | GE21 | hasAnyLegalMove(): query after king/rook rights lost | rights false preserved during trial searches | same four rights before and after | no |

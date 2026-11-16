@@ -169,4 +169,23 @@ public class GameEndTests {
         assertTrue(game.isCurrentPlayerInCheck());
         assertSearch(false);
     }
+
+    @Test
+    public void GE16RepeatedOpeningSearchLeavesEveryStateValueUnchanged() {
+        setUp();
+        game.startNewGame();
+        assertSearch(true);
+    }
+
+    @Test
+    public void GE17SearchIncludesTheLastSourceSquare() {
+        setUp("WHITE KING h8", "BLACK KING a1");
+        assertSearch(true);
+    }
+
+    @Test
+    public void GE18SearchIncludesRankZeroOnTheLastFile() {
+        setUp("WHITE KING h1", "BLACK KING a8");
+        assertSearch(true);
+    }
 }
