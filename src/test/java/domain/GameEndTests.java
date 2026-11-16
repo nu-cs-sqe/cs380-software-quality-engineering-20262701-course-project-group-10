@@ -407,4 +407,17 @@ public class GameEndTests {
         assertSame(Color.WHITE, board.getPiece(square("b2")).getColor());
         assertSame(Color.BLACK, game.getCurrentPlayer());
     }
+
+    @Test
+    public void GE37TrappingTheKingDoesNotEndAGameWithAPawnReply() {
+        setUp("WHITE KING a2", "WHITE PAWN h2", "BLACK KING c3", "BLACK QUEEN b4");
+        move("a2", "a1");
+        move("b4", "b3");
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+        assertFalse(game.isCurrentPlayerInCheck());
+        assertSearch(true);
+        assertSame(GameStatus.IN_PROGRESS, game.getStatus());
+        assertTrue(game.getWinner().isEmpty());
+        assertFalse(game.isGameOver());
+    }
 }
