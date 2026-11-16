@@ -436,12 +436,12 @@ the king on a1 (0, 0) and h8 (7, 7), the first and last squares of the search.
 | --- | --- | --- | --- |
 | CK01 | WHITE KING at (4, 0) only; color WHITE | `false` | yes |
 | CK02 | WHITE KING at (4, 0); BLACK ROOK at (4, 7); color WHITE | `true` | yes |
-| CK03 | WHITE KING at (4, 0); WHITE PAWN at (4, 1); BLACK ROOK at (4, 7); color WHITE | `false` (blocked) | no |
-| CK04 | WHITE KING at (4, 0); WHITE ROOK at (4, 7); color WHITE | `false` (own pieces never give check) | no |
-| CK05 | BLACK KING at (4, 7); WHITE QUEEN at (4, 0); color BLACK | `true` | no |
-| CK06 | WHITE KING at (0, 0); BLACK KING at (7, 7); BLACK ROOK at (0, 7); color BLACK | `false` (only the Black king is checked, and it is safe) | no |
-| CK07 | WHITE KING at (0, 0); BLACK KNIGHT at (1, 2); color WHITE | `true` (king on the first square searched) | no |
-| CK08 | BLACK KING at (7, 7); WHITE KNIGHT at (6, 5); color BLACK | `true` (king on the last square searched) | no |
+| CK03 | WHITE KING at (4, 0); WHITE PAWN at (4, 1); BLACK ROOK at (4, 7); color WHITE | `false` (blocked) | yes |
+| CK04 | WHITE KING at (4, 0); WHITE ROOK at (4, 7); color WHITE | `false` (own pieces never give check) | yes |
+| CK05 | BLACK KING at (4, 7); WHITE QUEEN at (4, 0); color BLACK | `true` | yes |
+| CK06 | WHITE KING at (0, 0); BLACK KING at (7, 7); BLACK ROOK at (0, 7); color BLACK | `false` (only the Black king is checked, and it is safe) | yes |
+| CK07 | WHITE KING at (0, 0); BLACK KNIGHT at (1, 2); color WHITE | `true` (king on the first square searched) | yes |
+| CK08 | BLACK KING at (7, 7); WHITE KNIGHT at (6, 5); color BLACK | `true` (king on the last square searched) | yes |
 
 ### check invalid states and null arguments
 
