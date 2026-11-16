@@ -61,7 +61,8 @@ public class MoveValidator {
                 }
             }
         }
-        return null;
+        // Game always keeps both kings on the board, so a missing one is a bug, not a bad move.
+        throw new IllegalStateException("No " + color + " king on the board");
     }
 
     private boolean attacks(Board board, Piece piece, Position from, Position square) {
