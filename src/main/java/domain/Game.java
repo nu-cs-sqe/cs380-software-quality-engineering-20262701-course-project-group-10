@@ -144,10 +144,12 @@ public class Game {
     }
 
     public boolean canCastleKingSide(Color color) {
+        Objects.requireNonNull(color, "color");
         return color == Color.WHITE ? whiteKingSide : blackKingSide;
     }
 
     public boolean canCastleQueenSide(Color color) {
+        Objects.requireNonNull(color, "color");
         return color == Color.WHITE ? whiteQueenSide : blackQueenSide;
     }
 }
