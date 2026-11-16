@@ -294,6 +294,20 @@ public class GameMakeMoveTests {
         assertSame(Color.BLACK, game.getCurrentPlayer());
     }
 
+    // G26: a king can never be captured, even when the capture is a legal shape.
+    @Test
+    public void G26KingCannotBeCaptured() {
+        place(PieceType.KING, Color.WHITE, E1);
+        place(PieceType.ROOK, Color.WHITE, A1);
+        place(PieceType.KING, Color.BLACK, A8);
+        Board before = board.copy();
+
+        assertThrows(IllegalArgumentException.class, () -> game.makeMove(A1, A8));
+
+        MoveRuleAssertions.assertSameSquares(before, board);
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+    }
+
     // G28: after a rejected move, the next legal move works and the turn advances once.
     @Test
     public void G28LegalMoveAfterRejectionAdvancesTurnOnce() {
