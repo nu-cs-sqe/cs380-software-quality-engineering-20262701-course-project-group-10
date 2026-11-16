@@ -341,4 +341,50 @@ public class GameEndTests {
         assertTrue(board.isEmpty(square("e2")));
         assertSame(Color.BLACK, game.getCurrentPlayer());
     }
+
+    @Test
+    public void GE19SearchSkipsRejectedDestinationsWithoutCommitting() {
+        setUp("WHITE KING b2", "BLACK KING h8", "BLACK ROOK a8");
+        Board before = board.copy();
+        Board mock = EasyMock.createStrictMock(Board.class);
+        EasyMock.expect(mock.getPiece(EasyMock.anyObject(Position.class)))
+                .andStubAnswer(() -> board.getPiece((Position) EasyMock.getCurrentArguments()[0]));
+        EasyMock.expect(mock.copy()).andStubAnswer(board::copy);
+        EasyMock.replay(mock);
+        Game isolated = new Game(mock);
+        assertTrue(isolated.hasAnyLegalMove());
+        EasyMock.verify(mock);
+        MoveRuleAssertions.assertSameSquares(before, board);
+        assertSame(Color.WHITE, isolated.getCurrentPlayer());
+    }
+
+    @Test
+    public void GE33SearchStopsBeforeReadingLaterSourceFiles() {
+        setUp("WHITE KING a1", "BLACK KING h8");
+        Board mock = EasyMock.createStrictMock(Board.class);
+        EasyMock.expect(mock.getPiece(EasyMock.anyObject(Position.class)))
+                .andStubAnswer(() -> {
+                    Position position = (Position) EasyMock.getCurrentArguments()[0];
+                    assertEquals(0, position.getFile(), "search should have stopped on file a");
+                    return board.getPiece(position);
+                });
+        EasyMock.expect(mock.copy()).andStubAnswer(board::copy);
+        EasyMock.replay(mock);
+        assertTrue(new Game(mock).hasAnyLegalMove());
+        EasyMock.verify(mock);
+    }
+
+    @Test
+    public void GE34InvariantFailureInsideTrialIsNotSwallowed() {
+        setUp("WHITE KING a1", "BLACK KING h8");
+        Board mock = EasyMock.createStrictMock(Board.class);
+        EasyMock.expect(mock.getPiece(EasyMock.anyObject(Position.class)))
+                .andStubAnswer(() -> board.getPiece((Position) EasyMock.getCurrentArguments()[0]));
+        IllegalStateException failure = new IllegalStateException("cannot copy board");
+        EasyMock.expect(mock.copy()).andThrow(failure);
+        EasyMock.replay(mock);
+        assertSame(failure, assertThrows(IllegalStateException.class,
+                () -> new Game(mock).hasAnyLegalMove()));
+        EasyMock.verify(mock);
+    }
 }

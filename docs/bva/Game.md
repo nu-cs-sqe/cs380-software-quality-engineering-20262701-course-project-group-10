@@ -334,7 +334,7 @@ implemented by the method with its GE ID in GameEndTests unless noted.
 | GE16 | hasAnyLegalMove(): initial position queried twice | many pieces, repeated search | true twice; board, turn, rights, status, winner unchanged | yes |
 | GE17 | hasAnyLegalMove(): White Kh8, Black Ka1 | last source file/rank and inward destinations | true; unchanged | yes |
 | GE18 | hasAnyLegalMove(): White Kh1, Black Ka8 | source rank 0 / file 7 boundary | true; unchanged | yes |
-| GE19 | hasAnyLegalMove(): White Kb2, Black Kh8; mock Board delegates reads and trial copies to a real position | rejected candidates before a later legal destination | true; strict mock rejects any commit or state writes | no |
+| GE19 | hasAnyLegalMove(): White Kb2, Black Kh8 Ra8; mock Board delegates reads and trial copies to a real position | rejected candidates before a later legal destination | true; strict mock rejects any commit or state writes | yes |
 | GE20 | hasAnyLegalMove(): White Ke1 Rh1, Black Ka8 | king-side castling available | true; unchanged; later real castle still works | yes |
 | GE21 | hasAnyLegalMove(): query after king/rook rights lost | rights false preserved during trial searches | same four rights before and after | yes |
 | GE22 | makeMove(): White Kc6 Qb6, Black Ka8; Qb6-b7 | Black checkmated | CHECKMATE; winner WHITE; current BLACK; isGameOver true; no legal move | yes |
@@ -348,4 +348,5 @@ implemented by the method with its GE ID in GameEndTests unless noted.
 | GE30 | hasAnyLegalMove(): strict mock Board throws IllegalStateException on source read | unexpected collaborator error | same error propagates; no writes | yes |
 | GE31 | isCurrentPlayerInCheck(): empty board | missing king invariant | IllegalStateException; board unchanged | yes |
 | GE32 | hasAnyLegalMove(): snapshot then actual move on original board | trial does not commit or consume turn | same source references before move; real move accepted once | yes |
-| GE33 | hasAnyLegalMove(): mock Board has a legal source before unread later squares | continued searching / early match | true; later source squares never read | no |
+| GE33 | hasAnyLegalMove(): mock Board has a legal source before unread later squares | continued searching / early match | true; later source squares never read | yes |
+| GE34 | hasAnyLegalMove(): mock Board throws IllegalStateException while copying a legal trial | unexpected failure inside trial | same exception propagates; no commit | yes |
