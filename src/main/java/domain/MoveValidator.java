@@ -46,7 +46,22 @@ public class MoveValidator {
     }
 
     public boolean isInCheck(Board board, Color color) {
-        return false;
+        Color opponent = color == Color.WHITE ? Color.BLACK : Color.WHITE;
+        return isSquareAttacked(board, findKing(board, color), opponent);
+    }
+
+    private Position findKing(Board board, Color color) {
+        for (int file = 0; file < BOARD_SIZE; file++) {
+            for (int rank = 0; rank < BOARD_SIZE; rank++) {
+                Position square = new Position(file, rank);
+                Piece piece = board.getPiece(square);
+                if (piece != null && piece.getType() == PieceType.KING
+                        && piece.getColor() == color) {
+                    return square;
+                }
+            }
+        }
+        return null;
     }
 
     private boolean attacks(Board board, Piece piece, Position from, Position square) {
