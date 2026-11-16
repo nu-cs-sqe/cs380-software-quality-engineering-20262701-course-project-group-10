@@ -140,4 +140,33 @@ public class GameEndTests {
         assertTrue(game.isCurrentPlayerInCheck());
         assertSearch(false);
     }
+
+    @Test
+    public void GE12OneSafeKingEscapeIsEnough() {
+        setUp("WHITE KING a1", "BLACK KING c3", "BLACK ROOK a3");
+        assertTrue(game.isCurrentPlayerInCheck());
+        assertSearch(true);
+    }
+
+    @Test
+    public void GE13AnotherPieceCanBlockForATrappedKing() {
+        setUp("WHITE KING a1", "WHITE BISHOP b3", "BLACK KING c2", "BLACK ROOK a8");
+        assertTrue(game.isCurrentPlayerInCheck());
+        assertSearch(true);
+    }
+
+    @Test
+    public void GE14AnotherPieceCanCaptureForATrappedKing() {
+        setUp("WHITE KING a1", "WHITE ROOK h8", "BLACK KING c2", "BLACK ROOK a8");
+        assertTrue(game.isCurrentPlayerInCheck());
+        assertSearch(true);
+    }
+
+    @Test
+    public void GE15AnApparentCaptureCannotExposeTheKing() {
+        setUp("WHITE KING a1", "WHITE ROOK b1", "BLACK KING c3",
+                "BLACK QUEEN b2", "BLACK ROOK h1");
+        assertTrue(game.isCurrentPlayerInCheck());
+        assertSearch(false);
+    }
 }

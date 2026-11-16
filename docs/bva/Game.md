@@ -327,10 +327,10 @@ implemented by the method with its GE ID in GameEndTests unless noted.
 | GE09 | hasAnyLegalMove(): only Black Kh8, White to move | enemy sources skipped | false; unchanged | yes |
 | GE10 | hasAnyLegalMove(): White Ka1, Black Kc3, Qb3 | zero legal destinations, not in check | false; unchanged | yes |
 | GE11 | hasAnyLegalMove(): White Ka1, Black Kc3, Qb2 | zero legal destinations, in check | false; unchanged | yes |
-| GE12 | hasAnyLegalMove(): White Ka1, Black Kc3, Ra3 | exactly one escape b1 | true; unchanged | no |
-| GE13 | hasAnyLegalMove(): White Ka1, Bb3; Black Kc2, Ra8 | king trapped; another piece can block at a2 | true; unchanged | no |
-| GE14 | hasAnyLegalMove(): White Ka1, Rh8; Black Kc2, Ra8 | king trapped; another piece can capture a8 | true; unchanged | no |
-| GE15 | hasAnyLegalMove(): White Ka1, Rb1; Black Kc3, Qb2, Rh1 | apparent rook capture exposes king to Rh1 | false; unchanged | no |
+| GE12 | hasAnyLegalMove(): White Ka1, Black Kc3, Ra3 | exactly one escape b1 | true; unchanged | yes |
+| GE13 | hasAnyLegalMove(): White Ka1, Bb3; Black Kc2, Ra8 | king trapped; another piece can block at a2 | true; unchanged | yes |
+| GE14 | hasAnyLegalMove(): White Ka1, Rh8; Black Kc2, Ra8 | king trapped; another piece can capture a8 | true; unchanged | yes |
+| GE15 | hasAnyLegalMove(): White Ka1, Rb1; Black Kc3, Qb2, Rh1 | apparent rook capture exposes king to Rh1 | false; unchanged | yes |
 | GE16 | hasAnyLegalMove(): initial position queried twice | many pieces, repeated search | true twice; board, turn, rights, status, winner unchanged | no |
 | GE17 | hasAnyLegalMove(): White Kh8, Black Ka1 | last source file/rank and inward destinations | true; unchanged | no |
 | GE18 | hasAnyLegalMove(): White Kh1, Black Ka8 | source rank 0 / file 7 boundary | true; unchanged | no |
