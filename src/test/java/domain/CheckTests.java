@@ -106,6 +106,29 @@ public class CheckTests {
                 () -> new MoveValidator().isInCheck(board, Color.WHITE));
     }
 
+    // CK10: an empty board has no king of either color.
+    @Test
+    public void CK10EmptyBoardIsInvalidState() {
+        assertThrows(IllegalStateException.class,
+                () -> new MoveValidator().isInCheck(new Board(), Color.WHITE));
+    }
+
+    // CK11: null pointer boundary for the board.
+    @Test
+    public void CK11NullBoardIsRejected() {
+        assertThrows(NullPointerException.class,
+                () -> new MoveValidator().isInCheck(null, Color.WHITE));
+    }
+
+    // CK12: null pointer boundary for the color.
+    @Test
+    public void CK12NullColorIsRejected() {
+        Board board = new Board();
+        place(board, PieceType.KING, Color.WHITE, E1);
+        assertThrows(NullPointerException.class,
+                () -> new MoveValidator().isInCheck(board, null));
+    }
+
     private void place(Board board, PieceType type, Color color, Position position) {
         board.placePiece(new Piece(type, color), position);
     }
