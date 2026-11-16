@@ -175,6 +175,13 @@ public class CastlingRightsTests {
         assertRights(true, true, true, true);
     }
 
+    // G42: null pointer boundary for the color, on both getters.
+    @Test
+    public void G42NullColorIsRejected() {
+        assertThrows(NullPointerException.class, () -> game.canCastleKingSide(null));
+        assertThrows(NullPointerException.class, () -> game.canCastleQueenSide(null));
+    }
+
     // Only the two kings and four rooks, all on their original squares.
     private void setUpCastlingPosition() {
         place(PieceType.KING, Color.WHITE, E1);
