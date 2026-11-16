@@ -33,6 +33,7 @@ public class CastlingTests {
     private static final Position A2 = new Position(FILE_A, RANK_2);
     private static final Position H2 = new Position(FILE_H, RANK_2);
     private static final Position E4 = new Position(FILE_E, RANK_4);
+    private static final Position F4 = new Position(FILE_F, RANK_4);
     private static final Position A7 = new Position(FILE_A, RANK_7);
     private static final Position A8 = new Position(FILE_A, RANK_8);
     private static final Position C8 = new Position(FILE_C, RANK_8);
@@ -199,6 +200,15 @@ public class CastlingTests {
     public void G55KingInCheckCannotCastle() {
         setUpCastlingPosition();
         place(PieceType.ROOK, Color.BLACK, E4);
+
+        assertCastlingRejected(E1, G1);
+    }
+
+    // G56: the king may not cross an attacked square, even though the rook lands on it.
+    @Test
+    public void G56KingCannotCrossAnAttackedSquare() {
+        setUpCastlingPosition();
+        place(PieceType.ROOK, Color.BLACK, F4);
 
         assertCastlingRejected(E1, G1);
     }
