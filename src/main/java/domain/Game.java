@@ -8,6 +8,7 @@ public class Game {
     private static final int QUEEN_SIDE_ROOK_FILE = 0;
     private static final int KING_SIDE_ROOK_FILE = 7;
     private static final int KING_SIDE_ROOK_TARGET_FILE = 5;
+    private static final int QUEEN_SIDE_ROOK_TARGET_FILE = 3;
     private static final int CASTLING_KING_STEP = 2;
     private static final int WHITE_HOME_RANK = 0;
     private static final int BLACK_HOME_RANK = 7;
@@ -21,6 +22,8 @@ public class Game {
             new Position(KING_SIDE_ROOK_FILE, BLACK_HOME_RANK);
     private static final Position WHITE_KING_SIDE_ROOK_TARGET =
             new Position(KING_SIDE_ROOK_TARGET_FILE, WHITE_HOME_RANK);
+    private static final Position WHITE_QUEEN_SIDE_ROOK_TARGET =
+            new Position(QUEEN_SIDE_ROOK_TARGET_FILE, WHITE_HOME_RANK);
 
     private final Board board;
     private final MoveValidator validator = new MoveValidator();
@@ -64,7 +67,7 @@ public class Game {
         Board trial = board.copy();
         trial.movePiece(from, to);
         if (castling) {
-            trial.movePiece(WHITE_KING_SIDE_ROOK, WHITE_KING_SIDE_ROOK_TARGET);
+            moveCastlingRook(trial, from, to);
         }
         requireKingSafe(trial);
 
@@ -77,6 +80,15 @@ public class Game {
     private boolean isCastlingAttempt(Piece moving, Position from, Position to) {
         return moving.getType() == PieceType.KING
                 && Math.abs(to.getFile() - from.getFile()) == CASTLING_KING_STEP;
+    }
+
+    // The rook jumps to the square the king crossed.
+    private void moveCastlingRook(Board trial, Position from, Position to) {
+        if (to.getFile() > from.getFile()) {
+            trial.movePiece(WHITE_KING_SIDE_ROOK, WHITE_KING_SIDE_ROOK_TARGET);
+        } else {
+            trial.movePiece(WHITE_QUEEN_SIDE_ROOK, WHITE_QUEEN_SIDE_ROOK_TARGET);
+        }
     }
 
     private void updateCastlingRights(Piece moving, Position from, Position to) {
