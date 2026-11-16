@@ -99,4 +99,45 @@ public class GameEndTests {
         MoveRuleAssertions.assertSameSquares(before, board);
         assertSame(Color.WHITE, game.getCurrentPlayer());
     }
+
+    private boolean[] rights() {
+        return new boolean[] {game.canCastleKingSide(Color.WHITE),
+            game.canCastleQueenSide(Color.WHITE), game.canCastleKingSide(Color.BLACK),
+            game.canCastleQueenSide(Color.BLACK)};
+    }
+
+    private void assertSearch(boolean expected) {
+        Board before = board.copy();
+        Color player = game.getCurrentPlayer();
+        GameStatus status = game.getStatus();
+        java.util.Optional<Color> winner = game.getWinner();
+        boolean[] beforeRights = rights();
+        assertEquals(expected, game.hasAnyLegalMove());
+        assertEquals(expected, game.hasAnyLegalMove());
+        MoveRuleAssertions.assertSameSquares(before, board);
+        assertSame(player, game.getCurrentPlayer());
+        assertSame(status, game.getStatus());
+        assertEquals(winner, game.getWinner());
+        org.junit.jupiter.api.Assertions.assertArrayEquals(beforeRights, rights());
+    }
+
+    @Test
+    public void GE09OpponentPiecesDoNotCountAsReplies() {
+        setUp("BLACK KING h8");
+        assertSearch(false);
+    }
+
+    @Test
+    public void GE10StalemateHasNoLegalReply() {
+        setUp("WHITE KING a1", "BLACK KING c3", "BLACK QUEEN b3");
+        assertFalse(game.isCurrentPlayerInCheck());
+        assertSearch(false);
+    }
+
+    @Test
+    public void GE11CheckmateHasNoLegalReply() {
+        setUp("WHITE KING a1", "BLACK KING c3", "BLACK QUEEN b2");
+        assertTrue(game.isCurrentPlayerInCheck());
+        assertSearch(false);
+    }
 }

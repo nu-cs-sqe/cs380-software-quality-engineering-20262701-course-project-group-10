@@ -324,17 +324,17 @@ implemented by the method with its GE ID in GameEndTests unless noted.
 | GE06 | isCurrentPlayerInCheck(): initial position, then White e2-e4 | both colors, check false | false before and after; query changes nothing | yes |
 | GE07 | hasAnyLegalMove(): empty board | zero own pieces | false; unchanged | yes |
 | GE08 | hasAnyLegalMove(): White Ka1, Black Kh8 | one own piece, multiple destinations | true; unchanged | yes |
-| GE09 | hasAnyLegalMove(): only Black Kh8, White to move | enemy sources skipped | false; unchanged | no |
-| GE10 | hasAnyLegalMove(): White Ka1, Black Kc3, Qb3 | zero legal destinations, not in check | false; unchanged | no |
-| GE11 | hasAnyLegalMove(): White Ka1, Black Kc3, Qb2 | zero legal destinations, in check | false; unchanged | no |
+| GE09 | hasAnyLegalMove(): only Black Kh8, White to move | enemy sources skipped | false; unchanged | yes |
+| GE10 | hasAnyLegalMove(): White Ka1, Black Kc3, Qb3 | zero legal destinations, not in check | false; unchanged | yes |
+| GE11 | hasAnyLegalMove(): White Ka1, Black Kc3, Qb2 | zero legal destinations, in check | false; unchanged | yes |
 | GE12 | hasAnyLegalMove(): White Ka1, Black Kc3, Ra3 | exactly one escape b1 | true; unchanged | no |
-| GE13 | hasAnyLegalMove(): White Ka1, Rh2; Black Kc2, Ra8 | king trapped; another piece can block at a2 | true; unchanged | no |
+| GE13 | hasAnyLegalMove(): White Ka1, Bb3; Black Kc2, Ra8 | king trapped; another piece can block at a2 | true; unchanged | no |
 | GE14 | hasAnyLegalMove(): White Ka1, Rh8; Black Kc2, Ra8 | king trapped; another piece can capture a8 | true; unchanged | no |
-| GE15 | hasAnyLegalMove(): White Ka1, Rb1; Black Kc3, Qb2 | apparent rook capture leaves king attacked by Kc3 | false; unchanged | no |
+| GE15 | hasAnyLegalMove(): White Ka1, Rb1; Black Kc3, Qb2, Rh1 | apparent rook capture exposes king to Rh1 | false; unchanged | no |
 | GE16 | hasAnyLegalMove(): initial position queried twice | many pieces, repeated search | true twice; board, turn, rights, status, winner unchanged | no |
 | GE17 | hasAnyLegalMove(): White Kh8, Black Ka1 | last source file/rank and inward destinations | true; unchanged | no |
 | GE18 | hasAnyLegalMove(): White Kh1, Black Ka8 | source rank 0 / file 7 boundary | true; unchanged | no |
-| GE19 | hasAnyLegalMove(): White Kb2, Black Ka8; only safe move is c1 (mock Board filters candidates) | last legal destination in controlled scan | true; strict mock rejects any commit or state writes | no |
+| GE19 | hasAnyLegalMove(): White Kb2, Black Kh8; mock Board delegates reads and trial copies to a real position | rejected candidates before a later legal destination | true; strict mock rejects any commit or state writes | no |
 | GE20 | hasAnyLegalMove(): White Ke1 Rh1, Black Ka8 | king-side castling available | true; unchanged; later real castle still works | no |
 | GE21 | hasAnyLegalMove(): query after king/rook rights lost | rights false preserved during trial searches | same four rights before and after | no |
 | GE22 | makeMove(): White Kc6 Qb6, Black Ka8; Qb6-b7 | Black checkmated | CHECKMATE; winner WHITE; current BLACK; isGameOver true; no legal move | no |
