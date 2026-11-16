@@ -29,6 +29,7 @@ public class Game {
         requireCurrentPlayersPieceOn(from);
         requireLegalMove(from, to);
         requireNotCapturingOwnPiece(to);
+        requireNotCapturingKing(to);
 
         // Try the move on a copy so a rejected move never touches the real board.
         Board trial = board.copy();
@@ -42,6 +43,13 @@ public class Game {
     private void requireKingSafe(Board trial) {
         if (validator.isInCheck(trial, currentPlayer)) {
             throw new IllegalArgumentException("That move would leave your king in check");
+        }
+    }
+
+    private void requireNotCapturingKing(Position to) {
+        Piece target = board.getPiece(to);
+        if (target != null && target.getType() == PieceType.KING) {
+            throw new IllegalArgumentException("You cannot capture a king");
         }
     }
 
