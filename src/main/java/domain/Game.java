@@ -49,6 +49,11 @@ public class Game {
     }
 
     public void makeMove(Position from, Position to) {
+        Board trial = trialMove(from, to);
+        commit(from, to, trial);
+    }
+
+    private Board trialMove(Position from, Position to) {
         Objects.requireNonNull(from, "from");
         Objects.requireNonNull(to, "to");
 
@@ -71,6 +76,11 @@ public class Game {
         }
         requireKingSafe(trial);
 
+        return trial;
+    }
+
+    private void commit(Position from, Position to, Board trial) {
+        Piece moving = board.getPiece(from);
         board.copyFrom(trial);
         updateCastlingRights(moving, from, to);
         passTurn();
