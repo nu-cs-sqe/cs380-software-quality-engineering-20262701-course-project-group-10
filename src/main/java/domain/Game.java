@@ -5,6 +5,19 @@ import java.util.Objects;
 
 /** A chess game: owns the board and tracks whose turn it is. */
 public class Game {
+    private static final int QUEEN_SIDE_ROOK_FILE = 0;
+    private static final int KING_SIDE_ROOK_FILE = 7;
+    private static final int WHITE_HOME_RANK = 0;
+    private static final int BLACK_HOME_RANK = 7;
+    private static final Position WHITE_QUEEN_SIDE_ROOK =
+            new Position(QUEEN_SIDE_ROOK_FILE, WHITE_HOME_RANK);
+    private static final Position WHITE_KING_SIDE_ROOK =
+            new Position(KING_SIDE_ROOK_FILE, WHITE_HOME_RANK);
+    private static final Position BLACK_QUEEN_SIDE_ROOK =
+            new Position(QUEEN_SIDE_ROOK_FILE, BLACK_HOME_RANK);
+    private static final Position BLACK_KING_SIDE_ROOK =
+            new Position(KING_SIDE_ROOK_FILE, BLACK_HOME_RANK);
+
     private final Board board;
     private final MoveValidator validator = new MoveValidator();
     private Color currentPlayer;
@@ -42,11 +55,11 @@ public class Game {
         requireKingSafe(trial);
 
         board.copyFrom(trial);
-        updateCastlingRights(moving);
+        updateCastlingRights(moving, from);
         passTurn();
     }
 
-    private void updateCastlingRights(Piece moving) {
+    private void updateCastlingRights(Piece moving, Position from) {
         if (moving.getType() == PieceType.KING) {
             if (currentPlayer == Color.WHITE) {
                 whiteKingSide = false;
@@ -55,6 +68,20 @@ public class Game {
                 blackKingSide = false;
                 blackQueenSide = false;
             }
+        }
+        loseRightAt(from);
+    }
+
+    // Any piece leaving an original rook square means that rook is gone or has moved.
+    private void loseRightAt(Position square) {
+        if (square.equals(WHITE_KING_SIDE_ROOK)) {
+            whiteKingSide = false;
+        } else if (square.equals(WHITE_QUEEN_SIDE_ROOK)) {
+            whiteQueenSide = false;
+        } else if (square.equals(BLACK_KING_SIDE_ROOK)) {
+            blackKingSide = false;
+        } else if (square.equals(BLACK_QUEEN_SIDE_ROOK)) {
+            blackQueenSide = false;
         }
     }
 
