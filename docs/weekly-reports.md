@@ -46,10 +46,7 @@
 
 # Week 8 (11/16/2026-11/22/2026)
 **Planning and Progress Tracking**:
-1. [not started] Person: Task (Links to PR)
-2. [not started] Person: Task (Links to PR)
-3. [80% done] Person: Task (Links to PR)
-4. etc.
+1. [done] Mengpang Xing: Game end conditions, start screen, and i18n requirements and design docs ([PR #55](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/55))
 
 
 
