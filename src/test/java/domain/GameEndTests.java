@@ -396,4 +396,15 @@ public class GameEndTests {
         assertFalse(game.isCurrentPlayerInCheck());
         assertSearch(true);
     }
+
+    @Test
+    public void GE36TheKingCanCaptureAnUnprotectedChecker() {
+        setUp("WHITE KING a1", "BLACK KING c4", "BLACK QUEEN b2");
+        assertTrue(game.isCurrentPlayerInCheck());
+        assertSearch(true);
+        move("a1", "b2");
+        assertSame(PieceType.KING, board.getPiece(square("b2")).getType());
+        assertSame(Color.WHITE, board.getPiece(square("b2")).getColor());
+        assertSame(Color.BLACK, game.getCurrentPlayer());
+    }
 }
