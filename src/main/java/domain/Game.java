@@ -91,4 +91,12 @@ public class Game {
     public Color getCurrentPlayer() {
         return currentPlayer;
     }
+
+    public boolean canCastleKingSide(Color color) {
+        return true;
+    }
+
+    public boolean canCastleQueenSide(Color color) {
+        return true;
+    }
 }
