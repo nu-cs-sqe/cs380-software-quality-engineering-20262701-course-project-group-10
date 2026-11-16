@@ -55,11 +55,11 @@ public class Game {
         requireKingSafe(trial);
 
         board.copyFrom(trial);
-        updateCastlingRights(moving, from);
+        updateCastlingRights(moving, from, to);
         passTurn();
     }
 
-    private void updateCastlingRights(Piece moving, Position from) {
+    private void updateCastlingRights(Piece moving, Position from, Position to) {
         if (moving.getType() == PieceType.KING) {
             if (currentPlayer == Color.WHITE) {
                 whiteKingSide = false;
@@ -70,9 +70,11 @@ public class Game {
             }
         }
         loseRightAt(from);
+        loseRightAt(to);
     }
 
-    // Any piece leaving an original rook square means that rook is gone or has moved.
+    // A piece leaving or landing on an original rook square means that rook has moved
+    // or is being captured.
     private void loseRightAt(Position square) {
         if (square.equals(WHITE_KING_SIDE_ROOK)) {
             whiteKingSide = false;
