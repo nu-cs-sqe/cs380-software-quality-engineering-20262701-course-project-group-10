@@ -137,6 +137,23 @@ public class CastlingTests {
         assertTrue(game.canCastleQueenSide(Color.WHITE));
     }
 
+    // G49: the right is still true on a hand-built board, but no rook stands on h1.
+    @Test
+    public void G49CastlingWithoutTheRookIsRejected() {
+        setUpCastlingPositionWithoutKingSideRook();
+
+        assertCastlingRejected(E1, G1);
+    }
+
+    // G50: the h1 square must hold the mover's rook, not just any own piece.
+    @Test
+    public void G50CastlingWithAnotherPieceOnTheRookSquareIsRejected() {
+        setUpCastlingPositionWithoutKingSideRook();
+        place(PieceType.KNIGHT, Color.WHITE, H1);
+
+        assertCastlingRejected(E1, G1);
+    }
+
     // A rejected castle changes no square and keeps the turn.
     private void assertCastlingRejected(Position from, Position to) {
         Board before = board.copy();
@@ -149,9 +166,14 @@ public class CastlingTests {
 
     // Only the two kings and four rooks, all on their original squares.
     private void setUpCastlingPosition() {
+        setUpCastlingPositionWithoutKingSideRook();
+        place(PieceType.ROOK, Color.WHITE, H1);
+    }
+
+    // The castling setup with h1 left empty.
+    private void setUpCastlingPositionWithoutKingSideRook() {
         place(PieceType.KING, Color.WHITE, E1);
         place(PieceType.ROOK, Color.WHITE, A1);
-        place(PieceType.ROOK, Color.WHITE, H1);
         place(PieceType.KING, Color.BLACK, E8);
         place(PieceType.ROOK, Color.BLACK, A8);
         place(PieceType.ROOK, Color.BLACK, H8);
