@@ -80,6 +80,7 @@ public class Game {
     private boolean isCastlingAttempt(Piece moving, Position from, Position to) {
         return moving.getType() == PieceType.KING
                 && from.equals(kingStartSquare(moving.getColor()))
+                && to.getRank() == from.getRank()
                 && Math.abs(to.getFile() - from.getFile()) == CASTLING_KING_STEP;
     }
 
