@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 public class CastlingTests {
     private static final int FILE_A = 0;
+    private static final int FILE_B = 1;
     private static final int FILE_C = 2;
     private static final int FILE_D = 3;
     private static final int FILE_E = 4;
@@ -21,6 +22,7 @@ public class CastlingTests {
     private static final int RANK_7 = 6;
     private static final int RANK_8 = 7;
     private static final Position A1 = new Position(FILE_A, RANK_1);
+    private static final Position B1 = new Position(FILE_B, RANK_1);
     private static final Position C1 = new Position(FILE_C, RANK_1);
     private static final Position D1 = new Position(FILE_D, RANK_1);
     private static final Position E1 = new Position(FILE_E, RANK_1);
@@ -161,6 +163,33 @@ public class CastlingTests {
         place(PieceType.KNIGHT, Color.WHITE, F1);
 
         assertCastlingRejected(E1, G1);
+    }
+
+    // G52: the king's destination must be empty.
+    @Test
+    public void G52BlockedDestinationStopsCastling() {
+        setUpCastlingPosition();
+        place(PieceType.KNIGHT, Color.WHITE, G1);
+
+        assertCastlingRejected(E1, G1);
+    }
+
+    // G53: b1 must be empty even though only the rook crosses it.
+    @Test
+    public void G53BlockedSquareOnlyTheRookCrossesStopsQueenSideCastling() {
+        setUpCastlingPosition();
+        place(PieceType.KNIGHT, Color.WHITE, B1);
+
+        assertCastlingRejected(E1, C1);
+    }
+
+    // G54: the square next to the king on the queen side must be empty.
+    @Test
+    public void G54BlockedSquareNextToKingStopsQueenSideCastling() {
+        setUpCastlingPosition();
+        place(PieceType.BISHOP, Color.WHITE, D1);
+
+        assertCastlingRejected(E1, C1);
     }
 
     // G63: the rook on h1 must be the mover's own color.
