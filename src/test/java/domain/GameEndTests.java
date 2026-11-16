@@ -232,4 +232,16 @@ public class GameEndTests {
         assertTrue(game.isCurrentPlayerInCheck());
         assertSearch(false);
     }
+
+    @Test
+    public void GE24WhiteStalematesTheBlackKing() {
+        setUp("WHITE KING c6", "WHITE QUEEN b5", "BLACK KING a8");
+        move("b5", "b6");
+        assertSame(Color.BLACK, game.getCurrentPlayer());
+        assertSame(GameStatus.STALEMATE, game.getStatus());
+        assertTrue(game.getWinner().isEmpty());
+        assertTrue(game.isGameOver());
+        assertFalse(game.isCurrentPlayerInCheck());
+        assertSearch(false);
+    }
 }
