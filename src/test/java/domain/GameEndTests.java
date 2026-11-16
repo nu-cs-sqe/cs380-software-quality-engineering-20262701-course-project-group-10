@@ -207,4 +207,16 @@ public class GameEndTests {
         assertFalse(game.canCastleKingSide(Color.WHITE));
         assertSearch(true);
     }
+
+    @Test
+    public void GE22WhiteMatesTheBlackKing() {
+        setUp("WHITE KING c6", "WHITE QUEEN b6", "BLACK KING a8");
+        move("b6", "b7");
+        assertSame(Color.BLACK, game.getCurrentPlayer());
+        assertSame(GameStatus.CHECKMATE, game.getStatus());
+        assertEquals(java.util.Optional.of(Color.WHITE), game.getWinner());
+        assertTrue(game.isGameOver());
+        assertTrue(game.isCurrentPlayerInCheck());
+        assertSearch(false);
+    }
 }
