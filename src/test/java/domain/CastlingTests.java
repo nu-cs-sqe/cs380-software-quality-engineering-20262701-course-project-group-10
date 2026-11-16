@@ -32,8 +32,11 @@ public class CastlingTests {
     private static final Position H1 = new Position(FILE_H, RANK_1);
     private static final Position A2 = new Position(FILE_A, RANK_2);
     private static final Position H2 = new Position(FILE_H, RANK_2);
+    private static final Position B4 = new Position(FILE_B, RANK_4);
+    private static final Position D4 = new Position(FILE_D, RANK_4);
     private static final Position E4 = new Position(FILE_E, RANK_4);
     private static final Position F4 = new Position(FILE_F, RANK_4);
+    private static final Position G4 = new Position(FILE_G, RANK_4);
     private static final Position A7 = new Position(FILE_A, RANK_7);
     private static final Position A8 = new Position(FILE_A, RANK_8);
     private static final Position C8 = new Position(FILE_C, RANK_8);
@@ -211,6 +214,39 @@ public class CastlingTests {
         place(PieceType.ROOK, Color.BLACK, F4);
 
         assertCastlingRejected(E1, G1);
+    }
+
+    // G57: the king may not land on an attacked square.
+    @Test
+    public void G57KingCannotCastleOntoAnAttackedSquare() {
+        setUpCastlingPosition();
+        place(PieceType.ROOK, Color.BLACK, G4);
+
+        assertCastlingRejected(E1, G1);
+    }
+
+    // G58: on the queen side, the king may not cross attacked d1.
+    @Test
+    public void G58KingCannotCrossAttackedSquareOnQueenSide() {
+        setUpCastlingPosition();
+        place(PieceType.ROOK, Color.BLACK, D4);
+
+        assertCastlingRejected(E1, C1);
+    }
+
+    // G59: an attacked b1 does not stop castling; only the rook passes over it.
+    @Test
+    public void G59AttackedSquareOnlyTheRookCrossesDoesNotStopCastling() {
+        setUpCastlingPosition();
+        place(PieceType.ROOK, Color.BLACK, B4);
+        Piece king = board.getPiece(E1);
+        Piece rook = board.getPiece(A1);
+
+        game.makeMove(E1, C1);
+
+        assertSame(king, board.getPiece(C1));
+        assertSame(rook, board.getPiece(D1));
+        assertSame(Color.BLACK, game.getCurrentPlayer());
     }
 
     // G63: the rook on h1 must be the mover's own color.
