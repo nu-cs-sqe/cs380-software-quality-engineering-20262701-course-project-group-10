@@ -7,18 +7,27 @@ import org.junit.jupiter.api.Test;
 
 public class CastlingRightsTests {
     private static final int FILE_A = 0;
+    private static final int FILE_B = 1;
+    private static final int FILE_D = 3;
     private static final int FILE_E = 4;
     private static final int FILE_F = 5;
     private static final int FILE_H = 7;
     private static final int RANK_1 = 0;
+    private static final int RANK_2 = 1;
     private static final int RANK_4 = 3;
+    private static final int RANK_5 = 4;
     private static final int RANK_8 = 7;
     private static final Position A1 = new Position(FILE_A, RANK_1);
+    private static final Position A2 = new Position(FILE_A, RANK_2);
+    private static final Position A4 = new Position(FILE_A, RANK_4);
     private static final Position E1 = new Position(FILE_E, RANK_1);
     private static final Position F1 = new Position(FILE_F, RANK_1);
     private static final Position H1 = new Position(FILE_H, RANK_1);
     private static final Position H4 = new Position(FILE_H, RANK_4);
+    private static final Position H5 = new Position(FILE_H, RANK_5);
     private static final Position A8 = new Position(FILE_A, RANK_8);
+    private static final Position B8 = new Position(FILE_B, RANK_8);
+    private static final Position D8 = new Position(FILE_D, RANK_8);
     private static final Position E8 = new Position(FILE_E, RANK_8);
     private static final Position H8 = new Position(FILE_H, RANK_8);
 
@@ -63,6 +72,49 @@ public class CastlingRightsTests {
         game.makeMove(H1, H4);
 
         assertRights(false, true, true, true);
+    }
+
+    // G34: moving the a1 rook loses only White's queen-side right.
+    @Test
+    public void G34QueenSideRookMoveLosesQueenSideRight() {
+        setUpCastlingPosition();
+
+        game.makeMove(A1, A4);
+
+        assertRights(true, false, true, true);
+    }
+
+    // G35: a Black king move loses both Black rights.
+    @Test
+    public void G35BlackKingMoveLosesBothBlackRights() {
+        setUpCastlingPosition();
+        game.makeMove(A1, A2);
+
+        game.makeMove(E8, D8);
+
+        assertRights(true, false, false, false);
+    }
+
+    // G36: moving the h8 rook loses only Black's king-side right.
+    @Test
+    public void G36BlackKingSideRookMoveLosesThatRight() {
+        setUpCastlingPosition();
+        game.makeMove(A1, A2);
+
+        game.makeMove(H8, H5);
+
+        assertRights(true, false, false, true);
+    }
+
+    // G37: capturing a rook on its original square loses that side's right.
+    @Test
+    public void G37CapturingRookOnItsSquareLosesThatRight() {
+        setUpCastlingPosition();
+        place(PieceType.ROOK, Color.WHITE, B8);
+
+        game.makeMove(B8, A8);
+
+        assertRights(true, true, true, false);
     }
 
     // Only the two kings and four rooks, all on their original squares.
