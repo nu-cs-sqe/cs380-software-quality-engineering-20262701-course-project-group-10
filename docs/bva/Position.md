@@ -108,7 +108,7 @@ call must throw `IllegalArgumentException`.
 | PH03 | Hash two separate `(7, 7)` objects | equal hashes | yes |
 | PH04 | Hash two separate `(3, 4)` objects | equal hashes | yes |
 | PH05 | Add two separate `(3, 4)` objects to a `HashSet`, then add `(4, 3)` | duplicate rejected; different coordinate added; size 2 | yes |
-| PH06 | Hash every valid coordinate from `(0, 0)` through `(7, 7)` | 64 distinct hashes | yes |
+| PH06 | Hash every valid coordinate from `(0, 0)` through `(7, 7)`, repeat each read, and hash an equal separate object | 64 distinct hashes; repeated and equal-coordinate hashes match | yes |
 
 ### EasyMock caller contracts
 

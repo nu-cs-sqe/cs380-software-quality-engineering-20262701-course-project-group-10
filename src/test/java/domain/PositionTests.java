@@ -242,7 +242,11 @@ public class PositionTests {
 
         for (int file = 0; file < 8; file++) {
             for (int rank = 0; rank < 8; rank++) {
-                assertTrue(hashes.add(new Position(file, rank).hashCode()));
+                Position position = new Position(file, rank);
+                int hash = position.hashCode();
+                assertTrue(hashes.add(hash));
+                assertEquals(hash, position.hashCode());
+                assertEquals(hash, new Position(file, rank).hashCode());
             }
         }
     }
