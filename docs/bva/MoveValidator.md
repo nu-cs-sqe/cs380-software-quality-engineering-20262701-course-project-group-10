@@ -450,4 +450,4 @@ the king on a1 (0, 0) and h8 (7, 7), the first and last squares of the search.
 | CK09 | BLACK KING at (4, 7) only; color WHITE | `IllegalStateException` (no White king) | yes |
 | CK10 | Empty board; color WHITE | `IllegalStateException` | yes |
 | CK11 | board `null`; color WHITE | `NullPointerException` | yes |
-| CK12 | WHITE KING at (4, 0); color `null` | `NullPointerException` | no |
+| CK12 | WHITE KING at (4, 0); color `null` | `NullPointerException` | yes |

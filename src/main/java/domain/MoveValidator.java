@@ -46,6 +46,8 @@ public class MoveValidator {
     }
 
     public boolean isInCheck(Board board, Color color) {
+        Objects.requireNonNull(board, "board");
+        Objects.requireNonNull(color, "color");
         Color opponent = color == Color.WHITE ? Color.BLACK : Color.WHITE;
         return isSquareAttacked(board, findKing(board, color), opponent);
     }
