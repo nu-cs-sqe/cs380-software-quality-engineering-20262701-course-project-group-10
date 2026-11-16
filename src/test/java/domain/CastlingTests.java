@@ -2,6 +2,7 @@ package domain;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +18,7 @@ public class CastlingTests {
     private static final int FILE_H = 7;
     private static final int RANK_1 = 0;
     private static final int RANK_2 = 1;
+    private static final int RANK_7 = 6;
     private static final int RANK_8 = 7;
     private static final Position A1 = new Position(FILE_A, RANK_1);
     private static final Position C1 = new Position(FILE_C, RANK_1);
@@ -27,6 +29,7 @@ public class CastlingTests {
     private static final Position H1 = new Position(FILE_H, RANK_1);
     private static final Position A2 = new Position(FILE_A, RANK_2);
     private static final Position H2 = new Position(FILE_H, RANK_2);
+    private static final Position A7 = new Position(FILE_A, RANK_7);
     private static final Position A8 = new Position(FILE_A, RANK_8);
     private static final Position C8 = new Position(FILE_C, RANK_8);
     private static final Position D8 = new Position(FILE_D, RANK_8);
@@ -117,6 +120,30 @@ public class CastlingTests {
         assertTrue(board.isEmpty(A8));
         assertFalse(game.canCastleKingSide(Color.BLACK));
         assertFalse(game.canCastleQueenSide(Color.BLACK));
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+    }
+
+    // G48: a rook that moved away and back has lost the right, so castling is rejected.
+    @Test
+    public void G48CastlingWithoutTheRightIsRejected() {
+        setUpCastlingPosition();
+        game.makeMove(H1, H2);
+        game.makeMove(A8, A7);
+        game.makeMove(H2, H1);
+        game.makeMove(A7, A8);
+
+        assertCastlingRejected(E1, G1);
+        assertFalse(game.canCastleKingSide(Color.WHITE));
+        assertTrue(game.canCastleQueenSide(Color.WHITE));
+    }
+
+    // A rejected castle changes no square and keeps the turn.
+    private void assertCastlingRejected(Position from, Position to) {
+        Board before = board.copy();
+
+        assertThrows(IllegalArgumentException.class, () -> game.makeMove(from, to));
+
+        MoveRuleAssertions.assertSameSquares(before, board);
         assertSame(Color.WHITE, game.getCurrentPlayer());
     }
 
