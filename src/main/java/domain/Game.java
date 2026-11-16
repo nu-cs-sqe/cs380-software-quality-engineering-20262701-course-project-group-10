@@ -35,6 +35,10 @@ public class Game {
     public void startNewGame() {
         board.setUpStartingPosition();
         currentPlayer = Color.WHITE;
+        whiteKingSide = true;
+        whiteQueenSide = true;
+        blackKingSide = true;
+        blackQueenSide = true;
     }
 
     // Stub so the click-to-move GUI compiles. The real version, with turn rules
