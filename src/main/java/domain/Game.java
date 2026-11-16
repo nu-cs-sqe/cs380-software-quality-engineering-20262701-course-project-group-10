@@ -20,10 +20,6 @@ public class Game {
             new Position(QUEEN_SIDE_ROOK_FILE, BLACK_HOME_RANK);
     private static final Position BLACK_KING_SIDE_ROOK =
             new Position(KING_SIDE_ROOK_FILE, BLACK_HOME_RANK);
-    private static final Position WHITE_KING_SIDE_ROOK_TARGET =
-            new Position(KING_SIDE_ROOK_TARGET_FILE, WHITE_HOME_RANK);
-    private static final Position WHITE_QUEEN_SIDE_ROOK_TARGET =
-            new Position(QUEEN_SIDE_ROOK_TARGET_FILE, WHITE_HOME_RANK);
 
     private final Board board;
     private final MoveValidator validator = new MoveValidator();
@@ -82,12 +78,15 @@ public class Game {
                 && Math.abs(to.getFile() - from.getFile()) == CASTLING_KING_STEP;
     }
 
-    // The rook jumps to the square the king crossed.
+    // The rook jumps to the square the king crossed, on the king's own home rank.
     private void moveCastlingRook(Board trial, Position from, Position to) {
+        int rank = from.getRank();
         if (to.getFile() > from.getFile()) {
-            trial.movePiece(WHITE_KING_SIDE_ROOK, WHITE_KING_SIDE_ROOK_TARGET);
+            trial.movePiece(new Position(KING_SIDE_ROOK_FILE, rank),
+                    new Position(KING_SIDE_ROOK_TARGET_FILE, rank));
         } else {
-            trial.movePiece(WHITE_QUEEN_SIDE_ROOK, WHITE_QUEEN_SIDE_ROOK_TARGET);
+            trial.movePiece(new Position(QUEEN_SIDE_ROOK_FILE, rank),
+                    new Position(QUEEN_SIDE_ROOK_TARGET_FILE, rank));
         }
     }
 
