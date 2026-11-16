@@ -58,4 +58,9 @@ public class GameEndReplyContractTests {
     public void GE40NoReportedReplyWhileCheckedIsMate() {
         assertReportedReply(false, true, GameStatus.CHECKMATE);
     }
+
+    @Test
+    public void GE41NoReportedReplyWithoutCheckIsStalemate() {
+        assertReportedReply(false, false, GameStatus.STALEMATE);
+    }
 }
