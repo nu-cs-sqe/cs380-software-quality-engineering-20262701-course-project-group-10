@@ -70,4 +70,16 @@ public class GameEndTests {
         MoveRuleAssertions.assertSameSquares(before, board);
         assertSame(Color.WHITE, game.getCurrentPlayer());
     }
+
+    @Test
+    public void GE06CheckQueryFollowsTheCurrentPlayer() {
+        setUp();
+        game.startNewGame();
+        assertFalse(game.isCurrentPlayerInCheck());
+        move("e2", "e4");
+        Board before = board.copy();
+        assertFalse(game.isCurrentPlayerInCheck());
+        assertSame(Color.BLACK, game.getCurrentPlayer());
+        MoveRuleAssertions.assertSameSquares(before, board);
+    }
 }

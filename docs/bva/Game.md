@@ -321,7 +321,7 @@ implemented by the method with its GE ID in GameEndTests unless noted.
 | GE03 | getWinner(): new Game(mockBoard); no Board calls | pointers: no result | Optional.empty on repeated reads | yes |
 | GE04 | isGameOver(): new Game(mockBoard); no Board calls | boolean false | false on repeated reads | yes |
 | GE05 | isCurrentPlayerInCheck(): White Ke1; Black Ka8, Re8 | check true | true; all state unchanged | yes |
-| GE06 | isCurrentPlayerInCheck(): initial position, then White e2-e4 | both colors, check false | false before and after; query changes nothing | no |
+| GE06 | isCurrentPlayerInCheck(): initial position, then White e2-e4 | both colors, check false | false before and after; query changes nothing | yes |
 | GE07 | hasAnyLegalMove(): empty board | zero own pieces | false; unchanged | no |
 | GE08 | hasAnyLegalMove(): White Ka1, Black Kh8 | one own piece, multiple destinations | true; unchanged | no |
 | GE09 | hasAnyLegalMove(): only Black Kh8, White to move | enemy sources skipped | false; unchanged | no |
