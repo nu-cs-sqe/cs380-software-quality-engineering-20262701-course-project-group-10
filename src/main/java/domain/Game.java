@@ -293,9 +293,15 @@ public class Game {
     }
 
     private void updateStatus() {
-        if (!hasAnyLegalMove() && isCurrentPlayerInCheck()) {
+        if (hasAnyLegalMove()) {
+            status = GameStatus.IN_PROGRESS;
+            winner = null;
+        } else if (isCurrentPlayerInCheck()) {
             status = GameStatus.CHECKMATE;
             winner = opponent();
+        } else {
+            status = GameStatus.STALEMATE;
+            winner = null;
         }
     }
 }
