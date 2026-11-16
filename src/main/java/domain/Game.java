@@ -244,4 +244,8 @@ public class Game {
     public Optional<Color> getWinner() {
         return Optional.ofNullable(winner);
     }
+
+    public boolean isGameOver() {
+        return status != GameStatus.IN_PROGRESS;
+    }
 }
