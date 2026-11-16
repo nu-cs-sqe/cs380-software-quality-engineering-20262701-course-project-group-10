@@ -50,4 +50,14 @@ public class GameEndTests {
         assertTrue(fresh.getWinner().isEmpty());
         EasyMock.verify(mock);
     }
+
+    @Test
+    public void GE04NewGameIsNotOverAndDoesNotReadTheBoard() {
+        Board mock = EasyMock.createStrictMock(Board.class);
+        EasyMock.replay(mock);
+        Game fresh = new Game(mock);
+        assertFalse(fresh.isGameOver());
+        assertFalse(fresh.isGameOver());
+        EasyMock.verify(mock);
+    }
 }
