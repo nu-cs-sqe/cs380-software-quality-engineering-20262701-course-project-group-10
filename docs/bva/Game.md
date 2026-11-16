@@ -149,3 +149,53 @@ Every case uses a real `Board` and `MoveValidator` with both kings on the board.
 | --- | --- | --- | --- |
 | G07 | current player is `BLACK` (after one legal move) when `startNewGame()` is called | `setUpStartingPosition()` called once; current player resets to `WHITE` | :white_check_mark: |
 
+### Methods under test: `canCastleKingSide(Color)`, `canCastleQueenSide(Color)`, castling rights in `makeMove` and `startNewGame`
+
+**Contract.** `Game` keeps four castling rights: White king side, White queen side,
+Black king side, Black queen side. All four are `true` after construction and after
+`startNewGame()`. The rights only record whether castling is still allowed; the
+castling move itself (next section) also checks the pieces and squares.
+
+A right is lost, and stays lost for the rest of the game, when:
+- that color's king moves (both of its rights are lost);
+- a piece moves away from that side's original rook square (a1/h1 for White,
+  a8/h8 for Black);
+- a piece is captured on that original rook square.
+
+A rejected move changes no right. Returning a piece to its original square does not
+restore a right. A null color throws `NullPointerException`. Rook promotion belongs to
+#35 and is CAN'T SET here.
+
+Two methods are used instead of one method with a `boolean` side flag, because a flag
+argument hides which side a call is about.
+
+**Inputs and outputs.** Inputs: the color asked about; which piece moves (king, the
+original rook, another rook); where it moves from (original square or not); whether a
+piece is captured on an original rook square; whether the move is rejected; how many
+moves have been made; `startNewGame()`. Outputs: the four rights.
+
+**Catalog clues.** **Boolean**: each right is `true` or `false`. **Cases**: both colors
+and both sides; king move, original-rook move, non-original-rook move, capture on an
+original rook square, rejected move. **Counts**: zero moves, one move, and a move away
+and back. **Pointers**: null color.
+
+All cases use the "castling setup" unless stated: a real `Board` with only a White king
+e1 (4, 0), White rooks a1 (0, 0) and h1 (7, 0), a Black king e8 (4, 7), and Black rooks
+a8 (0, 7) and h8 (7, 7). White moves first.
+
+| ID | State of the system | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| G30 | New `Game`; no moves | All four rights `true` | :x: |
+| G31 | `startNewGame()`; no moves | All four rights `true` | :x: |
+| G32 | Castling setup; White king e1 to f1 (5, 0) | White king side and queen side `false`; both Black rights `true` | :x: |
+| G33 | Castling setup; White rook h1 to h4 (7, 3) | White king side `false`; White queen side `true`; both Black rights `true` | :x: |
+| G34 | Castling setup; White rook a1 to a4 (0, 3) | White queen side `false`; White king side `true` | :x: |
+| G35 | Castling setup; White rook a1 to a2 (0, 1), then Black king e8 to d8 (3, 7) | Black king side and queen side `false` | :x: |
+| G36 | Castling setup; White rook a1 to a2 (0, 1), then Black rook h8 to h5 (7, 4) | Black king side `false`; Black queen side `true` | :x: |
+| G37 | Castling setup plus a White rook on b8 (1, 7); White rook b8 captures the Black rook on a8 | Black queen side `false`; Black king side `true`; both White rights `true` | :x: |
+| G38 | Castling setup plus a White rook on b4 (1, 3); White rook b4 to b5 (1, 4) | All four rights `true` (only the original rook squares count) | :x: |
+| G39 | Castling setup; White rook h1 to h4 (7, 3), Black rook a8 to a7 (0, 6), White rook h4 back to h1 | White king side still `false` | :x: |
+| G40 | Castling setup plus a Black rook on d7 (3, 6); White king e1 to d1 (3, 0) is rejected (into check) | All four rights still `true` | :x: |
+| G41 | `startNewGame()`; White pawn e2 to e4, Black pawn e7 to e5, White king e1 to e2; then `startNewGame()` again | All four rights `true` | :x: |
+| G42 | `canCastleKingSide(null)` and `canCastleQueenSide(null)` | `NullPointerException` for each | :x: |
+| G43 | A rook promoted from a pawn | CAN'T SET until promotion exists (#35) | n/a |
