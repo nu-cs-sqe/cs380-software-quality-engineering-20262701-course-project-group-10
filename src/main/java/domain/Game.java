@@ -91,18 +91,24 @@ public class Game {
         if (!hasRight) {
             throw new IllegalArgumentException("You can no longer castle on that side");
         }
+        // A hand-built board can keep the right with no rook, so check the piece itself.
+        Piece rook = board.getPiece(castlingRookSquare(from, to));
+        if (rook == null || rook.getType() != PieceType.ROOK
+                || rook.getColor() != currentPlayer) {
+            throw new IllegalArgumentException("No rook to castle with");
+        }
+    }
+
+    private Position castlingRookSquare(Position from, Position to) {
+        int file = isKingSideCastle(from, to) ? KING_SIDE_ROOK_FILE : QUEEN_SIDE_ROOK_FILE;
+        return new Position(file, from.getRank());
     }
 
     // The rook jumps to the square the king crossed, on the king's own home rank.
     private void moveCastlingRook(Board trial, Position from, Position to) {
-        int rank = from.getRank();
-        if (isKingSideCastle(from, to)) {
-            trial.movePiece(new Position(KING_SIDE_ROOK_FILE, rank),
-                    new Position(KING_SIDE_ROOK_TARGET_FILE, rank));
-        } else {
-            trial.movePiece(new Position(QUEEN_SIDE_ROOK_FILE, rank),
-                    new Position(QUEEN_SIDE_ROOK_TARGET_FILE, rank));
-        }
+        int file = isKingSideCastle(from, to)
+                ? KING_SIDE_ROOK_TARGET_FILE : QUEEN_SIDE_ROOK_TARGET_FILE;
+        trial.movePiece(castlingRookSquare(from, to), new Position(file, from.getRank()));
     }
 
     private void updateCastlingRights(Piece moving, Position from, Position to) {
