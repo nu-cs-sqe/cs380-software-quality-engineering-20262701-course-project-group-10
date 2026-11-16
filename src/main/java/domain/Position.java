@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.Objects;
+
 public final class Position {
     private static final int MAX_COORDINATE = 7;
 
@@ -36,6 +38,6 @@ public final class Position {
 
     @Override
     public int hashCode() {
-        return 31 * file + rank;
+        return Objects.hash(file, rank);
     }
 }
