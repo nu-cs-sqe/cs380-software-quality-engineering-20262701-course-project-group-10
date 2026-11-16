@@ -60,4 +60,14 @@ public class GameEndTests {
         assertFalse(fresh.isGameOver());
         EasyMock.verify(mock);
     }
+
+    @Test
+    public void GE05WhiteCheckQueryDoesNotMovePieces() {
+        setUp("WHITE KING e1", "BLACK KING a8", "BLACK ROOK e8");
+        Board before = board.copy();
+        assertTrue(game.isCurrentPlayerInCheck());
+        assertTrue(game.isCurrentPlayerInCheck());
+        MoveRuleAssertions.assertSameSquares(before, board);
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+    }
 }
