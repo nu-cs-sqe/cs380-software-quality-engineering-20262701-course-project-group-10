@@ -2,7 +2,6 @@ package domain;
 
 import java.util.Objects;
 
-/** Checks movement patterns without changing the board or enforcing turn order. */
 public class MoveValidator {
     private static final int BOARD_SIZE = 8;
     private static final int SINGLE_STEP = 1;

@@ -11,7 +11,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-/** The main window: shows the board, whose turn it is, and a "New Game" menu item. */
 public class ChessFrame extends JFrame {
     private static final String WHITE_TO_MOVE = "White to move";
     private static final String BLACK_TO_MOVE = "Black to move";

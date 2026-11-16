@@ -3,7 +3,6 @@ package domain;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.Objects;
 
-/** A chess game: owns the board and tracks whose turn it is. */
 public class Game {
     private static final int QUEEN_SIDE_ROOK_FILE = 0;
     private static final int KING_SIDE_ROOK_FILE = 7;

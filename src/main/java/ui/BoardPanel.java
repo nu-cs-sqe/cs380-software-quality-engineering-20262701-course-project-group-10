@@ -16,7 +16,6 @@ import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
 import javax.swing.JPanel;
 
-/** Draws the board and turns mouse clicks into moves. White is at the bottom. */
 public class BoardPanel extends JPanel {
     private static final int SIZE = 8;
     private static final int DEFAULT_SQUARE_SIZE = 64;
