@@ -8,6 +8,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class GameMakeMoveTests {
+    private static final int FILE_A = 0;
+    private static final int FILE_D = 3;
+    private static final int FILE_E = 4;
+    private static final int FILE_H = 7;
+    private static final int RANK_1 = 0;
+    private static final int RANK_8 = 7;
+    private static final Position A1 = new Position(FILE_A, RANK_1);
+    private static final Position D1 = new Position(FILE_D, RANK_1);
+    private static final Position D8 = new Position(FILE_D, RANK_8);
+    private static final Position E1 = new Position(FILE_E, RANK_1);
+    private static final Position H8 = new Position(FILE_H, RANK_8);
+
     private Board board;
     private Game game;
 
@@ -139,6 +151,9 @@ public class GameMakeMoveTests {
     // G17: a rook captures an opposing pawn.
     @Test
     public void capturingAnOpposingPieceReplacesIt() {
+        // Both kings are needed because every accepted move checks king safety.
+        place(PieceType.KING, Color.WHITE, A1);
+        place(PieceType.KING, Color.BLACK, H8);
         Piece rook = new Piece(PieceType.ROOK, Color.WHITE);
         board.placePiece(rook, new Position(3, 3));
         board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), new Position(3, 5));
@@ -161,5 +176,23 @@ public class GameMakeMoveTests {
         assertSame(PieceType.PAWN, board.getPiece(new Position(4, 1)).getType());
         assertTrue(board.isEmpty(new Position(4, 3)));
         assertSame(Color.WHITE, game.getCurrentPlayer());
+    }
+
+    // G18: a king may not move onto a square the opponent attacks.
+    @Test
+    public void G18KingCannotMoveIntoCheck() {
+        place(PieceType.KING, Color.WHITE, E1);
+        place(PieceType.KING, Color.BLACK, H8);
+        place(PieceType.ROOK, Color.BLACK, D8);
+        Board before = board.copy();
+
+        assertThrows(IllegalArgumentException.class, () -> game.makeMove(E1, D1));
+
+        MoveRuleAssertions.assertSameSquares(before, board);
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+    }
+
+    private void place(PieceType type, Color color, Position position) {
+        board.placePiece(new Piece(type, color), position);
     }
 }

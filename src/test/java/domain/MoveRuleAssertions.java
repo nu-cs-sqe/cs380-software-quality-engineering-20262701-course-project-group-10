@@ -38,7 +38,7 @@ final class MoveRuleAssertions {
         assertSameSquares(before, board);
     }
 
-    private static void assertSameSquares(Board before, Board after) {
+    static void assertSameSquares(Board before, Board after) {
         for (int file = 0; file < BOARD_SIZE; file++) {
             for (int rank = 0; rank < BOARD_SIZE; rank++) {
                 Position position = new Position(file, rank);
