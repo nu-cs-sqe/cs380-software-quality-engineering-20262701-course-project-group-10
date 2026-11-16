@@ -85,6 +85,7 @@ public class Game {
         board.copyFrom(trial);
         updateCastlingRights(moving, from, to);
         passTurn();
+        updateStatus();
     }
 
     // A king stepping two files from its original square is castling; the normal king
@@ -289,5 +290,12 @@ public class Game {
             }
         }
         return false;
+    }
+
+    private void updateStatus() {
+        if (!hasAnyLegalMove() && isCurrentPlayerInCheck()) {
+            status = GameStatus.CHECKMATE;
+            winner = opponent();
+        }
     }
 }
