@@ -30,8 +30,19 @@ public class Game {
         requireLegalMove(from, to);
         requireNotCapturingOwnPiece(to);
 
-        board.movePiece(from, to);
+        // Try the move on a copy so a rejected move never touches the real board.
+        Board trial = board.copy();
+        trial.movePiece(from, to);
+        requireKingSafe(trial);
+
+        board.copyFrom(trial);
         passTurn();
+    }
+
+    private void requireKingSafe(Board trial) {
+        if (validator.isInCheck(trial, currentPlayer)) {
+            throw new IllegalArgumentException("That move would leave your king in check");
+        }
     }
 
     private void requireNotCapturingOwnPiece(Position to) {
