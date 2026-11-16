@@ -257,4 +257,55 @@ public class GameEndTests {
         assertFalse(game.isCurrentPlayerInCheck());
         assertSearch(false);
     }
+
+    @Test
+    public void GE26FoolsMateIsDetectedThroughNormalMoves() {
+        setUp();
+        game.startNewGame();
+        move("f2", "f3");
+        move("e7", "e5");
+        move("g2", "g4");
+        move("d8", "h4");
+        assertSame(GameStatus.CHECKMATE, game.getStatus());
+        assertEquals(java.util.Optional.of(Color.BLACK), game.getWinner());
+    }
+
+    @Test
+    public void GE27CheckWithAnEscapeKeepsTheGameInProgress() {
+        setUp("WHITE KING e1", "WHITE ROOK a1", "BLACK KING e8");
+        move("a1", "a8");
+        assertTrue(game.isCurrentPlayerInCheck());
+        assertSearch(true);
+        assertSame(GameStatus.IN_PROGRESS, game.getStatus());
+        assertTrue(game.getWinner().isEmpty());
+        assertFalse(game.isGameOver());
+    }
+
+    @Test
+    public void GE28BothPlayersCanMakeOrdinaryMovesWithoutEndingTheGame() {
+        setUp();
+        game.startNewGame();
+        move("e2", "e4");
+        assertSame(GameStatus.IN_PROGRESS, game.getStatus());
+        assertTrue(game.getWinner().isEmpty());
+        assertFalse(game.isGameOver());
+        move("e7", "e5");
+        assertSame(GameStatus.IN_PROGRESS, game.getStatus());
+        assertTrue(game.getWinner().isEmpty());
+        assertFalse(game.isGameOver());
+    }
+
+    @Test
+    public void GE29RejectedMovesDoNotChangeTheResultOrState() {
+        setUp();
+        game.startNewGame();
+        Board before = board.copy();
+        boolean[] beforeRights = rights();
+        assertThrows(IllegalArgumentException.class, () -> move("e2", "e5"));
+        MoveRuleAssertions.assertSameSquares(before, board);
+        org.junit.jupiter.api.Assertions.assertArrayEquals(beforeRights, rights());
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+        assertSame(GameStatus.IN_PROGRESS, game.getStatus());
+        assertTrue(game.getWinner().isEmpty());
+    }
 }

@@ -341,10 +341,10 @@ implemented by the method with its GE ID in GameEndTests unless noted.
 | GE23 | makeMove(): White Ka2, Black Kc3 Qb3; Ka2-a1 then Qb3-b2 | White checkmated | CHECKMATE; winner BLACK; current WHITE; isGameOver true | yes |
 | GE24 | makeMove(): White Kc6 Qb5, Black Ka8; Qb5-b6 | Black stalemated | STALEMATE; winner empty; current BLACK; isGameOver true; not in check | yes |
 | GE25 | makeMove(): White Ka2, Black Kc3 Qb4; Ka2-a1 then Qb4-b3 | White stalemated | STALEMATE; winner empty; current WHITE; isGameOver true | yes |
-| GE26 | makeMove(): initial position; f2-f3, e7-e5, g2-g4, Qd8-h4 | real move sequence and diagonal mate | CHECKMATE; winner BLACK | no |
-| GE27 | makeMove(): White Ke1 Ra1, Black Ke8; Ra1-a8 | check with a king escape | IN_PROGRESS; winner empty; current BLACK; in check and has legal move | no |
-| GE28 | makeMove(): initial position; e2-e4, e7-e5 | not check with legal replies | IN_PROGRESS after both moves; winner empty; isGameOver false | no |
-| GE29 | makeMove(): initial position; e2-e5 rejected | rejected move before status update | IllegalArgumentException; board, turn, rights, status, winner unchanged | no |
+| GE26 | makeMove(): initial position; f2-f3, e7-e5, g2-g4, Qd8-h4 | real move sequence and diagonal mate | CHECKMATE; winner BLACK | yes |
+| GE27 | makeMove(): White Ke1 Ra1, Black Ke8; Ra1-a8 | check with a king escape | IN_PROGRESS; winner empty; current BLACK; in check and has legal move | yes |
+| GE28 | makeMove(): initial position; e2-e4, e7-e5 | not check with legal replies | IN_PROGRESS after both moves; winner empty; isGameOver false | yes |
+| GE29 | makeMove(): initial position; e2-e5 rejected | rejected move before status update | IllegalArgumentException; board, turn, rights, status, winner unchanged | yes |
 | GE30 | hasAnyLegalMove(): strict mock Board throws IllegalStateException on source read | unexpected collaborator error | same error propagates; no writes | no |
 | GE31 | isCurrentPlayerInCheck(): empty board | missing king invariant | IllegalStateException; board unchanged | no |
 | GE32 | hasAnyLegalMove(): snapshot then actual move on original board | trial does not commit or consume turn | same source references before move; real move accepted once | no |
