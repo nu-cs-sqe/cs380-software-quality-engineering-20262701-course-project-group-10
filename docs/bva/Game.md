@@ -197,5 +197,62 @@ a8 (0, 7) and h8 (7, 7). White moves first.
 | G39 | Castling setup; White rook h1 to h4 (7, 3), Black rook a8 to a7 (0, 6), White rook h4 back to h1 | White king side still `false` | :white_check_mark: |
 | G40 | Castling setup plus a Black rook on d7 (3, 6); White king e1 to d1 (3, 0) is rejected (into check) | All four rights still `true` | :white_check_mark: |
 | G41 | `startNewGame()`; White pawn e2 to e4, Black pawn e7 to e5, White king e1 to e2; then `startNewGame()` again | All four rights `true` | :white_check_mark: |
-| G42 | `canCastleKingSide(null)` and `canCastleQueenSide(null)` | `NullPointerException` for each | :x: |
+| G42 | `canCastleKingSide(null)` and `canCastleQueenSide(null)` | `NullPointerException` for each | :white_check_mark: |
 | G43 | A rook promoted from a pawn | CAN'T SET until promotion exists (#35) | n/a |
+
+### Method under test: `makeMove(from, to)`, castling
+
+**Contract.** A king moving exactly two files along its home rank, from its original
+square (e1 for White, e8 for Black), is a castling attempt. It is accepted only when
+all of these hold:
+- the matching right is still `true` (`canCastleKingSide` / `canCastleQueenSide`);
+- the mover's own rook stands on that side's original square (a right can still be
+  `true` on a hand-built board with no rook there);
+- every square between the king and the rook is empty (f and g king side; b, c and d
+  queen side);
+- the king is not in check now, does not cross an attacked square (f or d), and does
+  not land on one (g or c).
+
+When accepted, the king lands two files over, the rook lands on the square the king
+crossed (f1/d1 for White, f8/d8 for Black), both of that color's rights are lost, and
+the turn passes once. When rejected, `IllegalArgumentException` is thrown and the
+board, turn and rights are unchanged. b1/b8 may be attacked, because only the rook
+passes over it. An attacked rook does not stop castling. Any other two-square king
+move stays illegal. The GUI needs no change: clicking the king, then its two-square
+destination, calls `makeMove` like any other move.
+
+**Inputs and outputs.** Inputs: color and side; the right; what stands on the rook
+square; each square between king and rook; which squares the opponent attacks; where
+the king starts; how far and in which direction it moves. Outputs: an exception or
+none, all 64 squares, the current player, and the four rights.
+
+**Catalog clues.** **Boolean**: right held or lost; each square empty or not; each
+square attacked or not. **Cases**: both colors and both sides; rook square holding
+the own rook, nothing, or an enemy rook. **Intervals**: the king moving 1, 2 or 3
+files; the blocking or attacked square adjacent to the king, at the destination, or
+(queen side) the b-file square only the rook crosses.
+
+All cases use the "castling setup" from the previous section unless stated. In it
+the Black rooks on a8 and h8 attack a1 and h1 down the empty files.
+
+| ID | State of the system | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| G44 | Castling setup; White e1 to g1 (6, 0) | King g1, rook f1 (5, 0), e1 and h1 empty; both White rights `false`, both Black rights `true`; current player `BLACK` (h1 rook is attacked by h8, castling still allowed) | :x: |
+| G45 | Castling setup; White e1 to c1 (2, 0) | King c1, rook d1 (3, 0), e1 and a1 empty; both White rights `false`; current player `BLACK` | :x: |
+| G46 | Castling setup; White a1 to a2 (0, 1), then Black e8 to g8 (6, 7) | King g8, rook f8 (5, 7), e8 and h8 empty; both Black rights `false`; current player `WHITE` | :x: |
+| G47 | Castling setup; White h1 to h2 (7, 1), then Black e8 to c8 (2, 7) | King c8, rook d8 (3, 7), e8 and a8 empty; both Black rights `false`; current player `WHITE` | :x: |
+| G48 | Castling setup; White h1 to h2, Black a8 to a7 (0, 6), White h2 to h1, Black a7 to a8; then White e1 to g1 | `IllegalArgumentException` (right lost, rook back on h1); board, turn and rights unchanged | :x: |
+| G49 | Castling setup without the h1 rook (right still `true`); White e1 to g1 | `IllegalArgumentException` (no rook); board, turn and rights unchanged | :x: |
+| G50 | Castling setup with a Black rook on h1 instead of the White one; White e1 to g1 | `IllegalArgumentException` (rook square holds an enemy rook); board, turn and rights unchanged | :x: |
+| G51 | Castling setup plus a White knight on f1 (5, 0); White e1 to g1 | `IllegalArgumentException` (square next to the king blocked); board, turn and rights unchanged | :x: |
+| G52 | Castling setup plus a White knight on g1 (6, 0); White e1 to g1 | `IllegalArgumentException` (destination blocked); board, turn and rights unchanged | :x: |
+| G53 | Castling setup plus a White knight on b1 (1, 0); White e1 to c1 | `IllegalArgumentException` (b1 blocked; only the rook crosses it); board, turn and rights unchanged | :x: |
+| G54 | Castling setup plus a White bishop on d1 (3, 0); White e1 to c1 | `IllegalArgumentException` (square next to the king blocked); board, turn and rights unchanged | :x: |
+| G55 | Castling setup plus a Black rook on e4 (4, 3); White e1 to g1 | `IllegalArgumentException` (king in check); board, turn and rights unchanged | :x: |
+| G56 | Castling setup plus a Black rook on f4 (5, 3); White e1 to g1 | `IllegalArgumentException` (king crosses attacked f1); board, turn and rights unchanged | :x: |
+| G57 | Castling setup plus a Black rook on g4 (6, 3); White e1 to g1 | `IllegalArgumentException` (king lands on attacked g1); board, turn and rights unchanged | :x: |
+| G58 | Castling setup plus a Black rook on d4 (3, 3); White e1 to c1 | `IllegalArgumentException` (king crosses attacked d1); board, turn and rights unchanged | :x: |
+| G59 | Castling setup plus a Black rook on b4 (1, 3); White e1 to c1 | Accepted as G45 (b1 attacked, but the king never crosses it) | :x: |
+| G60 | Castling setup without the White king on e1 and with it on d1 (3, 0) instead; White d1 to f1 (5, 0) | `IllegalArgumentException` (two-file king move not from e1); board unchanged | :x: |
+| G61 | Castling setup; White e1 to b1 (1, 0), with c1 and d1 empty | `IllegalArgumentException` (three files is never castling); board unchanged | :x: |
+| G62 | Castling setup; White e1 to e3 (4, 2) | `IllegalArgumentException` (two ranks is never castling); board unchanged | :x: |
