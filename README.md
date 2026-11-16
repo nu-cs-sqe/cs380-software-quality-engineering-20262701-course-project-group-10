@@ -4,6 +4,8 @@
 
 ![Missed complexity](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/raw/badges/complexity.svg)
 
+[![Mutants killed](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/raw/badges/mutation.svg)](config/pitest/equivalent-mutants.xml)
+
 ## Contributors
 - Youran Ma
 - Mengpang Xing
@@ -36,6 +38,8 @@ class exclusions as JaCoCo.
 `bash ./gradlew mutationVerification` requires every non-equivalent mutant to be
 killed; this also runs during `check` and `build`. Equivalence proofs are recorded
 in `config/pitest/equivalent-mutants.xml` and must be reviewed after source changes.
+The badge shows killed/eligible mutants, excluding only reviewed equivalents;
+it updates on `main` alongside the complexity badge.
 
 ### Others
 - SpotBugs `EI_EXPOSE_REP` is suppressed only on `Game.getBoard()`. The design
