@@ -92,10 +92,22 @@ public class Game {
             throw new IllegalArgumentException("You can no longer castle on that side");
         }
         // A hand-built board can keep the right with no rook, so check the piece itself.
-        Piece rook = board.getPiece(castlingRookSquare(from, to));
+        Position rookSquare = castlingRookSquare(from, to);
+        Piece rook = board.getPiece(rookSquare);
         if (rook == null || rook.getType() != PieceType.ROOK
                 || rook.getColor() != currentPlayer) {
             throw new IllegalArgumentException("No rook to castle with");
+        }
+        requireEmptyBetween(from, rookSquare);
+    }
+
+    // Checks every square strictly between the king and the rook on their shared rank.
+    private void requireEmptyBetween(Position king, Position rook) {
+        int step = Integer.compare(rook.getFile(), king.getFile());
+        for (int file = king.getFile() + step; file != rook.getFile(); file += step) {
+            if (!board.isEmpty(new Position(file, king.getRank()))) {
+                throw new IllegalArgumentException("Pieces are in the way of castling");
+            }
         }
     }
 
