@@ -31,6 +31,7 @@ public class CastlingTests {
     private static final Position G1 = new Position(FILE_G, RANK_1);
     private static final Position H1 = new Position(FILE_H, RANK_1);
     private static final Position A2 = new Position(FILE_A, RANK_2);
+    private static final Position G2 = new Position(FILE_G, RANK_2);
     private static final Position H2 = new Position(FILE_H, RANK_2);
     private static final Position B4 = new Position(FILE_B, RANK_4);
     private static final Position D4 = new Position(FILE_D, RANK_4);
@@ -267,6 +268,14 @@ public class CastlingTests {
         place(PieceType.ROOK, Color.BLACK, H1);
 
         assertCastlingRejected(E1, G1);
+    }
+
+    // G64: two files plus one rank is not castling, even from e1.
+    @Test
+    public void G64TwoFilesAndOneRankIsNotCastling() {
+        setUpCastlingPosition();
+
+        assertCastlingRejected(E1, G2);
     }
 
     // A rejected castle changes no square and keeps the turn.
