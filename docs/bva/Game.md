@@ -370,3 +370,102 @@ The real-board special-move integration cases above remain deferred.
 | GE39 | makeMove: White Kc6 Qb5, Black Ka8; Qb5-b6; mocked search reports true once | not checked + simulated future reply available | IN_PROGRESS, no winner, not over; real Black king not in check; only intended queen move committed | yes |
 | GE40 | GE38 board and move; mocked search reports false once | checked + no reported reply | CHECKMATE, winner WHITE, over; only intended queen move committed | yes |
 | GE41 | GE39 board and move; mocked search reports false once | not checked + no reported reply | STALEMATE, no winner, over; only intended queen move committed | yes |
+
+---
+
+## En Passant and Pawn Promotion (Issue #35)
+
+### Contract and Scope
+
+`Game` records the last successful move to support en passant.
+
+En passant is allowed only immediately after an opponent's pawn moves
+two squares and lands next to the current player's pawn. The capturing
+pawn moves diagonally forward to an empty square, and the opponent's
+pawn is removed from its original square.
+
+Pawn promotion occurs when a pawn reaches the last rank. The player
+must choose QUEEN, ROOK, BISHOP, or KNIGHT. The promoted piece keeps
+the original pawn's color.
+
+Both special moves must preserve king safety. Rejected moves must not
+change the board, current player, castling rights, game status, or
+last successful move.
+
+### Boundary Analysis
+
+The main boundaries are:
+
+- **Last move:** no previous move, valid previous move, expired previous move.
+- **Pawn movement:** one-square advance versus two-square advance.
+- **Color:** WHITE and BLACK.
+- **Position:** promotion at rank 7 for WHITE and rank 0 for BLACK.
+- **Promotion type:** QUEEN, ROOK, BISHOP, KNIGHT, KING, PAWN, and null.
+- **Move result:** legal, illegal, or cancelled.
+- **King safety:** safe after the move or left in check.
+
+Invalid file/rank values are handled by `Position` and are not
+retested here.
+
+### Test Cases
+
+#### 1. Last Successful Move
+
+| ID | Method Under Test | State of System Under Test | Expected Output | Implemented |
+|---|---|---|---|---|
+| EP-01 | `makeMove()` | A new game; no previous move. | No en passant opportunity exists. | :x: |
+| EP-02 | `makeMove()` | A legal move is completed. | The move is recorded as the last successful move. | :x: |
+| EP-03 | `makeMove()` | Two legal moves are completed. | Only the most recent move determines en passant eligibility. | :x: |
+| EP-04 | `makeMove()` | An illegal move is attempted after a legal move. | The last successful move remains unchanged. | :x: |
+| EP-05 | `startNewGame()` | A previous move exists. | The previous move is cleared. | :x: |
+
+#### 2. En Passant
+
+| ID | Method Under Test | State of System Under Test | Expected Output | Implemented |
+|---|---|---|---|---|
+| EP-06 | `makeMove()` | White pawn at e5; Black pawn just moved d7 to d5. White moves e5 to d6. | White pawn moves to d6; Black pawn at d5 is removed; turn switches. | :x: |
+| EP-07 | `makeMove()` | Black pawn at e4; White pawn just moved d2 to d4. Black moves e4 to d3. | Black pawn moves to d3; White pawn at d4 is removed; turn switches. | :x: |
+| EP-08 | `makeMove()` | Opponent's adjacent pawn moved only one square. | En passant is rejected; game state unchanged. | :x: |
+| EP-09 | `makeMove()` | Opponent's pawn moved two squares but is not adjacent. | En passant is rejected; game state unchanged. | :x: |
+| EP-10 | `makeMove()` | Opponent's pawn moved two squares, but another successful move occurred afterward. | En passant is rejected because the opportunity expired. | :x: |
+| EP-11 | `makeMove()` | The previous move was made by a non-pawn piece. | En passant is rejected. | :x: |
+| EP-12 | `makeMove()` | The diagonal destination is occupied. | The move follows normal capture rules; it is not treated as en passant. | :x: |
+| EP-13 | `makeMove()` | En passant would expose the moving player's King to attack. | Throws `IllegalArgumentException`; all game state remains unchanged. | :x: |
+| EP-14 | `makeMove()` | A legal en passant move is completed. | The move is recorded and the turn switches exactly once. | :x: |
+
+#### 3. Pawn Promotion
+
+| ID | Method Under Test | State of System Under Test | Expected Output | Implemented |
+|---|---|---|---|---|
+| PR-01 | `requiresPromotion()` | White pawn can legally move from e7 to e8. | Returns `true`. | :x: |
+| PR-02 | `requiresPromotion()` | Black pawn can legally move from e2 to e1. | Returns `true`. | :x: |
+| PR-03 | `requiresPromotion()` | A legal pawn move does not reach the last rank. | Returns `false`. | :x: |
+| PR-04 | `requiresPromotion()` | An attempted promotion move is illegal. | Throws `IllegalArgumentException`; state unchanged. | :x: |
+| PR-05 | `makeMove(from, to, promotion)` | White pawn reaches rank 7; promotion is QUEEN. | White QUEEN replaces the pawn. | :x: |
+| PR-06 | `makeMove(from, to, promotion)` | Black pawn reaches rank 0; promotion is QUEEN. | Black QUEEN replaces the pawn. | :x: |
+| PR-07 | `makeMove(from, to, promotion)` | Pawn reaches the last rank; promotion is ROOK. | ROOK of the same color replaces the pawn. | :x: |
+| PR-08 | `makeMove(from, to, promotion)` | Pawn reaches the last rank; promotion is BISHOP. | BISHOP of the same color replaces the pawn. | :x: |
+| PR-09 | `makeMove(from, to, promotion)` | Pawn reaches the last rank; promotion is KNIGHT. | KNIGHT of the same color replaces the pawn. | :x: |
+| PR-10 | `makeMove(from, to, promotion)` | Pawn reaches the last rank; promotion is KING. | Throws `IllegalArgumentException`; state unchanged. | :x: |
+| PR-11 | `makeMove(from, to, promotion)` | Pawn reaches the last rank; promotion is PAWN. | Throws `IllegalArgumentException`; state unchanged. | :x: |
+| PR-12 | `makeMove(from, to, promotion)` | Pawn reaches the last rank; promotion is null. | Throws an exception; state unchanged. | :x: |
+| PR-13 | `makeMove(from, to, promotion)` | White pawn captures an opponent's piece on the last rank. | The opponent's piece is removed and the pawn is promoted. | :x: |
+| PR-14 | `makeMove(from, to, promotion)` | Promotion would leave the moving player's King in check. | Throws `IllegalArgumentException`; state unchanged. | :x: |
+| PR-15 | `makeMove(from, to)` | Pawn reaches the last rank without a promotion choice. | Move is rejected; the pawn is not silently promoted. | :x: |
+
+#### 4. GUI Promotion
+
+| ID | Method Under Test | State of System Under Test | Expected Output | Implemented |
+|---|---|---|---|---|
+| PR-16 | `BoardClickHandler.click()` | A legal promotion move is selected. | Requests a promotion choice and passes it to `Game`. | :x: |
+| PR-17 | `BoardClickHandler.click()` | The player cancels the promotion dialog. | No move occurs; board and turn remain unchanged. | :x: |
+| PR-18 | `BoardClickHandler.click()` | An ordinary legal move is selected. | No promotion dialog is requested. | :x: |
+
+### Notes
+
+1. `Game` owns the special-move rules and last-move information.
+2. `Board` continues to store and move pieces without validating chess rules.
+3. `Piece` remains immutable; promotion replaces the pawn with a new `Piece`.
+4. En passant and promotion use the existing board-copy and king-safety checks.
+5. GUI tests may use a mocked or stubbed promotion-choice callback.
+6. The Implemented column will be updated after the corresponding tests pass.
