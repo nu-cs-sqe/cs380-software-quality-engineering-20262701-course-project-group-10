@@ -308,4 +308,45 @@ public class GameEnPassantTests {
         assertSame(blackPawn, board.getPiece(new Position(3, 4)));
         assertSame(Color.WHITE, game.getCurrentPlayer());
     }
+
+    @Test
+    public void EP15CannotCaptureEnPassantAfterPawnIsReplaced() {
+        Board board = new Board();
+
+        Piece whiteKing = new Piece(PieceType.KING, Color.WHITE);
+        Piece blackKing = new Piece(PieceType.KING, Color.BLACK);
+        Piece whitePawn = new Piece(PieceType.PAWN, Color.WHITE);
+        Piece blackPawn = new Piece(PieceType.PAWN, Color.BLACK);
+
+        board.placePiece(whiteKing, new Position(0, 0)); // a1
+        board.placePiece(blackKing, new Position(7, 7)); // h8
+        board.placePiece(whitePawn, new Position(4, 4)); // e5
+        board.placePiece(blackPawn, new Position(3, 6)); // d7
+
+        Game game = new Game(board);
+
+        // White: a1 -> a2.
+        game.makeMove(new Position(0, 0), new Position(0, 1));
+
+        // Black: d7 -> d5.
+        game.makeMove(new Position(3, 6), new Position(3, 4));
+
+        // Replace the pawn at d5 with a different Pawn object.
+        Piece replacementPawn = new Piece(PieceType.PAWN, Color.BLACK);
+        board.placePiece(replacementPawn, new Position(3, 4));
+
+        // En passant must be rejected because the original pawn is gone.
+        assertThrows(IllegalArgumentException.class,
+                () -> game.makeMove(
+                        new Position(4, 4),
+                        new Position(3, 5)));
+
+        // The rejected move must not change the board.
+        assertSame(whitePawn, board.getPiece(new Position(4, 4)));
+        assertSame(replacementPawn, board.getPiece(new Position(3, 4)));
+        assertNull(board.getPiece(new Position(3, 5)));
+
+        // White keeps the turn.
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+    }
 }
