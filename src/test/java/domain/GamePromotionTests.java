@@ -352,4 +352,37 @@ public class GamePromotionTests {
         // Turn switches to Black.
         assertSame(Color.BLACK, game.getCurrentPlayer());
     }
+
+    @Test
+    public void PR14PromotionCannotExposeOwnKingToCheck() {
+        Board board = new Board();
+
+        Piece whiteKing = new Piece(PieceType.KING, Color.WHITE);
+        Piece blackKing = new Piece(PieceType.KING, Color.BLACK);
+        Piece whitePawn = new Piece(PieceType.PAWN, Color.WHITE);
+        Piece blackRook = new Piece(PieceType.ROOK, Color.BLACK);
+
+        board.placePiece(whiteKing, new Position(0, 6)); // a7
+        board.placePiece(blackKing, new Position(7, 7)); // h8
+        board.placePiece(whitePawn, new Position(1, 6)); // b7
+        board.placePiece(blackRook, new Position(7, 6)); // h7
+
+        Game game = new Game(board);
+
+        Position from = new Position(1, 6); // b7
+        Position to = new Position(1, 7);   // b8
+
+        // Promotion would expose the White King to the Black Rook.
+        assertThrows(IllegalArgumentException.class,
+                () -> game.makeMove(from, to, PieceType.QUEEN));
+
+        // Board must remain unchanged.
+        assertSame(whiteKing, board.getPiece(new Position(0, 6)));
+        assertSame(whitePawn, board.getPiece(from));
+        assertSame(blackRook, board.getPiece(new Position(7, 6)));
+        assertNull(board.getPiece(to));
+
+        // Turn must remain White.
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+    }
 }
