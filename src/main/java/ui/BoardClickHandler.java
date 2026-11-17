@@ -2,18 +2,27 @@ package ui;
 
 import domain.Board;
 import domain.Game;
+import domain.PieceType;
 import domain.Position;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /** Translates board clicks into square selection and move requests. */
 public class BoardClickHandler {
     private static final int BOARD_SIZE = 8;
 
     private final Game game;
+    private final Supplier<PieceType> promotionChoice;
     private Position selected;
 
     public BoardClickHandler(Game game) {
+        this(game, () -> null);
+    }
+
+    public BoardClickHandler(Game game, Supplier<PieceType> promotionChoice) {
         this.game = Objects.requireNonNull(game, "game");
+        this.promotionChoice = Objects.requireNonNull(
+                promotionChoice, "promotionChoice");
     }
 
     public Position getSelected() {
@@ -50,10 +59,22 @@ public class BoardClickHandler {
     }
 
     private void moveSelectedTo(Position to) {
-        // Clear first so an illegal move, which throws, still leaves nothing selected.
+        // Clear selection even if the move is rejected or cancelled.
         Position from = selected;
         clearSelection();
-        game.makeMove(from, to);
+
+        if (game.requiresPromotion(from, to)) {
+            PieceType choice = promotionChoice.get();
+
+            // Cancelling the dialog must not change the game.
+            if (choice == null) {
+                return;
+            }
+
+            game.makeMove(from, to, choice);
+        } else {
+            game.makeMove(from, to);
+        }
     }
 
     private void selectIfOwnPiece(Position position) {
