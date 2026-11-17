@@ -284,4 +284,32 @@ public class GamePromotionTests {
         // Turn must remain White.
         assertSame(Color.WHITE, game.getCurrentPlayer());
     }
+
+    @Test
+    public void PR15PromotionRequiresExplicitChoice() {
+        Board board = new Board();
+
+        Piece whiteKing = new Piece(PieceType.KING, Color.WHITE);
+        Piece blackKing = new Piece(PieceType.KING, Color.BLACK);
+        Piece whitePawn = new Piece(PieceType.PAWN, Color.WHITE);
+
+        board.placePiece(whiteKing, new Position(0, 0)); // a1
+        board.placePiece(blackKing, new Position(7, 7)); // h8
+        board.placePiece(whitePawn, new Position(4, 6)); // e7
+
+        Game game = new Game(board);
+
+        // Promotion without specifying a piece must be rejected.
+        assertThrows(IllegalArgumentException.class,
+                () -> game.makeMove(
+                        new Position(4, 6),
+                        new Position(4, 7)));
+
+        // Board must remain unchanged.
+        assertSame(whitePawn, board.getPiece(new Position(4, 6)));
+        assertNull(board.getPiece(new Position(4, 7)));
+
+        // Turn must remain White.
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+    }
 }
