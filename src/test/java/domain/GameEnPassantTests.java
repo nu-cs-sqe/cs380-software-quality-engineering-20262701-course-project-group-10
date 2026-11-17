@@ -2,6 +2,7 @@ package domain;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -64,6 +65,41 @@ public class GameEnPassantTests {
         assertSame(blackPawn, board.getPiece(new Position(3, 2)));
         assertNull(board.getPiece(new Position(4, 3)));
         assertNull(board.getPiece(new Position(3, 3)));
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+    }
+
+    @Test
+    public void EP08CannotCaptureEnPassantAfterSingleStep() {
+        Board board = new Board();
+
+        Piece whiteKing = new Piece(PieceType.KING, Color.WHITE);
+        Piece blackKing = new Piece(PieceType.KING, Color.BLACK);
+        Piece whitePawn = new Piece(PieceType.PAWN, Color.WHITE);
+        Piece blackPawn = new Piece(PieceType.PAWN, Color.BLACK);
+
+        board.placePiece(whiteKing, new Position(0, 0)); // a1
+        board.placePiece(blackKing, new Position(7, 7)); // h8
+        board.placePiece(whitePawn, new Position(4, 4)); // e5
+        board.placePiece(blackPawn, new Position(3, 5)); // d6
+
+        Game game = new Game(board);
+
+        // White passes the turn.
+        game.makeMove(new Position(0, 0), new Position(0, 1));
+
+        // Black pawn advances only one square: d6 -> d5.
+        game.makeMove(new Position(3, 5), new Position(3, 4));
+
+        // White cannot capture en passant.
+        assertThrows(IllegalArgumentException.class,
+                () -> game.makeMove(
+                        new Position(4, 4),
+                        new Position(3, 5)));
+
+        // Verify that the rejected move changes nothing.
+        assertSame(whitePawn, board.getPiece(new Position(4, 4)));
+        assertSame(blackPawn, board.getPiece(new Position(3, 4)));
+        assertNull(board.getPiece(new Position(3, 5)));
         assertSame(Color.WHITE, game.getCurrentPlayer());
     }
 }
