@@ -139,4 +139,47 @@ public class GameEnPassantTests {
         // White keeps the turn.
         assertSame(Color.WHITE, game.getCurrentPlayer());
     }
+
+    @Test
+    public void EP10CannotCaptureEnPassantAfterOpportunityExpires() {
+        Board board = new Board();
+
+        Piece whiteKing = new Piece(PieceType.KING, Color.WHITE);
+        Piece blackKing = new Piece(PieceType.KING, Color.BLACK);
+        Piece whitePawn = new Piece(PieceType.PAWN, Color.WHITE);
+        Piece blackPawn = new Piece(PieceType.PAWN, Color.BLACK);
+
+        board.placePiece(whiteKing, new Position(0, 0)); // a1
+        board.placePiece(blackKing, new Position(7, 7)); // h8
+        board.placePiece(whitePawn, new Position(4, 4)); // e5
+        board.placePiece(blackPawn, new Position(3, 6)); // d7
+
+        Game game = new Game(board);
+
+        // White: a1 -> a2.
+        game.makeMove(new Position(0, 0), new Position(0, 1));
+
+        // Black: d7 -> d5 (two-square pawn advance).
+        game.makeMove(new Position(3, 6), new Position(3, 4));
+
+        // White does not capture immediately.
+        game.makeMove(new Position(0, 1), new Position(0, 2));
+
+        // Black makes another move.
+        game.makeMove(new Position(7, 7), new Position(7, 6));
+
+        // En passant is no longer available.
+        assertThrows(IllegalArgumentException.class,
+                () -> game.makeMove(
+                        new Position(4, 4),
+                        new Position(3, 5)));
+
+        // Verify the rejected move does not change the board.
+        assertSame(whitePawn, board.getPiece(new Position(4, 4)));
+        assertSame(blackPawn, board.getPiece(new Position(3, 4)));
+        assertNull(board.getPiece(new Position(3, 5)));
+
+        // White keeps the turn.
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+    }
 }
