@@ -94,4 +94,41 @@ public class BoardPromotionTests {
         assertSame(whiteKing, board.getPiece(new Position(0, 1)));
         assertSame(Color.BLACK, game.getCurrentPlayer());
     }
+
+    @Test
+    public void PR18NormalMoveDoesNotRequestPromotionChoice() {
+        Board board = new Board();
+
+        Piece whiteKing = new Piece(PieceType.KING, Color.WHITE);
+        Piece blackKing = new Piece(PieceType.KING, Color.BLACK);
+        Piece whitePawn = new Piece(PieceType.PAWN, Color.WHITE);
+
+        board.placePiece(whiteKing, new Position(0, 0)); // a1
+        board.placePiece(blackKing, new Position(7, 7)); // h8
+        board.placePiece(whitePawn, new Position(4, 1)); // e2
+
+        Game game = new Game(board);
+
+        // This callback must never be called for a normal move.
+        BoardClickHandler handler = new BoardClickHandler(
+                game,
+                () -> {
+                    throw new AssertionError(
+                            "Promotion dialog should not open");
+                });
+
+        // White pawn moves normally: e2 -> e3.
+        handler.click(new Position(4, 1));
+        handler.click(new Position(4, 2));
+
+        // Verify the pawn moved normally.
+        assertNull(board.getPiece(new Position(4, 1)));
+        assertSame(whitePawn, board.getPiece(new Position(4, 2)));
+
+        // Turn switches to Black.
+        assertSame(Color.BLACK, game.getCurrentPlayer());
+
+        // Selection is cleared.
+        assertNull(handler.getSelected());
+    }
 }
