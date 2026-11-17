@@ -1,0 +1,41 @@
+package domain;
+
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+
+import org.junit.jupiter.api.Test;
+
+/** Tests en passant captures and their boundary conditions. */
+public class GameEnPassantTests {
+
+    @Test
+    public void EP06WhitePawnCapturesEnPassant() {
+        Board board = new Board();
+
+        Piece whiteKing = new Piece(PieceType.KING, Color.WHITE);
+        Piece blackKing = new Piece(PieceType.KING, Color.BLACK);
+        Piece whitePawn = new Piece(PieceType.PAWN, Color.WHITE);
+        Piece blackPawn = new Piece(PieceType.PAWN, Color.BLACK);
+
+        board.placePiece(whiteKing, new Position(0, 0)); // a1
+        board.placePiece(blackKing, new Position(7, 7)); // h8
+        board.placePiece(whitePawn, new Position(4, 4)); // e5
+        board.placePiece(blackPawn, new Position(3, 6)); // d7
+
+        Game game = new Game(board);
+
+        // White makes a legal move to pass the turn.
+        game.makeMove(new Position(0, 0), new Position(0, 1));
+
+        // Black pawn advances two squares: d7 -> d5.
+        game.makeMove(new Position(3, 6), new Position(3, 4));
+
+        // White captures en passant: e5 -> d6.
+        game.makeMove(new Position(4, 4), new Position(3, 5));
+
+        assertSame(whitePawn, board.getPiece(new Position(3, 5)));
+        assertNull(board.getPiece(new Position(4, 4)));
+        assertNull(board.getPiece(new Position(3, 4)));
+        assertSame(Color.BLACK, game.getCurrentPlayer());
+    }
+}
