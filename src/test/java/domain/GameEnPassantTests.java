@@ -182,4 +182,45 @@ public class GameEnPassantTests {
         // White keeps the turn.
         assertSame(Color.WHITE, game.getCurrentPlayer());
     }
+
+    @Test
+    public void EP13CannotCaptureEnPassantWhenKingWouldBeInCheck() {
+        Board board = new Board();
+
+        Piece whiteKing = new Piece(PieceType.KING, Color.WHITE);
+        Piece blackKing = new Piece(PieceType.KING, Color.BLACK);
+        Piece whitePawn = new Piece(PieceType.PAWN, Color.WHITE);
+        Piece blackPawn = new Piece(PieceType.PAWN, Color.BLACK);
+        Piece whiteKnight = new Piece(PieceType.KNIGHT, Color.WHITE);
+        Piece blackRook = new Piece(PieceType.ROOK, Color.BLACK);
+
+        board.placePiece(whiteKing, new Position(0, 4));   // a5
+        board.placePiece(blackKing, new Position(7, 7));   // h8
+        board.placePiece(whitePawn, new Position(1, 4));   // b5
+        board.placePiece(blackPawn, new Position(2, 6));   // c7
+        board.placePiece(whiteKnight, new Position(0, 0)); // a1
+        board.placePiece(blackRook, new Position(7, 4));   // h5
+
+        Game game = new Game(board);
+
+        // White: a1 -> b3.
+        game.makeMove(new Position(0, 0), new Position(1, 2));
+
+        // Black: c7 -> c5.
+        game.makeMove(new Position(2, 6), new Position(2, 4));
+
+        // White: b5 -> c6 would expose the King to the Black Rook.
+        assertThrows(IllegalArgumentException.class,
+                () -> game.makeMove(
+                        new Position(1, 4),
+                        new Position(2, 5)));
+
+        // Rejected move must leave both pawns in place.
+        assertSame(whitePawn, board.getPiece(new Position(1, 4)));
+        assertSame(blackPawn, board.getPiece(new Position(2, 4)));
+        assertNull(board.getPiece(new Position(2, 5)));
+
+        // White still has the turn.
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+    }
 }
