@@ -414,4 +414,56 @@ public class GamePromotionTests {
         // Turn must remain White.
         assertSame(Color.WHITE, game.getCurrentPlayer());
     }
+
+    @Test
+    public void PR19NonPawnCannotPromote() {
+        Board board = new Board();
+
+        Piece whiteKing = new Piece(PieceType.KING, Color.WHITE);
+        Piece blackKing = new Piece(PieceType.KING, Color.BLACK);
+
+        board.placePiece(whiteKing, new Position(0, 0)); // a1
+        board.placePiece(blackKing, new Position(7, 7)); // h8
+
+        Game game = new Game(board);
+
+        // King cannot promote, even with a valid movement.
+        assertThrows(IllegalArgumentException.class,
+                () -> game.makeMove(
+                        new Position(0, 0),
+                        new Position(0, 1),
+                        PieceType.QUEEN));
+
+        // Board and turn remain unchanged.
+        assertSame(whiteKing, board.getPiece(new Position(0, 0)));
+        assertNull(board.getPiece(new Position(0, 1)));
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+    }
+
+    @Test
+    public void PR20PawnCannotPromoteBeforeLastRank() {
+        Board board = new Board();
+
+        Piece whiteKing = new Piece(PieceType.KING, Color.WHITE);
+        Piece blackKing = new Piece(PieceType.KING, Color.BLACK);
+        Piece whitePawn = new Piece(PieceType.PAWN, Color.WHITE);
+
+        board.placePiece(whiteKing, new Position(0, 0)); // a1
+        board.placePiece(blackKing, new Position(7, 7)); // h8
+        board.placePiece(whitePawn, new Position(4, 1)); // e2
+
+        Game game = new Game(board);
+
+        // Pawn moves legally to e3, but cannot promote there.
+        assertThrows(IllegalArgumentException.class,
+                () -> game.makeMove(
+                        new Position(4, 1),
+                        new Position(4, 2),
+                        PieceType.QUEEN));
+
+        // Board and turn remain unchanged.
+        assertSame(whitePawn, board.getPiece(new Position(4, 1)));
+        assertNull(board.getPiece(new Position(4, 2)));
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+    }
 }
