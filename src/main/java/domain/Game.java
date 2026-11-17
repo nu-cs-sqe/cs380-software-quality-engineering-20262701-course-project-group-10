@@ -173,8 +173,7 @@ public class Game {
         }
 
         if (lastMovedPiece == null
-                || lastMovedPiece.getType() != PieceType.PAWN
-                || lastMovedPiece.getColor() == moving.getColor()) {
+                || lastMovedPiece.getType() != PieceType.PAWN) {
             return false;
         }
 
