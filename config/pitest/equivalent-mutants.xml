@@ -27,10 +27,10 @@
     <mutatedMethod>isKingSideCastle</mutatedMethod>
     <methodDescription>(Ldomain/Position;Ldomain/Position;)Z</methodDescription>
     <mutator>org.pitest.mutationtest.engine.gregor.mutators.ConditionalsBoundaryMutator</mutator>
-    <lineNumber>91</lineNumber>
+    <lineNumber>106</lineNumber>
     <description>changed conditional boundary</description>
     <indexes>7</indexes>
-    <sourceSha256>fc7f375c87f2c0ffa0711b4f5ed070a88c49007336ce1b9a09899d6a776cdfe3</sourceSha256>
-    <reason>All callers operate on castling attempts validated as a two-file king displacement. Source and destination files cannot be equal, so &gt; and &gt;= have identical results.</reason>
+    <sourceSha256>0150c7fd9390f8f04790bfa7f5b65bf6d53ae8f35e898d1e541dcd74e3f121a2</sourceSha256>
+    <reason>All callers still operate only on castling attempts validated as a two-file king displacement. The shared trialMove path retains that check before every call. Source and destination files cannot be equal, so &gt; and &gt;= remain identical after the trial/commit refactor.</reason>
   </mutant>
 </equivalentMutants>

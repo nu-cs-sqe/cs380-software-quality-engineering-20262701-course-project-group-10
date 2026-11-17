@@ -258,3 +258,115 @@ the Black rooks on a8 and h8 attack a1 and h1 down the empty files.
 | G62 | Castling setup; White e1 to e3 (4, 2) | `IllegalArgumentException` (two ranks is never castling); board unchanged | :white_check_mark: |
 | G63 | Castling setup with a Black rook on h1 instead of the White one; White e1 to g1 | `IllegalArgumentException` (rook square holds an enemy rook); board, turn and rights unchanged | :white_check_mark: |
 | G64 | Castling setup; White e1 to g2 (6, 1) | `IllegalArgumentException` (two files and one rank is never castling); board unchanged | :white_check_mark: |
+
+## Checkmate and stalemate (task 1.1)
+
+### Contract and ownership
+
+New queries: `getStatus()`, `getWinner()`, `isGameOver()`,
+`isCurrentPlayerInCheck()`, `hasAnyLegalMove()`. Initial status is IN_PROGRESS;
+initial winner is Optional.empty. Queries never change the board, turn, castling
+rights, result, or piece references. Status updates after a successful move and
+after passing the turn. No legal move + check means CHECKMATE with the previous
+mover as winner; no legal move without check means STALEMATE with no winner.
+A check with an escape remains IN_PROGRESS. Construction does not inspect Board.
+Invalid boards (missing king) remain invariant errors rather than draws.
+
+`trialMove` is private, uses the existing full move checks and Board copies, and
+never commits. `hasAnyLegalMove` tries current-player pieces and destinations
+until a trial succeeds. Rejected candidates are skipped; unexpected invariant
+errors propagate. Tests use real positions for chess behavior and strict Board
+mocks for collaborator errors and read-only search boundaries.
+
+### Catalog analysis (steps 1-3)
+
+BVA Catalog v4.0: Boolean (check, legal reply, finished), Cases (the result enum,
+both colors and supported piece kinds), Counts (zero/one/many own pieces and
+legal replies), Intervals ([0,7] file/rank endpoints), Pointers (null Board is
+already G02; real board references; empty/filled Optional), Searching (no match,
+first match, later match), and object equality (unchanged piece references).
+Each public query has no arguments, so null query inputs cannot be supplied.
+Coordinates -1 and 8 are CAN'T SET here because Position rejects them first.
+Both dimensions of check × legal reply are covered, including both losing colors.
+RESIGNED and DRAW_AGREED are declared for the shared API but unreachable through
+this task's actions; they belong to task 1.2, not fabricated production states.
+
+### Dependencies on other tasks
+
+- En passant and promotion (#35) are not implemented on this branch. Search
+  delegates to `trialMove`, so that task must extend the shared path, including
+  any last-move state. For promotion search, try a queen without changing the
+  real board; all promotion choices have the same occupancy for king safety.
+- Required follow-up cases after #35: en passant as the only legal reply; en
+  passant rejected because it exposes the king; expired en passant; promotion
+  and promotion-capture as legal replies; search preserves promotion and
+  last-move state. These are **deferred dependency tests**, not passing tests
+  or impossible chess positions. Do not claim full-rule end detection yet.
+- Task 1.2 owns resignation, agreed draw, rejection after game over, and resetting
+  status/winner in `startNewGame`. This task adds none of those actions.
+- Task 2 owns MoveError/IllegalMoveException. This branch retains the existing
+  IllegalArgumentException errors; trial searches catch that base class so the
+  translated exception subclass can replace it without duplicated legality code.
+
+### Step 4: cases
+
+Coordinates below use chess notation (a1=(0,0), h8=(7,7)). Unlisted squares are
+empty except for the initial-position cases. White moves first. Every row is
+implemented by the method with its GE ID in GameEndTests unless noted.
+
+| ID | Methods / state | Catalog boundary | Expected output | Implemented? |
+| --- | --- | --- | --- | --- |
+| GE01 | GameStatus.values() in GameStatusTests: exact five design values | enum declaration | IN_PROGRESS, CHECKMATE, STALEMATE, RESIGNED, DRAW_AGREED | yes |
+| GE02 | getStatus(): new Game(mockBoard); no Board calls | cases: initial status | IN_PROGRESS on repeated reads | yes |
+| GE03 | getWinner(): new Game(mockBoard); no Board calls | pointers: no result | Optional.empty on repeated reads | yes |
+| GE04 | isGameOver(): new Game(mockBoard); no Board calls | boolean false | false on repeated reads | yes |
+| GE05 | isCurrentPlayerInCheck(): White Ke1; Black Ka8, Re8 | check true | true; all state unchanged | yes |
+| GE06 | isCurrentPlayerInCheck(): initial position, then White e2-e4 | both colors, check false | false before and after; query changes nothing | yes |
+| GE07 | hasAnyLegalMove(): empty board | zero own pieces | false; unchanged | yes |
+| GE08 | hasAnyLegalMove(): White Ka1, Black Kh8 | one own piece, multiple destinations | true; unchanged | yes |
+| GE09 | hasAnyLegalMove(): only Black Kh8, White to move | enemy sources skipped | false; unchanged | yes |
+| GE10 | hasAnyLegalMove(): White Ka1, Black Kc3, Qb3 | zero legal destinations, not in check | false; unchanged | yes |
+| GE11 | hasAnyLegalMove(): White Ka1, Black Kc3, Qb2 | zero legal destinations, in check | false; unchanged | yes |
+| GE12 | hasAnyLegalMove(): White Ka1, Black Kc3, Ra3 | exactly one escape b1 | true; unchanged | yes |
+| GE13 | hasAnyLegalMove(): White Ka1, Bb3; Black Kc2, Ra8 | king trapped; another piece can block at a2 | true; unchanged | yes |
+| GE14 | hasAnyLegalMove(): White Ka1, Rh8; Black Kc2, Ra8 | king trapped; another piece can capture a8 | true; unchanged | yes |
+| GE15 | hasAnyLegalMove(): White Ka1, Rb1; Black Kc3, Qb2, Rh1 | apparent rook capture exposes king to Rh1 | false; unchanged | yes |
+| GE16 | hasAnyLegalMove(): initial position queried twice | many pieces, repeated search | true twice; board, turn, rights, status, winner unchanged | yes |
+| GE17 | hasAnyLegalMove(): White Kh8, Black Ka1 | last source file/rank and inward destinations | true; unchanged | yes |
+| GE18 | hasAnyLegalMove(): White Kh1, Black Ka8 | source rank 0 / file 7 boundary | true; unchanged | yes |
+| GE19 | hasAnyLegalMove(): White Kb2, Black Kh8 Ra8; mock Board delegates reads and trial copies to a real position | rejected candidates before a later legal destination | true; strict mock rejects any commit or state writes | yes |
+| GE20 | hasAnyLegalMove(): White Ke1 Rh1, Black Ka8 | king-side castling available | true; unchanged; later real castle still works | yes |
+| GE21 | hasAnyLegalMove(): query after king/rook rights lost | rights false preserved during trial searches | same four rights before and after | yes |
+| GE22 | makeMove(): White Kc6 Qb6, Black Ka8; Qb6-b7 | Black checkmated | CHECKMATE; winner WHITE; current BLACK; isGameOver true; no legal move | yes |
+| GE23 | makeMove(): White Ka2, Black Kc3 Qb3; Ka2-a1 then Qb3-b2 | White checkmated | CHECKMATE; winner BLACK; current WHITE; isGameOver true | yes |
+| GE24 | makeMove(): White Kc6 Qb5, Black Ka8; Qb5-b6 | Black stalemated | STALEMATE; winner empty; current BLACK; isGameOver true; not in check | yes |
+| GE25 | makeMove(): White Ka2, Black Kc3 Qb4; Ka2-a1 then Qb4-b3 | White stalemated | STALEMATE; winner empty; current WHITE; isGameOver true | yes |
+| GE26 | makeMove(): initial position; f2-f3, e7-e5, g2-g4, Qd8-h4 | real move sequence and diagonal mate | CHECKMATE; winner BLACK | yes |
+| GE27 | makeMove(): White Ke1 Ra1, Black Ke8; Ra1-a8 | check with a king escape | IN_PROGRESS; winner empty; current BLACK; in check and has legal move | yes |
+| GE28 | makeMove(): initial position; e2-e4, e7-e5 | not check with legal replies | IN_PROGRESS after both moves; winner empty; isGameOver false | yes |
+| GE29 | makeMove(): initial position; e2-e5 rejected | rejected move before status update | IllegalArgumentException; board, turn, rights, status, winner unchanged | yes |
+| GE30 | hasAnyLegalMove(): strict mock Board throws IllegalStateException on source read | unexpected collaborator error | same error propagates; no writes | yes |
+| GE31 | isCurrentPlayerInCheck(): empty board | missing king invariant | IllegalStateException; board unchanged | yes |
+| GE32 | hasAnyLegalMove(): snapshot then actual move on original board | trial does not commit or consume turn | same source references before move; real move accepted once | yes |
+| GE33 | hasAnyLegalMove(): mock Board has a legal source before unread later squares | continued searching / early match | true; later source squares never read | yes |
+| GE34 | hasAnyLegalMove(): mock Board throws IllegalStateException while copying a legal trial | unexpected failure inside trial | same exception propagates; no commit | yes |
+| GE35 | hasAnyLegalMove(): White Ka1 Ph2; Black Kc3 Qb3 | trapped king with a quiet pawn reply | true; unchanged | yes |
+| GE36 | hasAnyLegalMove(): White Ka1; Black Kc4 Qb2 | exactly one escape, capturing the unprotected checker on b2 | true; unchanged; real Kxb2 still succeeds | yes |
+| GE37 | makeMove(): White Ka2 Ph2; Black Kc3 Qb4; Ka2-a1 then Qb4-b3 | king trapped, but pawn can advance | IN_PROGRESS, no winner; not in check; legal reply exists | yes |
+
+### Mocked future-reply contract
+
+These tests live in `GameEndReplyContractTests`. An EasyMock partial mock replaces
+only `hasAnyLegalMove()`; `makeMove`, the board-copy and commit paths, check
+detection, and status/winner queries run normally. A reported reply stands in for
+an eventual special-move reply, without pretending to execute that rule.
+The fixtures deliberately have no ordinary reply. Reporting true is a synthetic
+search contract, not a claim that an en passant or promotion move exists there.
+The real-board special-move integration cases above remain deferred.
+
+| ID | Methods / state | Catalog boundary | Expected output | Implemented? |
+| --- | --- | --- | --- | --- |
+| GE38 | makeMove: White Kc6 Qb6, Black Ka8; Qb6-b7; mocked search reports true once | checked + simulated future reply available | IN_PROGRESS, no winner, not over; real Black king in check; only intended queen move committed | yes |
+| GE39 | makeMove: White Kc6 Qb5, Black Ka8; Qb5-b6; mocked search reports true once | not checked + simulated future reply available | IN_PROGRESS, no winner, not over; real Black king not in check; only intended queen move committed | yes |
+| GE40 | GE38 board and move; mocked search reports false once | checked + no reported reply | CHECKMATE, winner WHITE, over; only intended queen move committed | yes |
+| GE41 | GE39 board and move; mocked search reports false once | not checked + no reported reply | STALEMATE, no winner, over; only intended queen move committed | yes |

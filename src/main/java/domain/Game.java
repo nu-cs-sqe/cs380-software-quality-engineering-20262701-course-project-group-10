@@ -2,9 +2,11 @@ package domain;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.Objects;
+import java.util.Optional;
 
 /** Manages turns, legal moves, king safety, and castling rights. */
 public class Game {
+    private static final int BOARD_SIZE = 8;
     private static final int QUEEN_SIDE_ROOK_FILE = 0;
     private static final int KING_SIDE_ROOK_FILE = 7;
     private static final int KING_SIDE_ROOK_TARGET_FILE = 5;
@@ -25,6 +27,8 @@ public class Game {
     private final Board board;
     private final MoveValidator validator = new MoveValidator();
     private Color currentPlayer;
+    private GameStatus status = GameStatus.IN_PROGRESS;
+    private Color winner;
     private boolean whiteKingSide = true;
     private boolean whiteQueenSide = true;
     private boolean blackKingSide = true;
@@ -46,6 +50,11 @@ public class Game {
     }
 
     public void makeMove(Position from, Position to) {
+        Board trial = trialMove(from, to);
+        commit(from, to, trial);
+    }
+
+    private Board trialMove(Position from, Position to) {
         Objects.requireNonNull(from, "from");
         Objects.requireNonNull(to, "to");
 
@@ -68,9 +77,15 @@ public class Game {
         }
         requireKingSafe(trial);
 
+        return trial;
+    }
+
+    private void commit(Position from, Position to, Board trial) {
+        Piece moving = board.getPiece(from);
         board.copyFrom(trial);
         updateCastlingRights(moving, from, to);
         passTurn();
+        updateStatus();
     }
 
     // A king stepping two files from its original square is castling; the normal king
@@ -232,5 +247,62 @@ public class Game {
     public boolean canCastleQueenSide(Color color) {
         Objects.requireNonNull(color, "color");
         return color == Color.WHITE ? whiteQueenSide : blackQueenSide;
+    }
+
+    public GameStatus getStatus() {
+        return status;
+    }
+
+    public Optional<Color> getWinner() {
+        return Optional.ofNullable(winner);
+    }
+
+    public boolean isGameOver() {
+        return status != GameStatus.IN_PROGRESS;
+    }
+
+    public boolean isCurrentPlayerInCheck() {
+        return validator.isInCheck(board, currentPlayer);
+    }
+
+    public boolean hasAnyLegalMove() {
+        for (int file = 0; file < BOARD_SIZE; file++) {
+            for (int rank = 0; rank < BOARD_SIZE; rank++) {
+                Position from = new Position(file, rank);
+                Piece piece = board.getPiece(from);
+                if (piece != null && piece.getColor() == currentPlayer && hasLegalMoveFrom(from)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean hasLegalMoveFrom(Position from) {
+        for (int file = 0; file < BOARD_SIZE; file++) {
+            for (int rank = 0; rank < BOARD_SIZE; rank++) {
+                Position to = new Position(file, rank);
+                try {
+                    trialMove(from, to);
+                    return true;
+                } catch (IllegalArgumentException expected) {
+                    // A rejected candidate does not end the search for a legal reply.
+                }
+            }
+        }
+        return false;
+    }
+
+    private void updateStatus() {
+        if (hasAnyLegalMove()) {
+            status = GameStatus.IN_PROGRESS;
+            winner = null;
+        } else if (isCurrentPlayerInCheck()) {
+            status = GameStatus.CHECKMATE;
+            winner = opponent();
+        } else {
+            status = GameStatus.STALEMATE;
+            winner = null;
+        }
     }
 }

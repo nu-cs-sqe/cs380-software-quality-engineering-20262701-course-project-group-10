@@ -61,6 +61,13 @@ on the same square, so king safety is the same for each.
 
 At most 16 pieces × 64 squares are tried. That is fast enough after each move.
 
+**Task 1.1 integration dependency:** the current branch supports ordinary moves
+and castling. En passant and promotion remain with task #35; the search must use
+their implementation in `trialMove` once it merges, including last-move state and
+a queen promotion choice for trial searches. Until then, detection is limited to
+the implemented rules. The deferred special-move cases are listed in
+[Game BVA](../bva/Game.md#dependencies-on-other-tasks).
+
 ### Updating the status
 At the end of `commit`, after the turn passes:
 
