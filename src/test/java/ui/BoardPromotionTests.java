@@ -53,4 +53,45 @@ public class BoardPromotionTests {
         // Turn switches to Black.
         assertSame(Color.BLACK, game.getCurrentPlayer());
     }
+
+    @Test
+    public void PR17CancellingPromotionLeavesGameUnchanged() {
+        Board board = new Board();
+
+        Piece whiteKing = new Piece(PieceType.KING, Color.WHITE);
+        Piece blackKing = new Piece(PieceType.KING, Color.BLACK);
+        Piece whitePawn = new Piece(PieceType.PAWN, Color.WHITE);
+
+        board.placePiece(whiteKing, new Position(0, 0)); // a1
+        board.placePiece(blackKing, new Position(7, 7)); // h8
+        board.placePiece(whitePawn, new Position(4, 6)); // e7
+
+        Game game = new Game(board);
+
+        // Returning null simulates cancelling the promotion dialog.
+        BoardClickHandler handler = new BoardClickHandler(
+                game,
+                () -> null);
+
+        // Select the pawn and its promotion destination.
+        handler.click(new Position(4, 6)); // e7
+        handler.click(new Position(4, 7)); // e8
+
+        // The pawn must remain in its original position.
+        assertSame(whitePawn, board.getPiece(new Position(4, 6)));
+        assertNull(board.getPiece(new Position(4, 7)));
+
+        // The turn must remain White.
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+
+        // The selection must be cleared.
+        assertNull(handler.getSelected());
+
+        // The player can still make a normal legal move.
+        handler.click(new Position(0, 0)); // a1
+        handler.click(new Position(0, 1)); // a2
+
+        assertSame(whiteKing, board.getPiece(new Position(0, 1)));
+        assertSame(Color.BLACK, game.getCurrentPlayer());
+    }
 }
