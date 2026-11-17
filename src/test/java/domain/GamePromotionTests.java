@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import org.junit.jupiter.api.Test;
 
@@ -96,5 +98,42 @@ public class GamePromotionTests {
 
         // Checking must not change the turn.
         assertSame(Color.WHITE, game.getCurrentPlayer());
+    }
+
+    @Test
+    public void PR05WhitePawnPromotesToQueen() {
+        Board board = new Board();
+
+        Piece whiteKing = new Piece(PieceType.KING, Color.WHITE);
+        Piece blackKing = new Piece(PieceType.KING, Color.BLACK);
+        Piece whitePawn = new Piece(PieceType.PAWN, Color.WHITE);
+
+        board.placePiece(whiteKing, new Position(0, 0)); // a1
+        board.placePiece(blackKing, new Position(7, 7)); // h8
+        board.placePiece(whitePawn, new Position(4, 6)); // e7
+
+        Game game = new Game(board);
+
+        // White pawn moves from e7 to e8 and promotes to Queen.
+        game.makeMove(
+                new Position(4, 6),
+                new Position(4, 7),
+                PieceType.QUEEN);
+
+        // Original square must be empty.
+        assertNull(board.getPiece(new Position(4, 6)));
+
+        // Destination must contain a White Queen.
+        Piece promoted = board.getPiece(new Position(4, 7));
+
+        assertNotNull(promoted);
+        assertSame(PieceType.QUEEN, promoted.getType());
+        assertSame(Color.WHITE, promoted.getColor());
+
+        // Promotion must replace the pawn with a new piece.
+        assertNotSame(whitePawn, promoted);
+
+        // Turn switches to Black.
+        assertSame(Color.BLACK, game.getCurrentPlayer());
     }
 }
