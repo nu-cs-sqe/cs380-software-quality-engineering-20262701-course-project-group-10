@@ -312,4 +312,44 @@ public class GamePromotionTests {
         // Turn must remain White.
         assertSame(Color.WHITE, game.getCurrentPlayer());
     }
+
+    @Test
+    public void PR13PawnPromotesByCapturingOpponentPiece() {
+        Board board = new Board();
+
+        Piece whiteKing = new Piece(PieceType.KING, Color.WHITE);
+        Piece blackKing = new Piece(PieceType.KING, Color.BLACK);
+        Piece whitePawn = new Piece(PieceType.PAWN, Color.WHITE);
+        Piece blackRook = new Piece(PieceType.ROOK, Color.BLACK);
+
+        board.placePiece(whiteKing, new Position(0, 0)); // a1
+        board.placePiece(blackKing, new Position(7, 7)); // h8
+        board.placePiece(whitePawn, new Position(4, 6)); // e7
+        board.placePiece(blackRook, new Position(3, 7)); // d8
+
+        Game game = new Game(board);
+
+        // White pawn captures the Black Rook and promotes to Queen.
+        game.makeMove(
+                new Position(4, 6),
+                new Position(3, 7),
+                PieceType.QUEEN);
+
+        // Original square is empty.
+        assertNull(board.getPiece(new Position(4, 6)));
+
+        // The destination contains a White Queen.
+        Piece promoted = board.getPiece(new Position(3, 7));
+
+        assertNotNull(promoted);
+        assertSame(PieceType.QUEEN, promoted.getType());
+        assertSame(Color.WHITE, promoted.getColor());
+
+        // The pawn and captured rook are no longer at the destination.
+        assertNotSame(whitePawn, promoted);
+        assertNotSame(blackRook, promoted);
+
+        // Turn switches to Black.
+        assertSame(Color.BLACK, game.getCurrentPlayer());
+    }
 }
