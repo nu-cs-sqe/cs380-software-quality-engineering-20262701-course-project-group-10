@@ -23,10 +23,15 @@ public class Game {
             new Position(QUEEN_SIDE_ROOK_FILE, BLACK_HOME_RANK);
     private static final Position BLACK_KING_SIDE_ROOK =
             new Position(KING_SIDE_ROOK_FILE, BLACK_HOME_RANK);
+    private static final int PAWN_DOUBLE_STEP = 2;
+    private static final int PAWN_SINGLE_STEP = 1;
 
     private final Board board;
     private final MoveValidator validator = new MoveValidator();
     private Color currentPlayer;
+    private Piece lastMovedPiece;
+    private Position lastMoveFrom;
+    private Position lastMoveTo;
     private GameStatus status = GameStatus.IN_PROGRESS;
     private Color winner;
     private boolean whiteKingSide = true;
@@ -47,6 +52,10 @@ public class Game {
         whiteQueenSide = true;
         blackKingSide = true;
         blackQueenSide = true;
+
+        lastMovedPiece = null;
+        lastMoveFrom = null;
+        lastMoveTo = null;
     }
 
     public void makeMove(Position from, Position to) {
@@ -60,10 +69,13 @@ public class Game {
 
         requireCurrentPlayersPieceOn(from);
         Piece moving = board.getPiece(from);
+
         boolean castling = isCastlingAttempt(moving, from, to);
+        boolean enPassant = isEnPassantAttempt(moving, from, to);
+
         if (castling) {
             requireCastlingAllowed(from, to);
-        } else {
+        } else if (!enPassant) {
             requireLegalMove(from, to);
             requireNotCapturingOwnPiece(to);
             requireNotCapturingKing(to);
@@ -71,10 +83,17 @@ public class Game {
 
         // Try the move on a copy so a rejected move never touches the real board.
         Board trial = board.copy();
-        trial.movePiece(from, to);
-        if (castling) {
-            moveCastlingRook(trial, from, to);
+
+        if (enPassant) {
+            moveEnPassantPawn(trial, from, to);
+        } else {
+            trial.movePiece(from, to);
+
+            if (castling) {
+                moveCastlingRook(trial, from, to);
+            }
         }
+
         requireKingSafe(trial);
 
         return trial;
@@ -82,10 +101,57 @@ public class Game {
 
     private void commit(Position from, Position to, Board trial) {
         Piece moving = board.getPiece(from);
+
         board.copyFrom(trial);
         updateCastlingRights(moving, from, to);
+
+        lastMovedPiece = moving;
+        lastMoveFrom = from;
+        lastMoveTo = to;
+
         passTurn();
         updateStatus();
+    }
+
+    private boolean isEnPassantAttempt(Piece moving, Position from, Position to) {
+        if (moving.getType() != PieceType.PAWN) {
+            return false;
+        }
+
+        if (!board.isEmpty(to)) {
+            return false;
+        }
+
+        if (lastMovedPiece == null
+                || lastMovedPiece.getType() != PieceType.PAWN
+                || lastMovedPiece.getColor() == moving.getColor()) {
+            return false;
+        }
+
+        if (Math.abs(lastMoveTo.getRank() - lastMoveFrom.getRank())
+                != PAWN_DOUBLE_STEP) {
+            return false;
+        }
+
+        int direction = moving.getColor() == Color.WHITE
+                ? PAWN_SINGLE_STEP : -PAWN_SINGLE_STEP;
+
+        boolean diagonalStep =
+                Math.abs(to.getFile() - from.getFile()) == PAWN_SINGLE_STEP
+                        && to.getRank() - from.getRank() == direction;
+
+        boolean adjacentPawn =
+                lastMoveTo.getRank() == from.getRank()
+                        && lastMoveTo.getFile() == to.getFile();
+
+        return diagonalStep
+                && adjacentPawn
+                && board.getPiece(lastMoveTo) == lastMovedPiece;
+    }
+
+    private void moveEnPassantPawn(Board trial, Position from, Position to) {
+        trial.movePiece(from, to);
+        trial.placePiece(null, lastMoveTo);
     }
 
     // A king stepping two files from its original square is castling; the normal king
