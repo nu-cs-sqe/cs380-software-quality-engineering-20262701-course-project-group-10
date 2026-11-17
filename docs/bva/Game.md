@@ -416,22 +416,23 @@ retested here.
 | EP-01 | `makeMove()` | A new game; no previous move. | No en passant opportunity exists. | :x: |
 | EP-02 | `makeMove()` | A legal move is completed. | The move is recorded as the last successful move. | :x: |
 | EP-03 | `makeMove()` | Two legal moves are completed. | Only the most recent move determines en passant eligibility. | :x: |
-| EP-04 | `makeMove()` | An illegal move is attempted after a legal move. | The last successful move remains unchanged. | :x: |
-| EP-05 | `startNewGame()` | A previous move exists. | The previous move is cleared. | :x: |
+| EP-04 | `makeMove()` | An illegal move is attempted after a legal move. | The last successful move remains unchanged. | :white_check_mark: |
+| EP-05 | `startNewGame()` | A previous move exists. | The previous move is cleared. | :white_check_mark: |
 
 #### 2. En Passant
 
 | ID | Method Under Test | State of System Under Test | Expected Output | Implemented |
 |---|---|---|---|---|
-| EP-06 | `makeMove()` | White pawn at e5; Black pawn just moved d7 to d5. White moves e5 to d6. | White pawn moves to d6; Black pawn at d5 is removed; turn switches. | :x: |
-| EP-07 | `makeMove()` | Black pawn at e4; White pawn just moved d2 to d4. Black moves e4 to d3. | Black pawn moves to d3; White pawn at d4 is removed; turn switches. | :x: |
-| EP-08 | `makeMove()` | Opponent's adjacent pawn moved only one square. | En passant is rejected; game state unchanged. | :x: |
-| EP-09 | `makeMove()` | Opponent's pawn moved two squares but is not adjacent. | En passant is rejected; game state unchanged. | :x: |
-| EP-10 | `makeMove()` | Opponent's pawn moved two squares, but another successful move occurred afterward. | En passant is rejected because the opportunity expired. | :x: |
-| EP-11 | `makeMove()` | The previous move was made by a non-pawn piece. | En passant is rejected. | :x: |
+| EP-06 | `makeMove()` | White pawn at e5; Black pawn just moved d7 to d5. White moves e5 to d6. | White pawn moves to d6; Black pawn at d5 is removed; turn switches. | :white_check_mark: |
+| EP-07 | `makeMove()` | Black pawn at e4; White pawn just moved d2 to d4. Black moves e4 to d3. | Black pawn moves to d3; White pawn at d4 is removed; turn switches. | :white_check_mark: |
+| EP-08 | `makeMove()` | Opponent's adjacent pawn moved only one square. | En passant is rejected; game state unchanged. | :white_check_mark: |
+| EP-09 | `makeMove()` | Opponent's pawn moved two squares but is not adjacent. | En passant is rejected; game state unchanged. | :white_check_mark: |
+| EP-10 | `makeMove()` | Opponent's pawn moved two squares, but another successful move occurred afterward. | En passant is rejected because the opportunity expired. | :white_check_mark: |
+| EP-11 | `makeMove()` | The previous move was made by a non-pawn piece. | En passant is rejected. | Implemented in EP-10 |
 | EP-12 | `makeMove()` | The diagonal destination is occupied. | The move follows normal capture rules; it is not treated as en passant. | :x: |
-| EP-13 | `makeMove()` | En passant would expose the moving player's King to attack. | Throws `IllegalArgumentException`; all game state remains unchanged. | :x: |
-| EP-14 | `makeMove()` | A legal en passant move is completed. | The move is recorded and the turn switches exactly once. | :x: |
+| EP-13 | `makeMove()` | En passant would expose the moving player's King to attack. | Throws `IllegalArgumentException`; all game state remains unchanged. | :white_check_mark: |
+| EP-14 | `makeMove()` | A legal en passant move is completed. | The move is recorded and the turn switches exactly once. | Implemented in EP-06 and EP-07 |
+| EP-15 | `makeMove()` | The pawn from the last two-square advance has been replaced by another Pawn object. | En passant is rejected; board and turn remain unchanged. | :white_check_mark: |
 
 #### 3. Pawn Promotion
 
@@ -460,6 +461,8 @@ retested here.
 | PR-16 | `BoardClickHandler.click()` | A legal promotion move is selected. | Requests a promotion choice and passes it to `Game`. | :x: |
 | PR-17 | `BoardClickHandler.click()` | The player cancels the promotion dialog. | No move occurs; board and turn remain unchanged. | :x: |
 | PR-18 | `BoardClickHandler.click()` | An ordinary legal move is selected. | No promotion dialog is requested. | :x: |
+| PR-19 | `makeMove(from, to, promotion)` | A non-pawn piece attempts promotion. | Throws `IllegalArgumentException`; board and turn remain unchanged. | :white_check_mark: |
+| PR-20 | `makeMove(from, to, promotion)` | A pawn makes a legal move without reaching the last rank but specifies a promotion type. | Throws `IllegalArgumentException`; board and turn remain unchanged. | :white_check_mark: |
 
 ### Notes
 

@@ -6,7 +6,18 @@
 unit tested without Swing. `BoardPanel` only forwards mouse clicks and paints.
 
 `BoardClickHandler(Game game)` rejects a null game with `NullPointerException`.
-Nothing is selected after construction.
+Nothing is selected after construction. The default constructor provides
+a promotion callback that returns null, so promotion is cancelled when no
+choice is available.
+
+`BoardClickHandler(Game game, Supplier<PieceType> promotionChoice)` accepts
+a promotion choice callback. A null callback is rejected with
+`NullPointerException`.
+
+When a pawn reaches the last rank, the handler requests a promotion choice.
+A valid choice is passed to `game.makeMove(from, to, promotion)`.
+If the callback returns null, the move is cancelled without changing
+the board or current player.
 
 `toPosition(int x, int y, int squareSize)` turns a pixel inside the panel into a
 board square. Pixel (0, 0) is the top-left corner, and rank 8 is drawn on the top
@@ -17,10 +28,16 @@ row. It returns `null` when the pixel is outside the 8x8 board or when
 - Nothing selected: a square holding a current-player piece becomes selected.
   An empty square or an opponent's piece selects nothing (flow 1a).
 - A square selected, same square clicked: the selection clears (flow 3a).
-- A square selected, another square clicked: `game.makeMove(selected, position)`
-  is called once and the selection clears. If `makeMove` throws
-  `IllegalArgumentException`, the selection still clears and the exception is
-  passed on unchanged so `ChessFrame` can show its message (flow 4a).
+- A square selected, another square clicked: the handler first calls
+  `game.requiresPromotion(from, to)`.
+  - For a normal move, it calls `game.makeMove(from, to)`.
+  - For promotion, it requests a choice and calls
+    `game.makeMove(from, to, promotion)`.
+  - If promotion is cancelled, no move is made.
+    The selection is cleared in all cases.
+- If move validation or execution throws `IllegalArgumentException`,
+  the exception is passed on unchanged so `ChessFrame` can display
+  the error message (flow 4a).
 - A null position (an off-board click) is ignored.
 
 `getSelected()` returns the selected square, or `null`. `clearSelection()`
@@ -89,8 +106,8 @@ expects no `makeMove` call unless the case says so.
 | K03 | White to move; nothing selected; click e7 (Black pawn) | `getSelected()` is `null`; no `makeMove` | yes |
 | K04 | Black to move; nothing selected; click e7 (Black pawn) | `getSelected()` is e7; no `makeMove` | yes |
 | K05 | White to move; e2 selected; click e2 | `getSelected()` is `null`; no `makeMove` | yes |
-| K06 | White to move; e2 selected; click e4 | `makeMove(e2, e4)` called once; `getSelected()` is `null` | yes |
-| K07 | White to move; e2 selected; click e5; `makeMove` throws `IllegalArgumentException("That piece cannot move there.")` | the same exception and message are passed on; `getSelected()` is `null` | yes |
+| K06 | White to move; e2 selected; click e4; `requiresPromotion()` returns false | `makeMove(e2, e4)` called once; `getSelected()` is `null` | yes |
+| K07 | White to move; e2 selected; click e5; `requiresPromotion()` throws `IllegalArgumentException` | The same exception is passed on; selection is cleared; `makeMove()` is not called | yes |
 | K08 | White to move; nothing selected; click `null` | `getSelected()` is `null`; no `makeMove` | yes |
 | K09 | White to move; e2 selected; click `null` | `getSelected()` is still e2; no `makeMove` | yes |
 
@@ -100,3 +117,53 @@ expects no `makeMove` call unless the case says so.
 | --- | --- | --- | --- |
 | S01 | e2 selected; `clearSelection()` | `getSelected()` is `null` | yes |
 | S02 | nothing selected; `clearSelection()` | `getSelected()` is `null` | yes |
+
+---
+
+## 5. Promotion Choice Handling (Issue #35)
+
+### Contract and scope
+
+Promotion choices are provided through `Supplier<PieceType>`, allowing
+the click handler to be tested without displaying Swing dialogs.
+
+The handler requests a promotion choice only when
+`Game.requiresPromotion(from, to)` returns true.
+
+A valid choice completes the promotion. A null choice cancels the move.
+Ordinary moves do not request a promotion choice.
+
+### Boundary Analysis
+
+The main cases are:
+
+- **Promotion required:** true or false.
+- **Promotion choice:** valid piece type or null.
+- **Constructor:** default callback or supplied callback.
+- **Result:** successful promotion, cancelled promotion, or ordinary move.
+- **State:** board, current player, and selection before and after the click.
+
+### Test Cases
+
+#### Constructor and Default Callback
+
+| ID | Method Under Test | State of System Under Test | Expected Output | Implemented |
+|---|---|---|---|---|
+| H03 | `BoardClickHandler(Game)` | Default constructor; a legal promotion move is selected. | Promotion is cancelled because no choice is provided; board and turn remain unchanged. | :white_check_mark: |
+| H04 | `BoardClickHandler(Game, Supplier<PieceType>)` | A null promotion callback is supplied. | Throws `NullPointerException`. | :white_check_mark: |
+
+#### Promotion Click Handling
+
+| ID | Method Under Test | State of System Under Test | Expected Output | Implemented |
+|---|---|---|---|---|
+| K10 | `click(Position)` | White Pawn at e7; player selects e7 and e8; callback returns QUEEN. | Pawn is replaced by a White Queen at e8; turn switches to Black; selection is cleared. | :white_check_mark: |
+| K11 | `click(Position)` | White Pawn at e7; player selects e7 and e8; callback returns null. | Promotion is cancelled; board and turn remain unchanged; selection is cleared. | :white_check_mark: |
+| K12 | `click(Position)` | White Pawn at e2; player selects e2 and e3; promotion callback would throw if called. | Pawn moves normally; callback is never called; turn switches to Black. | :white_check_mark: |
+
+### Notes
+
+1. `BoardClickHandler` does not determine promotion legality.
+   This responsibility belongs to `Game`.
+2. Tests use a real `Game` and `Board` with stubbed promotion callbacks.
+3. The Swing promotion dialog belongs to `ChessFrame` and is verified manually.
+4. A cancelled promotion does not change the board or current player.

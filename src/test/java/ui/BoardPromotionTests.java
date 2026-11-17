@@ -3,6 +3,7 @@ package ui;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import domain.Board;
 import domain.Color;
@@ -159,5 +160,14 @@ public class BoardPromotionTests {
         // The game state must remain unchanged.
         assertSame(Color.WHITE, game.getCurrentPlayer());
         assertNull(handler.getSelected());
+    }
+
+    @Test
+    public void H04NullPromotionCallbackIsRejected() {
+        Board board = new Board();
+        Game game = new Game(board);
+
+        assertThrows(NullPointerException.class,
+                () -> new BoardClickHandler(game, null));
     }
 }
