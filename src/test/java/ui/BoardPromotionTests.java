@@ -131,4 +131,33 @@ public class BoardPromotionTests {
         // Selection is cleared.
         assertNull(handler.getSelected());
     }
+
+    @Test
+    public void defaultHandlerCancelsPromotionWithoutChoice() {
+        Board board = new Board();
+
+        Piece whiteKing = new Piece(PieceType.KING, Color.WHITE);
+        Piece blackKing = new Piece(PieceType.KING, Color.BLACK);
+        Piece whitePawn = new Piece(PieceType.PAWN, Color.WHITE);
+
+        board.placePiece(whiteKing, new Position(0, 0)); // a1
+        board.placePiece(blackKing, new Position(7, 7)); // h8
+        board.placePiece(whitePawn, new Position(4, 6)); // e7
+
+        Game game = new Game(board);
+
+        // Use the original one-argument constructor.
+        BoardClickHandler handler = new BoardClickHandler(game);
+
+        handler.click(new Position(4, 6)); // e7
+        handler.click(new Position(4, 7)); // e8
+
+        // Without a promotion choice, the move is cancelled.
+        assertSame(whitePawn, board.getPiece(new Position(4, 6)));
+        assertNull(board.getPiece(new Position(4, 7)));
+
+        // The game state must remain unchanged.
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+        assertNull(handler.getSelected());
+    }
 }
