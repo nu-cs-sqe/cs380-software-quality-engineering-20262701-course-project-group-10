@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -219,5 +220,68 @@ public class GamePromotionTests {
             // Turn switches exactly once.
             assertSame(Color.BLACK, game.getCurrentPlayer());
         }
+    }
+
+    @Test
+    public void PR10AndPR11RejectInvalidPromotionTypes() {
+        PieceType[] invalidTypes = {
+                PieceType.KING,
+                PieceType.PAWN
+        };
+
+        for (PieceType invalidType : invalidTypes) {
+            Board board = new Board();
+
+            Piece whiteKing = new Piece(PieceType.KING, Color.WHITE);
+            Piece blackKing = new Piece(PieceType.KING, Color.BLACK);
+            Piece whitePawn = new Piece(PieceType.PAWN, Color.WHITE);
+
+            board.placePiece(whiteKing, new Position(0, 0)); // a1
+            board.placePiece(blackKing, new Position(7, 7)); // h8
+            board.placePiece(whitePawn, new Position(4, 6)); // e7
+
+            Game game = new Game(board);
+
+            assertThrows(IllegalArgumentException.class,
+                    () -> game.makeMove(
+                            new Position(4, 6),
+                            new Position(4, 7),
+                            invalidType));
+
+            // Board must remain unchanged.
+            assertSame(whitePawn, board.getPiece(new Position(4, 6)));
+            assertNull(board.getPiece(new Position(4, 7)));
+
+            // Turn must remain White.
+            assertSame(Color.WHITE, game.getCurrentPlayer());
+        }
+    }
+
+    @Test
+    public void PR12RejectNullPromotionType() {
+        Board board = new Board();
+
+        Piece whiteKing = new Piece(PieceType.KING, Color.WHITE);
+        Piece blackKing = new Piece(PieceType.KING, Color.BLACK);
+        Piece whitePawn = new Piece(PieceType.PAWN, Color.WHITE);
+
+        board.placePiece(whiteKing, new Position(0, 0)); // a1
+        board.placePiece(blackKing, new Position(7, 7)); // h8
+        board.placePiece(whitePawn, new Position(4, 6)); // e7
+
+        Game game = new Game(board);
+
+        assertThrows(NullPointerException.class,
+                () -> game.makeMove(
+                        new Position(4, 6),
+                        new Position(4, 7),
+                        null));
+
+        // Board must remain unchanged.
+        assertSame(whitePawn, board.getPiece(new Position(4, 6)));
+        assertNull(board.getPiece(new Position(4, 7)));
+
+        // Turn must remain White.
+        assertSame(Color.WHITE, game.getCurrentPlayer());
     }
 }
