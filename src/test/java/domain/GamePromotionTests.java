@@ -176,4 +176,48 @@ public class GamePromotionTests {
         // Turn switches to White.
         assertSame(Color.WHITE, game.getCurrentPlayer());
     }
+
+    @Test
+    public void PR07ToPR09PawnPromotesToOtherValidPieces() {
+        PieceType[] promotionTypes = {
+                PieceType.ROOK,
+                PieceType.BISHOP,
+                PieceType.KNIGHT
+        };
+
+        for (PieceType promotionType : promotionTypes) {
+            Board board = new Board();
+
+            Piece whiteKing = new Piece(PieceType.KING, Color.WHITE);
+            Piece blackKing = new Piece(PieceType.KING, Color.BLACK);
+            Piece whitePawn = new Piece(PieceType.PAWN, Color.WHITE);
+
+            board.placePiece(whiteKing, new Position(0, 0)); // a1
+            board.placePiece(blackKing, new Position(7, 7)); // h8
+            board.placePiece(whitePawn, new Position(4, 6)); // e7
+
+            Game game = new Game(board);
+
+            game.makeMove(
+                    new Position(4, 6),
+                    new Position(4, 7),
+                    promotionType);
+
+            // Original square must be empty.
+            assertNull(board.getPiece(new Position(4, 6)));
+
+            // Destination contains the selected piece type.
+            Piece promoted = board.getPiece(new Position(4, 7));
+
+            assertNotNull(promoted);
+            assertSame(promotionType, promoted.getType());
+            assertSame(Color.WHITE, promoted.getColor());
+
+            // A new piece replaces the original pawn.
+            assertNotSame(whitePawn, promoted);
+
+            // Turn switches exactly once.
+            assertSame(Color.BLACK, game.getCurrentPlayer());
+        }
+    }
 }
