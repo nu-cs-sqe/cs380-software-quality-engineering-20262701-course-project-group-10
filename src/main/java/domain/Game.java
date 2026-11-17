@@ -63,6 +63,36 @@ public class Game {
         commit(from, to, trial);
     }
 
+    public void makeMove(Position from, Position to, PieceType promotion) {
+        Objects.requireNonNull(promotion, "promotion");
+
+        Board trial = trialMove(from, to);
+        Piece moving = board.getPiece(from);
+
+        if (moving.getType() != PieceType.PAWN) {
+            throw new IllegalArgumentException("Only pawns can promote");
+        }
+
+        int lastRank = moving.getColor() == Color.WHITE
+                ? BLACK_HOME_RANK : WHITE_HOME_RANK;
+
+        if (to.getRank() != lastRank) {
+            throw new IllegalArgumentException("Pawn has not reached the last rank");
+        }
+
+        if (promotion != PieceType.QUEEN
+                && promotion != PieceType.ROOK
+                && promotion != PieceType.BISHOP
+                && promotion != PieceType.KNIGHT) {
+            throw new IllegalArgumentException("Invalid promotion type");
+        }
+
+        Piece promotedPiece = new Piece(promotion, moving.getColor());
+        trial.placePiece(promotedPiece, to);
+
+        commit(from, to, trial);
+    }
+
     public boolean requiresPromotion(Position from, Position to) {
         trialMove(from, to);
 
