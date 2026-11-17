@@ -63,6 +63,21 @@ public class Game {
         commit(from, to, trial);
     }
 
+    public boolean requiresPromotion(Position from, Position to) {
+        trialMove(from, to);
+
+        Piece moving = board.getPiece(from);
+
+        if (moving.getType() != PieceType.PAWN) {
+            return false;
+        }
+
+        int lastRank = moving.getColor() == Color.WHITE
+                ? BLACK_HOME_RANK : WHITE_HOME_RANK;
+
+        return to.getRank() == lastRank;
+    }
+
     private Board trialMove(Position from, Position to) {
         Objects.requireNonNull(from, "from");
         Objects.requireNonNull(to, "to");
