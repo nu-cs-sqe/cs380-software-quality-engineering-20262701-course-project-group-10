@@ -4,8 +4,8 @@ import domain.Board;
 import domain.Color;
 import domain.Game;
 import domain.Piece;
-import domain.Position;
 import domain.PieceType;
+import domain.Position;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -57,6 +57,7 @@ public class BoardPanel extends JPanel {
             }
         });
     }
+
     public void clearSelection() {
         clickHandler.clearSelection();
         repaint();

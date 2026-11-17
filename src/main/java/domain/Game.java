@@ -71,7 +71,7 @@ public class Game {
     public void makeMove(Position from, Position to, PieceType promotion) {
         Objects.requireNonNull(promotion, "promotion");
 
-        Board trial = trialMove(from, to);
+        final Board trial = trialMove(from, to);
         Piece moving = board.getPiece(from);
 
         if (moving.getType() != PieceType.PAWN) {
