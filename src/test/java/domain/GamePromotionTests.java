@@ -385,4 +385,33 @@ public class GamePromotionTests {
         // Turn must remain White.
         assertSame(Color.WHITE, game.getCurrentPlayer());
     }
+
+    @Test
+    public void PR04RequiresPromotionRejectsIllegalMove() {
+        Board board = new Board();
+
+        Piece whiteKing = new Piece(PieceType.KING, Color.WHITE);
+        Piece blackKing = new Piece(PieceType.KING, Color.BLACK);
+        Piece whitePawn = new Piece(PieceType.PAWN, Color.WHITE);
+
+        board.placePiece(whiteKing, new Position(0, 0)); // a1
+        board.placePiece(blackKing, new Position(7, 7)); // h8
+        board.placePiece(whitePawn, new Position(4, 5)); // e6
+
+        Game game = new Game(board);
+
+        Position from = new Position(4, 5); // e6
+        Position to = new Position(4, 7);   // e8
+
+        // A pawn cannot move two squares from e6 to e8.
+        assertThrows(IllegalArgumentException.class,
+                () -> game.requiresPromotion(from, to));
+
+        // Board must remain unchanged.
+        assertSame(whitePawn, board.getPiece(from));
+        assertNull(board.getPiece(to));
+
+        // Turn must remain White.
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+    }
 }
