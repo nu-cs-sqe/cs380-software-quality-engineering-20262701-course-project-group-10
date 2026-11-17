@@ -4,6 +4,7 @@ import domain.Board;
 import domain.Color;
 import domain.Game;
 import domain.Piece;
+import domain.PieceType;
 import domain.Position;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -14,6 +15,7 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import javax.swing.JPanel;
 
 /** Draws the chessboard, pieces, and selection, and forwards mouse clicks. */
@@ -31,13 +33,23 @@ public class BoardPanel extends JPanel {
     private final Runnable onBoardChanged;
     private final Consumer<String> onIllegalMove;
 
-    public BoardPanel(Game game, Runnable onBoardChanged, Consumer<String> onIllegalMove) {
+    public BoardPanel(Game game, Runnable onBoardChanged,
+                      Consumer<String> onIllegalMove) {
+        this(game, onBoardChanged, onIllegalMove, () -> null);
+    }
+
+    public BoardPanel(Game game, Runnable onBoardChanged,
+                      Consumer<String> onIllegalMove,
+                      Supplier<PieceType> promotionChoice) {
+
         this.game = game;
-        this.clickHandler = new BoardClickHandler(game);
+        this.clickHandler = new BoardClickHandler(game, promotionChoice);
         this.onBoardChanged = onBoardChanged;
         this.onIllegalMove = onIllegalMove;
+
         setPreferredSize(new Dimension(SIZE * DEFAULT_SQUARE_SIZE,
                 SIZE * DEFAULT_SQUARE_SIZE));
+
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent event) {

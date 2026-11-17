@@ -2,6 +2,7 @@ package ui;
 
 import domain.Color;
 import domain.Game;
+import domain.PieceType;
 import java.awt.BorderLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -24,8 +25,11 @@ public class ChessFrame extends JFrame {
     public ChessFrame(Game game) {
         super("Chess");
         this.game = game;
-        this.boardPanel = new BoardPanel(game, this::updateTurnLabel,
-                this::showIllegalMove);
+        this.boardPanel = new BoardPanel(
+                game,
+                this::updateTurnLabel,
+                this::showIllegalMove,
+                this::choosePromotion);
 
         turnLabel.setBorder(BorderFactory.createEmptyBorder(
                 LABEL_PADDING, LABEL_PADDING, LABEL_PADDING, LABEL_PADDING));
@@ -55,6 +59,26 @@ public class ChessFrame extends JFrame {
         turnLabel.setText(
                 game.getCurrentPlayer() == Color.WHITE
                         ? WHITE_TO_MOVE : BLACK_TO_MOVE);
+    }
+
+    private PieceType choosePromotion() {
+        PieceType[] choices = {
+                PieceType.QUEEN,
+                PieceType.ROOK,
+                PieceType.BISHOP,
+                PieceType.KNIGHT
+        };
+
+        Object selected = JOptionPane.showInputDialog(
+                this,
+                "Choose a piece to promote to:",
+                "Pawn Promotion",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                choices,
+                PieceType.QUEEN);
+
+        return (PieceType) selected;
     }
 
     // Use case 2, flow 4a: tell the player why the move was rejected.

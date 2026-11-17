@@ -182,14 +182,21 @@ public class BoardClickHandlerTests {
         assertNull(handler.getSelected());
     }
 
-    // K06: a square selected; clicking another square makes the move once
+    // K06: clicking a legal destination makes the move once
     // and clears the selection.
     @Test
     public void clickingDestinationMakesTheMove() {
         Game game = recordGameWithPawns(Color.WHITE);
+
+        // Normal moves do not require promotion.
+        EasyMock.expect(game.requiresPromotion(E2, E4))
+                .andReturn(false).once();
+
         game.makeMove(E2, E4);
         EasyMock.expectLastCall().once();
+
         EasyMock.replay(game);
+
         BoardClickHandler handler = new BoardClickHandler(game);
         handler.click(E2);
 
@@ -199,16 +206,21 @@ public class BoardClickHandlerTests {
         EasyMock.verify(game);
     }
 
-    // K07: an illegal move passes the game's exception on unchanged and still
-    // clears the selection (flow 4a).
+    // K07: an illegal move passes the game's exception on unchanged
+    // and still clears the selection.
     @Test
     public void illegalMovePassesErrorOnAndDeselects() {
         IllegalArgumentException illegalMove =
                 new IllegalArgumentException("That piece cannot move there.");
+
         Game game = recordGameWithPawns(Color.WHITE);
-        game.makeMove(E2, E5);
-        EasyMock.expectLastCall().andThrow(illegalMove).once();
+
+        // The new validation step rejects the illegal move.
+        EasyMock.expect(game.requiresPromotion(E2, E5))
+                .andThrow(illegalMove).once();
+
         EasyMock.replay(game);
+
         BoardClickHandler handler = new BoardClickHandler(game);
         handler.click(E2);
 
@@ -218,6 +230,7 @@ public class BoardClickHandlerTests {
 
         assertSame(illegalMove, thrown);
         assertNull(handler.getSelected());
+
         EasyMock.verify(game);
     }
 
