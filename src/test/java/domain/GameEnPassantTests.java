@@ -1,7 +1,9 @@
 package domain;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
@@ -348,5 +350,50 @@ public class GameEnPassantTests {
 
         // White keeps the turn.
         assertSame(Color.WHITE, game.getCurrentPlayer());
+    }
+
+    @Test
+    void EP12OccupiedDestinationUsesNormalCapture() {
+        Board board = new Board();
+
+        board.placePiece(new Piece(PieceType.KING, Color.WHITE),
+                new Position(0, 0)); // a1
+        board.placePiece(new Piece(PieceType.KING, Color.BLACK),
+                new Position(7, 7)); // h8
+        board.placePiece(new Piece(PieceType.PAWN, Color.WHITE),
+                new Position(4, 4)); // e5
+        board.placePiece(new Piece(PieceType.BISHOP, Color.BLACK),
+                new Position(3, 5)); // d6
+        board.placePiece(new Piece(PieceType.PAWN, Color.BLACK),
+                new Position(7, 6)); // h7
+
+        Game game = new Game(board);
+
+        // White moves the king.
+        game.makeMove(new Position(0, 0), new Position(0, 1));
+
+        // Black pawn moves two squares: h7 -> h5.
+        game.makeMove(new Position(7, 6), new Position(7, 4));
+
+        // White pawn captures the bishop normally: e5 -> d6.
+        game.makeMove(new Position(4, 4), new Position(3, 5));
+
+        // The white pawn should occupy d6.
+        Piece capturedPawn = board.getPiece(new Position(3, 5));
+
+        assertEquals(PieceType.PAWN, capturedPawn.getType());
+        assertEquals(Color.WHITE, capturedPawn.getColor());
+
+        // The original square should be empty.
+        assertTrue(board.isEmpty(new Position(4, 4)));
+
+        // The black pawn at h5 should remain untouched.
+        Piece blackPawn = board.getPiece(new Position(7, 4));
+
+        assertEquals(PieceType.PAWN, blackPawn.getType());
+        assertEquals(Color.BLACK, blackPawn.getColor());
+
+        // Turn should switch to Black.
+        assertEquals(Color.BLACK, game.getCurrentPlayer());
     }
 }
