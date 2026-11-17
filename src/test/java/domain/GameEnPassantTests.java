@@ -102,4 +102,41 @@ public class GameEnPassantTests {
         assertNull(board.getPiece(new Position(3, 5)));
         assertSame(Color.WHITE, game.getCurrentPlayer());
     }
+
+    @Test
+    public void EP09CannotCaptureEnPassantWhenPawnIsNotAdjacent() {
+        Board board = new Board();
+
+        Piece whiteKing = new Piece(PieceType.KING, Color.WHITE);
+        Piece blackKing = new Piece(PieceType.KING, Color.BLACK);
+        Piece whitePawn = new Piece(PieceType.PAWN, Color.WHITE);
+        Piece blackPawn = new Piece(PieceType.PAWN, Color.BLACK);
+
+        board.placePiece(whiteKing, new Position(0, 0)); // a1
+        board.placePiece(blackKing, new Position(7, 7)); // h8
+        board.placePiece(whitePawn, new Position(4, 4)); // e5
+        board.placePiece(blackPawn, new Position(2, 6)); // c7
+
+        Game game = new Game(board);
+
+        // White passes the turn.
+        game.makeMove(new Position(0, 0), new Position(0, 1));
+
+        // Black pawn advances two squares: c7 -> c5.
+        game.makeMove(new Position(2, 6), new Position(2, 4));
+
+        // White cannot capture en passant: e5 -> d6.
+        assertThrows(IllegalArgumentException.class,
+                () -> game.makeMove(
+                        new Position(4, 4),
+                        new Position(3, 5)));
+
+        // The rejected move must not change the board.
+        assertSame(whitePawn, board.getPiece(new Position(4, 4)));
+        assertSame(blackPawn, board.getPiece(new Position(2, 4)));
+        assertNull(board.getPiece(new Position(3, 5)));
+
+        // White keeps the turn.
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+    }
 }
