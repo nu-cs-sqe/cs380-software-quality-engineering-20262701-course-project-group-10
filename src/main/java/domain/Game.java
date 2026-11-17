@@ -59,6 +59,11 @@ public class Game {
     }
 
     public void makeMove(Position from, Position to) {
+        if (requiresPromotion(from, to)) {
+            throw new IllegalArgumentException(
+                    "Promotion choice is required");
+        }
+
         Board trial = trialMove(from, to);
         commit(from, to, trial);
     }
