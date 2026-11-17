@@ -223,4 +223,46 @@ public class GameEnPassantTests {
         // White still has the turn.
         assertSame(Color.WHITE, game.getCurrentPlayer());
     }
+
+    @Test
+    public void EP04IllegalMoveDoesNotClearEnPassantOpportunity() {
+        Board board = new Board();
+
+        Piece whiteKing = new Piece(PieceType.KING, Color.WHITE);
+        Piece blackKing = new Piece(PieceType.KING, Color.BLACK);
+        Piece whitePawn = new Piece(PieceType.PAWN, Color.WHITE);
+        Piece blackPawn = new Piece(PieceType.PAWN, Color.BLACK);
+
+        board.placePiece(whiteKing, new Position(0, 0)); // a1
+        board.placePiece(blackKing, new Position(7, 7)); // h8
+        board.placePiece(whitePawn, new Position(4, 4)); // e5
+        board.placePiece(blackPawn, new Position(3, 6)); // d7
+
+        Game game = new Game(board);
+
+        // White: a1 -> a2.
+        game.makeMove(new Position(0, 0), new Position(0, 1));
+
+        // Black: d7 -> d5.
+        game.makeMove(new Position(3, 6), new Position(3, 4));
+
+        // White attempts an illegal two-square move from e5.
+        assertThrows(IllegalArgumentException.class,
+                () -> game.makeMove(
+                        new Position(4, 4),
+                        new Position(4, 6)));
+
+        // The failed move must not change the turn or board.
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+        assertSame(whitePawn, board.getPiece(new Position(4, 4)));
+        assertSame(blackPawn, board.getPiece(new Position(3, 4)));
+
+        // En passant must still be available.
+        game.makeMove(new Position(4, 4), new Position(3, 5));
+
+        assertSame(whitePawn, board.getPiece(new Position(3, 5)));
+        assertNull(board.getPiece(new Position(4, 4)));
+        assertNull(board.getPiece(new Position(3, 4)));
+        assertSame(Color.BLACK, game.getCurrentPlayer());
+    }
 }
