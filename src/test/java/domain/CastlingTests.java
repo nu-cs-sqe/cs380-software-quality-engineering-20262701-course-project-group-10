@@ -1,5 +1,6 @@
 package domain;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -143,7 +144,7 @@ public class CastlingTests {
         game.makeMove(H2, H1);
         game.makeMove(A7, A8);
 
-        assertCastlingRejected(E1, G1);
+        assertCastlingRejected(E1, G1, MoveError.NO_CASTLING_RIGHT);
         assertFalse(game.canCastleKingSide(Color.WHITE));
         assertTrue(game.canCastleQueenSide(Color.WHITE));
     }
@@ -153,7 +154,7 @@ public class CastlingTests {
     public void G49CastlingWithoutTheRookIsRejected() {
         setUpCastlingPositionWithoutKingSideRook();
 
-        assertCastlingRejected(E1, G1);
+        assertCastlingRejected(E1, G1, MoveError.NO_CASTLING_ROOK);
     }
 
     // G50: the h1 square must hold the mover's rook, not just any own piece.
@@ -162,7 +163,7 @@ public class CastlingTests {
         setUpCastlingPositionWithoutKingSideRook();
         place(PieceType.KNIGHT, Color.WHITE, H1);
 
-        assertCastlingRejected(E1, G1);
+        assertCastlingRejected(E1, G1, MoveError.NO_CASTLING_ROOK);
     }
 
     // G51: the square next to the king on the king side must be empty.
@@ -171,7 +172,7 @@ public class CastlingTests {
         setUpCastlingPosition();
         place(PieceType.KNIGHT, Color.WHITE, F1);
 
-        assertCastlingRejected(E1, G1);
+        assertCastlingRejected(E1, G1, MoveError.CASTLING_BLOCKED);
     }
 
     // G52: the king's destination must be empty.
@@ -180,7 +181,7 @@ public class CastlingTests {
         setUpCastlingPosition();
         place(PieceType.KNIGHT, Color.WHITE, G1);
 
-        assertCastlingRejected(E1, G1);
+        assertCastlingRejected(E1, G1, MoveError.CASTLING_BLOCKED);
     }
 
     // G53: b1 must be empty even though only the rook crosses it.
@@ -189,7 +190,7 @@ public class CastlingTests {
         setUpCastlingPosition();
         place(PieceType.KNIGHT, Color.WHITE, B1);
 
-        assertCastlingRejected(E1, C1);
+        assertCastlingRejected(E1, C1, MoveError.CASTLING_BLOCKED);
     }
 
     // G54: the square next to the king on the queen side must be empty.
@@ -198,7 +199,7 @@ public class CastlingTests {
         setUpCastlingPosition();
         place(PieceType.BISHOP, Color.WHITE, D1);
 
-        assertCastlingRejected(E1, C1);
+        assertCastlingRejected(E1, C1, MoveError.CASTLING_BLOCKED);
     }
 
     // G55: a king in check may not castle out of it.
@@ -207,7 +208,7 @@ public class CastlingTests {
         setUpCastlingPosition();
         place(PieceType.ROOK, Color.BLACK, E4);
 
-        assertCastlingRejected(E1, G1);
+        assertCastlingRejected(E1, G1, MoveError.CASTLING_OUT_OF_CHECK);
     }
 
     // G56: the king may not cross an attacked square, even though the rook lands on it.
@@ -216,7 +217,7 @@ public class CastlingTests {
         setUpCastlingPosition();
         place(PieceType.ROOK, Color.BLACK, F4);
 
-        assertCastlingRejected(E1, G1);
+        assertCastlingRejected(E1, G1, MoveError.CASTLING_THROUGH_ATTACK);
     }
 
     // G57: the king may not land on an attacked square.
@@ -225,7 +226,7 @@ public class CastlingTests {
         setUpCastlingPosition();
         place(PieceType.ROOK, Color.BLACK, G4);
 
-        assertCastlingRejected(E1, G1);
+        assertCastlingRejected(E1, G1, MoveError.KING_IN_CHECK);
     }
 
     // G58: on the queen side, the king may not cross attacked d1.
@@ -234,7 +235,7 @@ public class CastlingTests {
         setUpCastlingPosition();
         place(PieceType.ROOK, Color.BLACK, D4);
 
-        assertCastlingRejected(E1, C1);
+        assertCastlingRejected(E1, C1, MoveError.CASTLING_THROUGH_ATTACK);
     }
 
     // G59: an attacked b1 does not stop castling; only the rook passes over it.
@@ -260,7 +261,7 @@ public class CastlingTests {
         place(PieceType.ROOK, Color.WHITE, H1);
         place(PieceType.KING, Color.BLACK, E8);
 
-        assertCastlingRejected(D1, F1);
+        assertCastlingRejected(D1, F1, MoveError.ILLEGAL_MOVE);
     }
 
     // G61: three files is never castling, even with an empty path.
@@ -268,7 +269,7 @@ public class CastlingTests {
     public void G61ThreeFileKingMoveIsNotCastling() {
         setUpCastlingPosition();
 
-        assertCastlingRejected(E1, B1);
+        assertCastlingRejected(E1, B1, MoveError.ILLEGAL_MOVE);
     }
 
     // G62: two ranks is never castling.
@@ -276,7 +277,7 @@ public class CastlingTests {
     public void G62TwoRankKingMoveIsNotCastling() {
         setUpCastlingPosition();
 
-        assertCastlingRejected(E1, E3);
+        assertCastlingRejected(E1, E3, MoveError.ILLEGAL_MOVE);
     }
 
     // G63: the rook on h1 must be the mover's own color.
@@ -285,7 +286,7 @@ public class CastlingTests {
         setUpCastlingPositionWithoutKingSideRook();
         place(PieceType.ROOK, Color.BLACK, H1);
 
-        assertCastlingRejected(E1, G1);
+        assertCastlingRejected(E1, G1, MoveError.NO_CASTLING_ROOK);
     }
 
     // G64: two files plus one rank is not castling, even from e1.
@@ -293,14 +294,15 @@ public class CastlingTests {
     public void G64TwoFilesAndOneRankIsNotCastling() {
         setUpCastlingPosition();
 
-        assertCastlingRejected(E1, G2);
+        assertCastlingRejected(E1, G2, MoveError.ILLEGAL_MOVE);
     }
 
     // A rejected castle changes no square and keeps the turn.
-    private void assertCastlingRejected(Position from, Position to) {
+    private void assertCastlingRejected(Position from, Position to, MoveError error) {
         Board before = board.copy();
 
-        assertThrows(IllegalArgumentException.class, () -> game.makeMove(from, to));
+        assertEquals(error, assertThrows(IllegalMoveException.class,
+                () -> game.makeMove(from, to)).getError());
 
         MoveRuleAssertions.assertSameSquares(before, board);
         assertSame(Color.WHITE, game.getCurrentPlayer());
