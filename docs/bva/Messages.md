@@ -29,7 +29,7 @@ for composed text so translators can reorder names.
 
 | ID | Methods and state | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| M01 | construct en; get app.title | Chess | no |
+| M01 | construct en; get app.title | Chess | yes |
 | M02 | construct es; get app.title | Ajedrez | no |
 | M03 | null locale | NullPointerException | no |
 | M04 | get null, empty, unknown keys | NPE for null; MissingResourceException otherwise | no |
