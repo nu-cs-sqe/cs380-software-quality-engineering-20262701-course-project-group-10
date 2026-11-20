@@ -92,7 +92,8 @@ val coverageExclusions = listOf(
     "ui/Main.class",
     "domain/Color.class",
     "domain/PieceType.class",
-    "domain/GameStatus.class"
+    "domain/GameStatus.class",
+    "domain/MoveError.class"
 )
 val coverageClasses = sourceSets.main.get().output.asFileTree.matching {
     exclude(coverageExclusions)
