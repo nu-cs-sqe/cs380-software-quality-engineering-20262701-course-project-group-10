@@ -38,8 +38,8 @@ for composed text so translators can reorder names.
 | M07 | test-only fr bundle | French text without production Java changes | yes |
 | M08 | both colors, both check states, en/es | exact localized turn/check text | yes |
 | M09 | null player | NullPointerException | yes |
-| M10 | every MoveError, en/es | exact corresponding translated error | no |
-| M11 | null error | NullPointerException | no |
+| M10 | every MoveError, en/es | exact corresponding translated error | yes |
+| M11 | null error | NullPointerException | yes |
 | M12 | every GameStatus, both winners for decisive results, en/es | exact formatted result | no |
 | M13 | null status / null Optional / decisive status without winner | NPE / NPE / IllegalArgumentException | no |
 | M14 | draw/in-progress with a present winner | winner ignored; same nondecisive text | no |

@@ -1,6 +1,7 @@
 package ui;
 
 import domain.Color;
+import domain.MoveError;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Objects;
@@ -26,5 +27,9 @@ public class Messages {
         String turn = get("turn." + Objects.requireNonNull(player, "player").name());
         return inCheck ? new MessageFormat(get("turn.check"), locale).format(new Object[] {turn})
                 : turn;
+    }
+
+    public String errorText(MoveError error) {
+        return get("error." + Objects.requireNonNull(error, "error").name());
     }
 }
