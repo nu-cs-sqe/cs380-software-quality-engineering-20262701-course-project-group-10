@@ -59,3 +59,15 @@ Checkstyle rules: `config/checkstyle/checkstyle.xml`.
 Every production class and enum starts with a short Javadoc comment describing
 its responsibility. Keep implementation comments where they explain a reason or
 constraint that is not clear from the code; avoid comments that repeat the code.
+
+## Languages
+Choose English or Español before starting, or use the language menu during play.
+Switching the language preserves the current game.
+
+To add a locale without editing Java, copy `src/main/resources/messages_en.properties`
+to `messages_<language>.properties` and translate every value, retaining the keys
+and MessageFormat placeholders. Register its BCP 47 tag and native name in
+`src/main/resources/languages.properties` (for example `fr=Français`). For a
+regional tag such as `fr-CA`, use `messages_fr_CA.properties`. The base bundle is
+the English fallback. Tests check every registered bundle for matching keys,
+nonempty values and duplicate keys. Run the full build after adding a language.
