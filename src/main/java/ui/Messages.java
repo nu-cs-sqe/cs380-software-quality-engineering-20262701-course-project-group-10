@@ -4,10 +4,14 @@ import domain.Color;
 import domain.GameStatus;
 import domain.MoveError;
 import java.text.MessageFormat;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.TreeSet;
 
 /** Loads localized chess text without changing game state. */
 public class Messages {
@@ -46,5 +50,14 @@ public class Messages {
                     .format(new Object[] {get("color." + color.name())});
         }
         return pattern;
+    }
+
+    public static Map<Locale, String> languageOptions() {
+        ResourceBundle languages = ResourceBundle.getBundle("languages", Locale.ROOT);
+        Map<Locale, String> options = new LinkedHashMap<>();
+        for (String tag : new TreeSet<>(languages.keySet())) {
+            options.put(Locale.forLanguageTag(tag), languages.getString(tag));
+        }
+        return Collections.unmodifiableMap(options);
     }
 }

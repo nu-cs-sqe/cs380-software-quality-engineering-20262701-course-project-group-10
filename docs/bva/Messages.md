@@ -44,7 +44,7 @@ for composed text so translators can reorder names.
 | M13 | null status / null Optional / decisive status without winner | NPE / NPE / IllegalArgumentException | yes |
 | M14 | draw/in-progress with a present winner | winner ignored; same nondecisive text | yes |
 | M15 | raw base/en/es bundles | identical keys; no blank/duplicate entries; readable Unicode | no |
-| M16 | languageOptions | en/English and es/Español; sorted and unmodifiable | no |
+| M16 | languageOptions | en/English and es/Español; sorted and unmodifiable | yes |
 | M17 | two Messages instances for en/es with real game | text changes, game state unchanged | no |
 | M18 | all promotion piece names, en/es | localized choices; enum names never shown to players | no |
 
