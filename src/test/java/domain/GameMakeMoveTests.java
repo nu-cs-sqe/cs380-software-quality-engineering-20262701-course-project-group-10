@@ -1,5 +1,6 @@
 package domain;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -70,8 +71,9 @@ public class GameMakeMoveTests {
     public void movingFromAnEmptySquareIsRejected() {
         game.startNewGame();
 
-        assertThrows(IllegalArgumentException.class,
-                () -> game.makeMove(new Position(4, 2), new Position(4, 3)));
+        assertEquals(MoveError.NO_PIECE,
+                assertThrows(IllegalMoveException.class,
+                        () -> game.makeMove(new Position(4, 2), new Position(4, 3))).getError());
 
         assertSame(Color.WHITE, game.getCurrentPlayer());
     }
@@ -83,8 +85,9 @@ public class GameMakeMoveTests {
         game.startNewGame();
         Piece blackPawn = board.getPiece(new Position(4, 6));
 
-        assertThrows(IllegalArgumentException.class,
-                () -> game.makeMove(new Position(4, 6), new Position(4, 5)));
+        assertEquals(MoveError.NOT_YOUR_TURN,
+                assertThrows(IllegalMoveException.class,
+                        () -> game.makeMove(new Position(4, 6), new Position(4, 5))).getError());
 
         assertSame(blackPawn, board.getPiece(new Position(4, 6)));
         assertTrue(board.isEmpty(new Position(4, 5)));
@@ -98,8 +101,9 @@ public class GameMakeMoveTests {
         game.makeMove(new Position(4, 1), new Position(4, 3));
         Piece whitePawn = board.getPiece(new Position(3, 1));
 
-        assertThrows(IllegalArgumentException.class,
-                () -> game.makeMove(new Position(3, 1), new Position(3, 3)));
+        assertEquals(MoveError.NOT_YOUR_TURN,
+                assertThrows(IllegalMoveException.class,
+                        () -> game.makeMove(new Position(3, 1), new Position(3, 3))).getError());
 
         assertSame(whitePawn, board.getPiece(new Position(3, 1)));
         assertSame(Color.BLACK, game.getCurrentPlayer());
@@ -111,8 +115,9 @@ public class GameMakeMoveTests {
         game.startNewGame();
         Piece pawn = board.getPiece(new Position(4, 1));
 
-        assertThrows(IllegalArgumentException.class,
-                () -> game.makeMove(new Position(4, 1), new Position(4, 4)));
+        assertEquals(MoveError.ILLEGAL_MOVE,
+                assertThrows(IllegalMoveException.class,
+                        () -> game.makeMove(new Position(4, 1), new Position(4, 4))).getError());
 
         assertSame(pawn, board.getPiece(new Position(4, 1)));
         assertTrue(board.isEmpty(new Position(4, 4)));
@@ -154,8 +159,9 @@ public class GameMakeMoveTests {
         board.placePiece(rook, new Position(3, 3));
         board.placePiece(pawn, new Position(3, 5));
 
-        assertThrows(IllegalArgumentException.class,
-                () -> game.makeMove(new Position(3, 3), new Position(3, 5)));
+        assertEquals(MoveError.OWN_PIECE,
+                assertThrows(IllegalMoveException.class,
+                        () -> game.makeMove(new Position(3, 3), new Position(3, 5))).getError());
 
         assertSame(rook, board.getPiece(new Position(3, 3)));
         assertSame(pawn, board.getPiece(new Position(3, 5)));
@@ -200,7 +206,9 @@ public class GameMakeMoveTests {
         place(PieceType.ROOK, Color.BLACK, D8);
         Board before = board.copy();
 
-        assertThrows(IllegalArgumentException.class, () -> game.makeMove(E1, D1));
+        assertEquals(MoveError.KING_IN_CHECK,
+                assertThrows(IllegalMoveException.class,
+                        () -> game.makeMove(E1, D1)).getError());
 
         MoveRuleAssertions.assertSameSquares(before, board);
         assertSame(Color.WHITE, game.getCurrentPlayer());
@@ -302,7 +310,9 @@ public class GameMakeMoveTests {
         place(PieceType.KING, Color.BLACK, A8);
         Board before = board.copy();
 
-        assertThrows(IllegalArgumentException.class, () -> game.makeMove(A1, A8));
+        assertEquals(MoveError.CAPTURE_KING,
+                assertThrows(IllegalMoveException.class,
+                        () -> game.makeMove(A1, A8)).getError());
 
         MoveRuleAssertions.assertSameSquares(before, board);
         assertSame(Color.WHITE, game.getCurrentPlayer());
