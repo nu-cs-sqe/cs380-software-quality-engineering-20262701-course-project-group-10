@@ -30,12 +30,12 @@ for composed text so translators can reorder names.
 | ID | Methods and state | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | M01 | construct en; get app.title | Chess | yes |
-| M02 | construct es; get app.title | Ajedrez | no |
-| M03 | null locale | NullPointerException | no |
-| M04 | get null, empty, unknown keys | NPE for null; MissingResourceException otherwise | no |
-| M05 | en_US / en_GB / es_MX / es_ES | language bundle selected | no |
-| M06 | root/unsupported locale with Spanish JVM default | English base fallback, global locale restored | no |
-| M07 | test-only fr bundle | French text without production Java changes | no |
+| M02 | construct es; get app.title | Ajedrez | yes |
+| M03 | null locale | NullPointerException | yes |
+| M04 | get null, empty, unknown keys | NPE for null; MissingResourceException otherwise | yes |
+| M05 | en_US / en_GB / es_MX / es_ES | language bundle selected | yes |
+| M06 | root/unsupported locale with Spanish JVM default | English base fallback, global locale restored | yes |
+| M07 | test-only fr bundle | French text without production Java changes | yes |
 | M08 | both colors, both check states, en/es | exact localized turn/check text | no |
 | M09 | null player | NullPointerException | no |
 | M10 | every MoveError, en/es | exact corresponding translated error | no |
