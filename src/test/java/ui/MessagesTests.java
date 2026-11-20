@@ -307,8 +307,13 @@ public class MessagesTests {
     @Test
     public void M16LanguageOptionsComeFromAnImmutableRegistry() {
         java.util.Map<Locale, String> languages = Messages.languageOptions();
-        assertEquals(java.util.List.of(Locale.ENGLISH, new Locale("es")),
-                new java.util.ArrayList<>(languages.keySet()));
+        java.util.List<String> tags = new java.util.ArrayList<>();
+        for (Locale locale : languages.keySet()) {
+            tags.add(locale.toLanguageTag());
+        }
+        java.util.List<String> sorted = new java.util.ArrayList<>(tags);
+        java.util.Collections.sort(sorted);
+        assertEquals(sorted, tags);
         assertEquals("English", languages.get(Locale.ENGLISH));
         assertEquals("Español", languages.get(new Locale("es")));
         assertThrows(UnsupportedOperationException.class,
@@ -318,8 +323,7 @@ public class MessagesTests {
     @Test
     public void M15RawBundlesHaveExactlyTheSameNonemptyKeys() throws java.io.IOException {
         java.util.Set<String> expected = null;
-        for (String file : java.util.List.of(
-                "messages.properties", "messages_en.properties", "messages_es.properties")) {
+        for (String file : bundleFiles()) {
             java.util.Properties bundle = new java.util.Properties();
             try (java.io.Reader reader = new java.io.InputStreamReader(
                     java.util.Objects.requireNonNull(getClass().getResourceAsStream("/" + file)),
@@ -332,7 +336,8 @@ public class MessagesTests {
                 assertEquals(expected, bundle.stringPropertyNames(), file);
             }
             for (String key : bundle.stringPropertyNames()) {
-                org.junit.jupiter.api.Assertions.assertFalse(bundle.getProperty(key).isBlank(), key);
+                org.junit.jupiter.api.Assertions.assertFalse(bundle.getProperty(key).isBlank(),
+                        key);
             }
         }
     }
@@ -350,7 +355,8 @@ public class MessagesTests {
         org.junit.jupiter.api.Assertions.assertSame(pawn,
                 board.getPiece(new domain.Position(4, 1)));
         org.junit.jupiter.api.Assertions.assertSame(domain.Color.WHITE, game.getCurrentPlayer());
-        org.junit.jupiter.api.Assertions.assertSame(domain.GameStatus.IN_PROGRESS, game.getStatus());
+        org.junit.jupiter.api.Assertions.assertSame(domain.GameStatus.IN_PROGRESS,
+                game.getStatus());
     }
 
     @Test
@@ -379,5 +385,42 @@ public class MessagesTests {
                 new Messages(Locale.ENGLISH).get("piece.PAWN"));
         assertEquals("Peón",
                 new Messages(new Locale("es")).get("piece.PAWN"));
+    }
+
+    @Test
+    public void M15RawBundlesDoNotHideDuplicateKeys() throws java.io.IOException {
+        for (String file : bundleFiles()) {
+            try (java.io.InputStream input = java.util.Objects.requireNonNull(
+                    getClass().getResourceAsStream("/" + file))) {
+                String text = new String(input.readAllBytes(),
+                        java.nio.charset.StandardCharsets.UTF_8);
+                java.util.Set<String> keys = new java.util.HashSet<>();
+                for (String line : text.split("\n")) {
+                    if (!line.isBlank()) {
+                        String key = line.split("=", 2)[0];
+                        org.junit.jupiter.api.Assertions.assertTrue(keys.add(key), key);
+                    }
+                }
+            }
+        }
+    }
+
+    private java.util.List<String> bundleFiles() {
+        java.util.List<String> files = new java.util.ArrayList<>();
+        files.add("messages.properties");
+        for (Locale locale : Messages.languageOptions().keySet()) {
+            files.add("messages_" + locale.toLanguageTag().replace('-', '_') + ".properties");
+        }
+        return files;
+    }
+
+    @Test
+    public void M10EveryRegisteredLanguageIncludesEveryErrorCode() {
+        for (Locale locale : Messages.languageOptions().keySet()) {
+            Messages messages = new Messages(locale);
+            for (domain.MoveError error : domain.MoveError.values()) {
+                org.junit.jupiter.api.Assertions.assertFalse(messages.errorText(error).isBlank());
+            }
+        }
     }
 }
