@@ -1,10 +1,12 @@
 package ui;
 
 import domain.Color;
+import domain.GameStatus;
 import domain.MoveError;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /** Loads localized chess text without changing game state. */
@@ -31,5 +33,18 @@ public class Messages {
 
     public String errorText(MoveError error) {
         return get("error." + Objects.requireNonNull(error, "error").name());
+    }
+
+    public String resultText(GameStatus status, Optional<Color> winner) {
+        Objects.requireNonNull(status, "status");
+        Objects.requireNonNull(winner, "winner");
+        String pattern = get("result." + status.name());
+        if (status == GameStatus.CHECKMATE || status == GameStatus.RESIGNED) {
+            Color color = winner.orElseThrow(
+                    () -> new IllegalArgumentException("A winning result requires a winner"));
+            return new MessageFormat(pattern, locale)
+                    .format(new Object[] {get("color." + color.name())});
+        }
+        return pattern;
     }
 }

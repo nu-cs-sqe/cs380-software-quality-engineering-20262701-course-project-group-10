@@ -40,9 +40,9 @@ for composed text so translators can reorder names.
 | M09 | null player | NullPointerException | yes |
 | M10 | every MoveError, en/es | exact corresponding translated error | yes |
 | M11 | null error | NullPointerException | yes |
-| M12 | every GameStatus, both winners for decisive results, en/es | exact formatted result | no |
-| M13 | null status / null Optional / decisive status without winner | NPE / NPE / IllegalArgumentException | no |
-| M14 | draw/in-progress with a present winner | winner ignored; same nondecisive text | no |
+| M12 | every GameStatus, both winners for decisive results, en/es | exact formatted result | yes |
+| M13 | null status / null Optional / decisive status without winner | NPE / NPE / IllegalArgumentException | yes |
+| M14 | draw/in-progress with a present winner | winner ignored; same nondecisive text | yes |
 | M15 | raw base/en/es bundles | identical keys; no blank/duplicate entries; readable Unicode | no |
 | M16 | languageOptions | en/English and es/Español; sorted and unmodifiable | no |
 | M17 | two Messages instances for en/es with real game | text changes, game state unchanged | no |
