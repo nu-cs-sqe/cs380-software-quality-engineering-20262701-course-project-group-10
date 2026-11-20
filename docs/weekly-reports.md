@@ -48,6 +48,7 @@
 **Planning and Progress Tracking**:
 1. [done] Mengpang Xing: Game end conditions, start screen, and i18n requirements and design docs ([PR #55](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/55))
 2. [done] Mengpang Xing: Checkmate and stalemate detection with BVA and tests, including mocked future replies ([PR #56](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/56)).
+- [done] Mengpang Xing: English/Spanish resource bundles, typed move errors, locale selection, BVA and tests.
 
 
 
