@@ -8,7 +8,7 @@
     <lineNumber>109</lineNumber>
     <description>Replaced integer multiplication with division</description>
     <indexes>25</indexes>
-	<sourceSha256>f45e9cbf6f21d8f854f0a04b8e456db49970826f684686a0bb31db576ac957ea</sourceSha256>
+    <sourceSha256>f45e9cbf6f21d8f854f0a04b8e456db49970826f684686a0bb31db576ac957ea</sourceSha256>
     <reason>direction is always 1 or -1; integer multiplication and division by either value are identical for bounded rank differences (-7 through 7).</reason>
   </mutant>
   <mutant>
@@ -19,7 +19,7 @@
     <lineNumber>124</lineNumber>
     <description>Replaced integer multiplication with division</description>
     <indexes>16</indexes>
-	<sourceSha256>f45e9cbf6f21d8f854f0a04b8e456db49970826f684686a0bb31db576ac957ea</sourceSha256>
+    <sourceSha256>f45e9cbf6f21d8f854f0a04b8e456db49970826f684686a0bb31db576ac957ea</sourceSha256>
     <reason>direction is always 1 or -1; integer multiplication and division by either value are identical for bounded rank differences (-7 through 7).</reason>
   </mutant>
   <mutant>
@@ -27,10 +27,10 @@
     <mutatedMethod>isKingSideCastle</mutatedMethod>
     <methodDescription>(Ldomain/Position;Ldomain/Position;)Z</methodDescription>
     <mutator>org.pitest.mutationtest.engine.gregor.mutators.ConditionalsBoundaryMutator</mutator>
-	<lineNumber>221</lineNumber>
+    <lineNumber>220</lineNumber>
     <description>changed conditional boundary</description>
     <indexes>7</indexes>
-	<sourceSha256>46a41ed36218167d3ce62f6d160f9ca88a2f87e154fb11b9005a9cf5969ce8e1</sourceSha256>
+    <sourceSha256>eb63a54f18e2a8ef9e606b6b8d8c77b81b3fb9134f9e8f628a38e4dfa9cfa98e</sourceSha256>
     <reason>All callers still operate only on castling attempts validated as a two-file king displacement. The shared trialMove path retains that check before every call. Source and destination files cannot be equal, so &gt; and &gt;= remain identical after the trial/commit refactor.</reason>
   </mutant>
 </equivalentMutants>

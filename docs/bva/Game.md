@@ -472,3 +472,11 @@ retested here.
 4. En passant and promotion use the existing board-copy and king-safety checks.
 5. GUI tests may use a mocked or stubbed promotion-choice callback.
 6. The Implemented column records completed tests and cases covered by other tests.
+## Internationalization error contract
+
+Issue #58 replaces each English rule rejection with `IllegalMoveException` and
+a stable `MoveError`. Existing IllegalArgumentException callers remain compatible.
+Null/invariant failures retain their existing exception types. The strengthened
+GameMakeMoveTests, CastlingTests, and GamePromotionTests assert the precise error
+codes and continue checking that rejected moves leave state unchanged. Translation
+is tested separately in MessagesTests; Game never selects a display language.

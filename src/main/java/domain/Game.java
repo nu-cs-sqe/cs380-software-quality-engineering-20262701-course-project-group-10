@@ -60,8 +60,7 @@ public class Game {
 
     public void makeMove(Position from, Position to) {
         if (requiresPromotion(from, to)) {
-            throw new IllegalArgumentException(
-                    "Promotion choice is required");
+            throw new IllegalMoveException(MoveError.PROMOTION_REQUIRED);
         }
 
         Board trial = trialMove(from, to);
@@ -75,21 +74,21 @@ public class Game {
         Piece moving = board.getPiece(from);
 
         if (moving.getType() != PieceType.PAWN) {
-            throw new IllegalArgumentException("Only pawns can promote");
+            throw new IllegalMoveException(MoveError.NOT_A_PAWN);
         }
 
         int lastRank = moving.getColor() == Color.WHITE
                 ? BLACK_HOME_RANK : WHITE_HOME_RANK;
 
         if (to.getRank() != lastRank) {
-            throw new IllegalArgumentException("Pawn has not reached the last rank");
+            throw new IllegalMoveException(MoveError.NOT_LAST_RANK);
         }
 
         if (promotion != PieceType.QUEEN
                 && promotion != PieceType.ROOK
                 && promotion != PieceType.BISHOP
                 && promotion != PieceType.KNIGHT) {
-            throw new IllegalArgumentException("Invalid promotion type");
+            throw new IllegalMoveException(MoveError.INVALID_PROMOTION);
         }
 
         Piece promotedPiece = new Piece(promotion, moving.getColor());
@@ -226,25 +225,24 @@ public class Game {
                 ? canCastleKingSide(currentPlayer)
                 : canCastleQueenSide(currentPlayer);
         if (!hasRight) {
-            throw new IllegalArgumentException("You can no longer castle on that side");
+            throw new IllegalMoveException(MoveError.NO_CASTLING_RIGHT);
         }
         // A hand-built board can keep the right with no rook, so check the piece itself.
         Position rookSquare = castlingRookSquare(from, to);
         Piece rook = board.getPiece(rookSquare);
         if (rook == null || rook.getType() != PieceType.ROOK
                 || rook.getColor() != currentPlayer) {
-            throw new IllegalArgumentException("No rook to castle with");
+            throw new IllegalMoveException(MoveError.NO_CASTLING_ROOK);
         }
         requireEmptyBetween(from, rookSquare);
         if (validator.isInCheck(board, currentPlayer)) {
-            throw new IllegalArgumentException("You cannot castle out of check");
+            throw new IllegalMoveException(MoveError.CASTLING_OUT_OF_CHECK);
         }
         // Use the real board: on the trial board the rook stands here and hides the attack.
         int step = Integer.compare(to.getFile(), from.getFile());
         Position crossing = new Position(from.getFile() + step, from.getRank());
         if (validator.isSquareAttacked(board, crossing, opponent())) {
-            throw new IllegalArgumentException(
-                    "Your king cannot castle through an attacked square");
+            throw new IllegalMoveException(MoveError.CASTLING_THROUGH_ATTACK);
         }
     }
 
@@ -253,7 +251,7 @@ public class Game {
         int step = Integer.compare(rook.getFile(), king.getFile());
         for (int file = king.getFile() + step; file != rook.getFile(); file += step) {
             if (!board.isEmpty(new Position(file, king.getRank()))) {
-                throw new IllegalArgumentException("Pieces are in the way of castling");
+                throw new IllegalMoveException(MoveError.CASTLING_BLOCKED);
             }
         }
     }
@@ -300,37 +298,37 @@ public class Game {
 
     private void requireKingSafe(Board trial) {
         if (validator.isInCheck(trial, currentPlayer)) {
-            throw new IllegalArgumentException("That move would leave your king in check");
+            throw new IllegalMoveException(MoveError.KING_IN_CHECK);
         }
     }
 
     private void requireNotCapturingKing(Position to) {
         Piece target = board.getPiece(to);
         if (target != null && target.getType() == PieceType.KING) {
-            throw new IllegalArgumentException("You cannot capture a king");
+            throw new IllegalMoveException(MoveError.CAPTURE_KING);
         }
     }
 
     private void requireNotCapturingOwnPiece(Position to) {
         Piece target = board.getPiece(to);
         if (target != null && target.getColor() == currentPlayer) {
-            throw new IllegalArgumentException("Cannot capture your own piece");
+            throw new IllegalMoveException(MoveError.OWN_PIECE);
         }
     }
 
     private void requireCurrentPlayersPieceOn(Position position) {
         Piece piece = board.getPiece(position);
         if (piece == null) {
-            throw new IllegalArgumentException("No piece on " + position);
+            throw new IllegalMoveException(MoveError.NO_PIECE);
         }
         if (piece.getColor() != currentPlayer) {
-            throw new IllegalArgumentException("It is " + currentPlayer + "'s turn");
+            throw new IllegalMoveException(MoveError.NOT_YOUR_TURN);
         }
     }
 
     private void requireLegalMove(Position from, Position to) {
         if (!validator.isLegalMove(board, from, to)) {
-            throw new IllegalArgumentException("Illegal move");
+            throw new IllegalMoveException(MoveError.ILLEGAL_MOVE);
         }
     }
 
