@@ -8,7 +8,6 @@ import javax.swing.SwingUtilities;
 public class Main {
     public static void main(String[] args) {
         Game game = new Game(new Board());
-        game.startNewGame();
         SwingUtilities.invokeLater(() -> new ChessFrame(game).setVisible(true));
     }
 }
