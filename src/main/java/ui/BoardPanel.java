@@ -3,6 +3,8 @@ package ui;
 import domain.Board;
 import domain.Color;
 import domain.Game;
+import domain.IllegalMoveException;
+import domain.MoveError;
 import domain.Piece;
 import domain.PieceType;
 import domain.Position;
@@ -31,15 +33,15 @@ public class BoardPanel extends JPanel {
     private final Game game;
     private final BoardClickHandler clickHandler;
     private final Runnable onBoardChanged;
-    private final Consumer<String> onIllegalMove;
+    private final Consumer<MoveError> onIllegalMove;
 
     public BoardPanel(Game game, Runnable onBoardChanged,
-                      Consumer<String> onIllegalMove) {
+                      Consumer<MoveError> onIllegalMove) {
         this(game, onBoardChanged, onIllegalMove, () -> null);
     }
 
     public BoardPanel(Game game, Runnable onBoardChanged,
-                      Consumer<String> onIllegalMove,
+                      Consumer<MoveError> onIllegalMove,
                       Supplier<PieceType> promotionChoice) {
 
         this.game = game;
@@ -67,8 +69,8 @@ public class BoardPanel extends JPanel {
         try {
             clickHandler.click(clickHandler.toPosition(x, y, squareSize()));
             onBoardChanged.run();
-        } catch (IllegalArgumentException illegalMove) {
-            onIllegalMove.accept(illegalMove.getMessage());
+        } catch (IllegalMoveException illegalMove) {
+            onIllegalMove.accept(illegalMove.getError());
         } finally {
             repaint();
         }
