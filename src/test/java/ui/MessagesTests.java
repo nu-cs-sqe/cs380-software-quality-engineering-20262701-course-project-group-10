@@ -208,4 +208,99 @@ public class MessagesTests {
         assertThrows(NullPointerException.class,
                 () -> new Messages(Locale.ENGLISH).errorText(null));
     }
+
+    @Test
+    public void M12ResultInProgressIsTranslated() {
+        assertEquals("Game in progress.",
+                new Messages(Locale.ENGLISH).resultText(domain.GameStatus.IN_PROGRESS,
+                        java.util.Optional.empty()));
+        assertEquals("Partida en curso.",
+                new Messages(new Locale("es")).resultText(domain.GameStatus.IN_PROGRESS,
+                        java.util.Optional.empty()));
+    }
+
+    @Test
+    public void M12ResultCheckmateWhiteIsTranslated() {
+        assertEquals("White wins by checkmate.",
+                new Messages(Locale.ENGLISH).resultText(domain.GameStatus.CHECKMATE,
+                        java.util.Optional.of(domain.Color.WHITE)));
+        assertEquals("Blancas ganan por jaque mate.",
+                new Messages(new Locale("es")).resultText(domain.GameStatus.CHECKMATE,
+                        java.util.Optional.of(domain.Color.WHITE)));
+    }
+
+    @Test
+    public void M12ResultCheckmateBlackIsTranslated() {
+        assertEquals("Black wins by checkmate.",
+                new Messages(Locale.ENGLISH).resultText(domain.GameStatus.CHECKMATE,
+                        java.util.Optional.of(domain.Color.BLACK)));
+        assertEquals("Negras ganan por jaque mate.",
+                new Messages(new Locale("es")).resultText(domain.GameStatus.CHECKMATE,
+                        java.util.Optional.of(domain.Color.BLACK)));
+    }
+
+    @Test
+    public void M12ResultStalemateIsTranslated() {
+        assertEquals("Draw by stalemate.",
+                new Messages(Locale.ENGLISH).resultText(domain.GameStatus.STALEMATE,
+                        java.util.Optional.empty()));
+        assertEquals("Tablas por ahogado.",
+                new Messages(new Locale("es")).resultText(domain.GameStatus.STALEMATE,
+                        java.util.Optional.empty()));
+    }
+
+    @Test
+    public void M12ResultResignedWhiteIsTranslated() {
+        assertEquals("White wins by resignation.",
+                new Messages(Locale.ENGLISH).resultText(domain.GameStatus.RESIGNED,
+                        java.util.Optional.of(domain.Color.WHITE)));
+        assertEquals("Blancas ganan por abandono.",
+                new Messages(new Locale("es")).resultText(domain.GameStatus.RESIGNED,
+                        java.util.Optional.of(domain.Color.WHITE)));
+    }
+
+    @Test
+    public void M12ResultResignedBlackIsTranslated() {
+        assertEquals("Black wins by resignation.",
+                new Messages(Locale.ENGLISH).resultText(domain.GameStatus.RESIGNED,
+                        java.util.Optional.of(domain.Color.BLACK)));
+        assertEquals("Negras ganan por abandono.",
+                new Messages(new Locale("es")).resultText(domain.GameStatus.RESIGNED,
+                        java.util.Optional.of(domain.Color.BLACK)));
+    }
+
+    @Test
+    public void M12ResultDrawAgreedIsTranslated() {
+        assertEquals("Draw by agreement.",
+                new Messages(Locale.ENGLISH).resultText(domain.GameStatus.DRAW_AGREED,
+                        java.util.Optional.empty()));
+        assertEquals("Tablas por acuerdo.",
+                new Messages(new Locale("es")).resultText(domain.GameStatus.DRAW_AGREED,
+                        java.util.Optional.empty()));
+    }
+
+    @Test
+    public void M13InvalidResultInputsAreRejected() {
+        Messages messages = new Messages(Locale.ENGLISH);
+        assertThrows(NullPointerException.class,
+                () -> messages.resultText(null, java.util.Optional.empty()));
+        assertThrows(NullPointerException.class,
+                () -> messages.resultText(domain.GameStatus.STALEMATE, null));
+        for (domain.GameStatus status : new domain.GameStatus[] {
+                domain.GameStatus.CHECKMATE, domain.GameStatus.RESIGNED}) {
+            assertThrows(IllegalArgumentException.class,
+                    () -> messages.resultText(status, java.util.Optional.empty()));
+        }
+    }
+
+    @Test
+    public void M14DrawAndProgressTextDoNotUseAWinner() {
+        Messages messages = new Messages(Locale.ENGLISH);
+        for (domain.GameStatus status : new domain.GameStatus[] {
+                domain.GameStatus.IN_PROGRESS, domain.GameStatus.STALEMATE,
+                domain.GameStatus.DRAW_AGREED}) {
+            assertEquals(messages.resultText(status, java.util.Optional.empty()),
+                    messages.resultText(status, java.util.Optional.of(domain.Color.WHITE)));
+        }
+    }
 }
