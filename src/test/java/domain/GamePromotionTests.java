@@ -1,5 +1,6 @@
 package domain;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
@@ -242,11 +243,12 @@ public class GamePromotionTests {
 
             Game game = new Game(board);
 
-            assertThrows(IllegalArgumentException.class,
-                    () -> game.makeMove(
-                            new Position(4, 6),
-                            new Position(4, 7),
-                            invalidType));
+            assertEquals(MoveError.INVALID_PROMOTION,
+                    assertThrows(IllegalMoveException.class,
+                            () -> game.makeMove(
+                                    new Position(4, 6),
+                                    new Position(4, 7),
+                                    invalidType)).getError());
 
             // Board must remain unchanged.
             assertSame(whitePawn, board.getPiece(new Position(4, 6)));
@@ -300,10 +302,11 @@ public class GamePromotionTests {
         Game game = new Game(board);
 
         // Promotion without specifying a piece must be rejected.
-        assertThrows(IllegalArgumentException.class,
-                () -> game.makeMove(
-                        new Position(4, 6),
-                        new Position(4, 7)));
+        assertEquals(MoveError.PROMOTION_REQUIRED,
+                assertThrows(IllegalMoveException.class,
+                        () -> game.makeMove(
+                                new Position(4, 6),
+                                new Position(4, 7))).getError());
 
         // Board must remain unchanged.
         assertSame(whitePawn, board.getPiece(new Position(4, 6)));
@@ -373,8 +376,12 @@ public class GamePromotionTests {
         Position to = new Position(1, 7);   // b8
 
         // Promotion would expose the White King to the Black Rook.
-        assertThrows(IllegalArgumentException.class,
-                () -> game.makeMove(from, to, PieceType.QUEEN));
+        assertEquals(MoveError.KING_IN_CHECK,
+                assertThrows(IllegalMoveException.class,
+                        () -> game.makeMove(
+                                from,
+                                to,
+                                PieceType.QUEEN)).getError());
 
         // Board must remain unchanged.
         assertSame(whiteKing, board.getPiece(new Position(0, 6)));
@@ -404,8 +411,8 @@ public class GamePromotionTests {
         Position to = new Position(4, 7);   // e8
 
         // A pawn cannot move two squares from e6 to e8.
-        assertThrows(IllegalArgumentException.class,
-                () -> game.requiresPromotion(from, to));
+        assertEquals(MoveError.ILLEGAL_MOVE, assertThrows(IllegalMoveException.class,
+                () -> game.requiresPromotion(from, to)).getError());
 
         // Board must remain unchanged.
         assertSame(whitePawn, board.getPiece(from));
@@ -428,11 +435,12 @@ public class GamePromotionTests {
         Game game = new Game(board);
 
         // King cannot promote, even with a valid movement.
-        assertThrows(IllegalArgumentException.class,
-                () -> game.makeMove(
-                        new Position(0, 0),
-                        new Position(0, 1),
-                        PieceType.QUEEN));
+        assertEquals(MoveError.NOT_A_PAWN,
+                assertThrows(IllegalMoveException.class,
+                        () -> game.makeMove(
+                                new Position(0, 0),
+                                new Position(0, 1),
+                                PieceType.QUEEN)).getError());
 
         // Board and turn remain unchanged.
         assertSame(whiteKing, board.getPiece(new Position(0, 0)));
@@ -455,11 +463,12 @@ public class GamePromotionTests {
         Game game = new Game(board);
 
         // Pawn moves legally to e3, but cannot promote there.
-        assertThrows(IllegalArgumentException.class,
-                () -> game.makeMove(
-                        new Position(4, 1),
-                        new Position(4, 2),
-                        PieceType.QUEEN));
+        assertEquals(MoveError.NOT_LAST_RANK,
+                assertThrows(IllegalMoveException.class,
+                        () -> game.makeMove(
+                                new Position(4, 1),
+                                new Position(4, 2),
+                                PieceType.QUEEN)).getError());
 
         // Board and turn remain unchanged.
         assertSame(whitePawn, board.getPiece(new Position(4, 1)));
