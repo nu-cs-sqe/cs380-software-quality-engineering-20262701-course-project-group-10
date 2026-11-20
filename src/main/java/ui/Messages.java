@@ -1,5 +1,7 @@
 package ui;
 
+import domain.Color;
+import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -18,5 +20,11 @@ public class Messages {
 
     public String get(String key) {
         return bundle.getString(Objects.requireNonNull(key, "key"));
+    }
+
+    public String turnText(Color player, boolean inCheck) {
+        String turn = get("turn." + Objects.requireNonNull(player, "player").name());
+        return inCheck ? new MessageFormat(get("turn.check"), locale).format(new Object[] {turn})
+                : turn;
     }
 }

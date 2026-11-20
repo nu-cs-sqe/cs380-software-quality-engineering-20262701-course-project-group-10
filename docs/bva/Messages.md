@@ -36,8 +36,8 @@ for composed text so translators can reorder names.
 | M05 | en_US / en_GB / es_MX / es_ES | language bundle selected | yes |
 | M06 | root/unsupported locale with Spanish JVM default | English base fallback, global locale restored | yes |
 | M07 | test-only fr bundle | French text without production Java changes | yes |
-| M08 | both colors, both check states, en/es | exact localized turn/check text | no |
-| M09 | null player | NullPointerException | no |
+| M08 | both colors, both check states, en/es | exact localized turn/check text | yes |
+| M09 | null player | NullPointerException | yes |
 | M10 | every MoveError, en/es | exact corresponding translated error | no |
 | M11 | null error | NullPointerException | no |
 | M12 | every GameStatus, both winners for decisive results, en/es | exact formatted result | no |
