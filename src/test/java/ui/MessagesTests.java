@@ -54,4 +54,24 @@ public class MessagesTests {
     public void M07AnotherBundleWorksWithoutChangingProductionJava() {
         assertEquals("Échecs", new Messages(Locale.FRENCH).get("app.title"));
     }
+
+    @Test
+    public void M08BothPlayersAndCheckStatesAreTranslated() {
+        Messages en = new Messages(Locale.ENGLISH);
+        final Messages es = new Messages(new Locale("es"));
+        assertEquals("White to move", en.turnText(domain.Color.WHITE, false));
+        assertEquals("Black to move", en.turnText(domain.Color.BLACK, false));
+        assertEquals("White to move — check", en.turnText(domain.Color.WHITE, true));
+        assertEquals("Black to move — check", en.turnText(domain.Color.BLACK, true));
+        assertEquals("Juegan las blancas", es.turnText(domain.Color.WHITE, false));
+        assertEquals("Juegan las negras", es.turnText(domain.Color.BLACK, false));
+        assertEquals("Juegan las blancas — jaque", es.turnText(domain.Color.WHITE, true));
+        assertEquals("Juegan las negras — jaque", es.turnText(domain.Color.BLACK, true));
+    }
+
+    @Test
+    public void M09NullPlayerIsRejected() {
+        assertThrows(NullPointerException.class,
+                () -> new Messages(Locale.ENGLISH).turnText(null, false));
+    }
 }
