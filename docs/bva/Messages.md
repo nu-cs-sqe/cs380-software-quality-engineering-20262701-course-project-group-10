@@ -53,8 +53,8 @@ for composed text so translators can reorder names.
 `IllegalMoveException` extends IllegalArgumentException and retains a non-null
 MoveError plus an English diagnostic for logs; the GUI translates the error code,
 never the diagnostic. Its tests cover all codes, getter identity, superclass
-compatibility and null rejection. Each Game rejection is checked for its precise
-error code while the existing BVA tests retain board/state rejection coverage.
+compatibility and null rejection. Game rule rejections are checked for their precise error codes in the existing
+move, castling, and promotion tests, which retain board/state rejection coverage.
 Game-over actions themselves remain with the separate lifecycle task.
 
 ## Swing review
