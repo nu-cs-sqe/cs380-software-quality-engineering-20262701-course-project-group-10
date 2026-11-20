@@ -303,4 +303,15 @@ public class MessagesTests {
                     messages.resultText(status, java.util.Optional.of(domain.Color.WHITE)));
         }
     }
+
+    @Test
+    public void M16LanguageOptionsComeFromAnImmutableRegistry() {
+        java.util.Map<Locale, String> languages = Messages.languageOptions();
+        assertEquals(java.util.List.of(Locale.ENGLISH, new Locale("es")),
+                new java.util.ArrayList<>(languages.keySet()));
+        assertEquals("English", languages.get(Locale.ENGLISH));
+        assertEquals("Español", languages.get(new Locale("es")));
+        assertThrows(UnsupportedOperationException.class,
+                () -> languages.put(Locale.FRENCH, "Français"));
+    }
 }
