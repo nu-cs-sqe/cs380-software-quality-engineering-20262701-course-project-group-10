@@ -314,4 +314,70 @@ public class MessagesTests {
         assertThrows(UnsupportedOperationException.class,
                 () -> languages.put(Locale.FRENCH, "Français"));
     }
+
+    @Test
+    public void M15RawBundlesHaveExactlyTheSameNonemptyKeys() throws java.io.IOException {
+        java.util.Set<String> expected = null;
+        for (String file : java.util.List.of(
+                "messages.properties", "messages_en.properties", "messages_es.properties")) {
+            java.util.Properties bundle = new java.util.Properties();
+            try (java.io.Reader reader = new java.io.InputStreamReader(
+                    java.util.Objects.requireNonNull(getClass().getResourceAsStream("/" + file)),
+                    java.nio.charset.StandardCharsets.UTF_8)) {
+                bundle.load(reader);
+            }
+            if (expected == null) {
+                expected = bundle.stringPropertyNames();
+            } else {
+                assertEquals(expected, bundle.stringPropertyNames(), file);
+            }
+            for (String key : bundle.stringPropertyNames()) {
+                org.junit.jupiter.api.Assertions.assertFalse(bundle.getProperty(key).isBlank(), key);
+            }
+        }
+    }
+
+    @Test
+    public void M17ChangingMessagesDoesNotChangeTheGame() {
+        domain.Board board = new domain.Board();
+        domain.Game game = new domain.Game(board);
+        game.startNewGame();
+        domain.Piece pawn = board.getPiece(new domain.Position(4, 1));
+        Messages english = new Messages(Locale.ENGLISH);
+        Messages spanish = new Messages(new Locale("es"));
+        assertEquals("White to move", english.turnText(game.getCurrentPlayer(), false));
+        assertEquals("Juegan las blancas", spanish.turnText(game.getCurrentPlayer(), false));
+        org.junit.jupiter.api.Assertions.assertSame(pawn,
+                board.getPiece(new domain.Position(4, 1)));
+        org.junit.jupiter.api.Assertions.assertSame(domain.Color.WHITE, game.getCurrentPlayer());
+        org.junit.jupiter.api.Assertions.assertSame(domain.GameStatus.IN_PROGRESS, game.getStatus());
+    }
+
+    @Test
+    public void M18PromotionLabelsAreTranslatedRatherThanEnumNames() {
+        assertEquals("King",
+                new Messages(Locale.ENGLISH).get("piece.KING"));
+        assertEquals("Rey",
+                new Messages(new Locale("es")).get("piece.KING"));
+        assertEquals("Queen",
+                new Messages(Locale.ENGLISH).get("piece.QUEEN"));
+        assertEquals("Dama",
+                new Messages(new Locale("es")).get("piece.QUEEN"));
+        assertEquals("Rook",
+                new Messages(Locale.ENGLISH).get("piece.ROOK"));
+        assertEquals("Torre",
+                new Messages(new Locale("es")).get("piece.ROOK"));
+        assertEquals("Bishop",
+                new Messages(Locale.ENGLISH).get("piece.BISHOP"));
+        assertEquals("Alfil",
+                new Messages(new Locale("es")).get("piece.BISHOP"));
+        assertEquals("Knight",
+                new Messages(Locale.ENGLISH).get("piece.KNIGHT"));
+        assertEquals("Caballo",
+                new Messages(new Locale("es")).get("piece.KNIGHT"));
+        assertEquals("Pawn",
+                new Messages(Locale.ENGLISH).get("piece.PAWN"));
+        assertEquals("Peón",
+                new Messages(new Locale("es")).get("piece.PAWN"));
+    }
 }
