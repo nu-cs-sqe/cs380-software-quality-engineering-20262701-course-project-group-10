@@ -480,3 +480,21 @@ Null/invariant failures retain their existing exception types. The strengthened
 GameMakeMoveTests, CastlingTests, and GamePromotionTests assert the precise error
 codes and continue checking that rejected moves leave state unchanged. Translation
 is tested separately in MessagesTests; Game never selects a display language.
+
+## Resignation, agreed draws, and restart (Issue #54)
+
+| ID | Action | Game state and input | Expected result |
+|---|---|---|---|
+| GE38 | `resign` | In progress, White to move, White resigns | `RESIGNED`, Black wins, board and turn unchanged. |
+| GE39 | `resign` | In progress, Black to move, Black resigns | `RESIGNED`, White wins, board and turn unchanged. |
+| GE40 | `resign` | In progress, White to move, Black tries to resign | `NOT_YOUR_TURN`, game stays in progress. |
+| GE41 | `resign` | In progress, color is `null` | `NOT_YOUR_TURN`, game stays in progress. |
+| GE42 | `agreeDraw` | In progress after both players agree | `DRAW_AGREED`, no winner, board and turn unchanged. |
+| GE43 | `makeMove(from, to)` | Game ended by resignation | `GAME_OVER` before reading the board. |
+| GE44 | `makeMove(from, to, promotion)` | Game ended by agreed draw, with a promotion choice or `null` | `GAME_OVER` before checking the choice or reading the board. |
+| GE45 | `resign` | Game ended by agreed draw, color is not on turn | `GAME_OVER`, draw stands. |
+| GE46 | `agreeDraw` | Game ended by resignation | `GAME_OVER`, resignation and winner stand. |
+| GE47 | `startNewGame` | Game ended by resignation | Board resets once, status is `IN_PROGRESS`, winner is cleared. |
+| GE48 | `startNewGame` | Game ended by agreed draw | Board resets once, status is `IN_PROGRESS`, winner is empty. |
+| GE49 | `makeMove`, `startNewGame` | No legal reply and the player to move is in check | Move is rejected with `GAME_OVER`; restart clears the checkmate and winner. |
+| GE50 | `makeMove`, `startNewGame` | No legal reply and the player to move is not in check | Move is rejected with `GAME_OVER`; restart clears the stalemate. |
