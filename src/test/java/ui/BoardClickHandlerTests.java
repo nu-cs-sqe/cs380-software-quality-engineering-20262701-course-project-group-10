@@ -302,6 +302,33 @@ public class BoardClickHandlerTests {
         assertNull(handler.getSelected());
     }
 
+    // K15: clicking the leftover selected square after the game ends clears it.
+    @Test
+    public void clickingSelectedSquareAfterGameEndsClearsIt() {
+        BoardClickHandler handler = new BoardClickHandler(gameThatEndsAfterFirstClick());
+        handler.click(E2);
+
+        handler.click(E2);
+
+        assertNull(handler.getSelected());
+    }
+
+    // K16: an off-board click is ignored before the game is asked anything.
+    @Test
+    public void offBoardClickAfterGameEndsKeepsSelection() {
+        Game game = recordBoardReads(Color.WHITE);
+        // Allowed once, for the first click; a second call would fail the mock.
+        EasyMock.expect(game.isGameOver()).andReturn(false).once();
+        EasyMock.replay(game);
+        BoardClickHandler handler = new BoardClickHandler(game);
+        handler.click(E2);
+
+        handler.click(null);
+
+        assertEquals(E2, handler.getSelected());
+        EasyMock.verify(game);
+    }
+
     // A replayed mock with no expectations fails on any call, so these tests
     // also check that mapping a pixel never touches the game.
     private BoardClickHandler handlerWithIdleGame() {

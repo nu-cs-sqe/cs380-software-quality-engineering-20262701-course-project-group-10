@@ -211,6 +211,6 @@ so "no `makeMove`" is checked by the mock itself.
 | --- | --- | --- | --- |
 | K13 | Game over; nothing selected; click e2 (White pawn) | `getSelected()` is `null`; no `requiresPromotion` or `makeMove` | :white_check_mark: |
 | K14 | e2 selected while the game was in progress; game is now over; click e4 | `getSelected()` is `null`; no `requiresPromotion` or `makeMove` | :white_check_mark: |
-| K15 | e2 selected while the game was in progress; game is now over; click e2 | `getSelected()` is `null`; no `makeMove` | :x: |
-| K16 | Game over; e2 selected; click `null` | `getSelected()` is still e2; `isGameOver()` is not called (off-board check comes first) | :x: |
+| K15 | e2 selected while the game was in progress; game is now over; click e2 | `getSelected()` is `null`; no `makeMove` | :white_check_mark: |
+| K16 | Game over; e2 selected; click `null` | `getSelected()` is still e2; `isGameOver()` is not called (off-board check comes first) | :white_check_mark: |
 | K17 | Game in progress | K01 to K12 unchanged; `isGameOver()` returns false | :x: |
