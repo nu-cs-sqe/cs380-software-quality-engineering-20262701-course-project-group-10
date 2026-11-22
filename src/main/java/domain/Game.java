@@ -378,11 +378,16 @@ public class Game {
     }
 
     public void resign(Color color) {
+        requireGameInProgress();
+        if (color != currentPlayer) {
+            throw new IllegalMoveException(MoveError.NOT_YOUR_TURN);
+        }
         status = GameStatus.RESIGNED;
         winner = opponent();
     }
 
     public void agreeDraw() {
+        requireGameInProgress();
         status = GameStatus.DRAW_AGREED;
     }
 

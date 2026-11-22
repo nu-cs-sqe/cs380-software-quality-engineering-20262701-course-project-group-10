@@ -30,7 +30,7 @@
     <lineNumber>223</lineNumber>
     <description>changed conditional boundary</description>
     <indexes>7</indexes>
-    <sourceSha256>69e981d5c450a2671469e6217e06ff2bdd2b6e0d702d6dd6f1a3fef5b060c420</sourceSha256>
+    <sourceSha256>f4af6590c71a5612ddc1b6a6347f1a589d5c3513605a23f1e1ebce3690093831</sourceSha256>
     <reason>All callers still operate only on castling attempts validated as a two-file king displacement. The shared trialMove path retains that check before every call. Source and destination files cannot be equal, so &gt; and &gt;= remain identical after the trial/commit refactor.</reason>
   </mutant>
 </equivalentMutants>
