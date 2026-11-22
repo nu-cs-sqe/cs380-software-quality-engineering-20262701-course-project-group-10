@@ -167,3 +167,50 @@ The main cases are:
 2. Tests use a real `Game` and `Board` with stubbed promotion callbacks.
 3. The Swing promotion dialog belongs to `ChessFrame` and is verified manually.
 4. A cancelled promotion does not change the board or current player.
+
+---
+
+## 6. Ignoring clicks after the game ends (Issue #59)
+
+### Contract and scope
+
+Once `game.isGameOver()` is true, `click(Position)` ignores the board:
+- it never selects a piece, never calls `requiresPromotion` or `makeMove`, and
+  never asks the promotion callback;
+- it clears any selection left over from before the game ended (for example, a
+  piece was selected when the player resigned), so no highlight stays on screen;
+- an off-board click (`null`) is still ignored before the game is asked anything.
+
+`click` asks `isGameOver()` on every on-board click, so while the game is in
+progress the cases above (K01 to K12) behave exactly as before. Which ending it
+was (checkmate, stalemate, resignation, agreed draw) belongs to `Game`; the
+handler only sees the boolean. "New Game" makes `isGameOver()` false again, and
+clicks work again with no change in this class.
+
+### Inputs and outputs
+
+Inputs: `isGameOver()` (false or true), the selection before the click (none or a
+square), and the clicked square (own piece, another square, the selected square,
+or `null`). Outputs: the selection after the click, and which `Game` methods are
+called.
+
+### Catalog clues
+
+**Boolean**: `isGameOver()` false or true; the flip from false to true between
+two clicks. **Cases**: nothing selected or a square selected; clicking an own
+piece, a destination, the selected square, or off the board. **Pointers**: a
+`null` position.
+
+All cases use an EasyMock `Game` with a White pawn on e2 and a Black pawn on e7,
+White to move. A replayed strict mock fails on any call it was not told about,
+so "no `makeMove`" is checked by the mock itself.
+
+### Test cases
+
+| ID | State of the system | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| K13 | Game over; nothing selected; click e2 (White pawn) | `getSelected()` is `null`; no `requiresPromotion` or `makeMove` | :x: |
+| K14 | e2 selected while the game was in progress; game is now over; click e4 | `getSelected()` is `null`; no `requiresPromotion` or `makeMove` | :x: |
+| K15 | e2 selected while the game was in progress; game is now over; click e2 | `getSelected()` is `null`; no `makeMove` | :x: |
+| K16 | Game over; e2 selected; click `null` | `getSelected()` is still e2; `isGameOver()` is not called (off-board check comes first) | :x: |
+| K17 | Game in progress | K01 to K12 unchanged; `isGameOver()` returns false | :x: |
