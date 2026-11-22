@@ -43,6 +43,26 @@ public class GameEndActionTests {
     }
 
     @Test
+    public void GE44OnlyTheCurrentPlayerCanResign() {
+        EasyMock.replay(board);
+
+        assertError(MoveError.NOT_YOUR_TURN, () -> game.resign(Color.BLACK));
+
+        assertInProgress(game);
+        EasyMock.verify(board);
+    }
+
+    @Test
+    public void GE45NullCannotResign() {
+        EasyMock.replay(board);
+
+        assertError(MoveError.NOT_YOUR_TURN, () -> game.resign(null));
+
+        assertInProgress(game);
+        EasyMock.verify(board);
+    }
+
+    @Test
     public void GE46AgreedDrawHasNoWinner() {
         EasyMock.replay(board);
 
@@ -62,6 +82,28 @@ public class GameEndActionTests {
 
         assertResult(game, GameStatus.RESIGNED, Color.BLACK);
         assertSame(Color.WHITE, game.getCurrentPlayer());
+        EasyMock.verify(board);
+    }
+
+    @Test
+    public void GE49ResignationIsBlockedAfterDraw() {
+        EasyMock.replay(board);
+        game.agreeDraw();
+
+        assertError(MoveError.GAME_OVER, () -> game.resign(Color.BLACK));
+
+        assertResult(game, GameStatus.DRAW_AGREED, null);
+        EasyMock.verify(board);
+    }
+
+    @Test
+    public void GE50DrawIsBlockedAfterResignation() {
+        EasyMock.replay(board);
+        game.resign(Color.WHITE);
+
+        assertError(MoveError.GAME_OVER, game::agreeDraw);
+
+        assertResult(game, GameStatus.RESIGNED, Color.BLACK);
         EasyMock.verify(board);
     }
 
