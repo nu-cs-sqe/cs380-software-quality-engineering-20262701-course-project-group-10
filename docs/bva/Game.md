@@ -512,4 +512,4 @@ fields, because a resignation sets a status and a winner.
 
 | ID | State of the system | Expected output | Implemented? |
 | --- | --- | --- | --- |
-| GR04 | New game; `resign(WHITE)`; then `startNewGame()` | Status `IN_PROGRESS`; no winner; `isGameOver()` false; White to move | :x: |
+| GR04 | New game; `resign(WHITE)`; then `startNewGame()` | Status `IN_PROGRESS`; no winner; `isGameOver()` false; White to move | :white_check_mark: |
