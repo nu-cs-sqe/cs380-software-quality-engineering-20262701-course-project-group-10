@@ -291,6 +291,17 @@ public class BoardClickHandlerTests {
         EasyMock.verify(game);
     }
 
+    // K14: a selection made before the game ended is cleared, and no move is made.
+    @Test
+    public void clickAfterGameEndsClearsLeftoverSelection() {
+        BoardClickHandler handler = new BoardClickHandler(gameThatEndsAfterFirstClick());
+        handler.click(E2);
+
+        handler.click(E4);
+
+        assertNull(handler.getSelected());
+    }
+
     // A replayed mock with no expectations fails on any call, so these tests
     // also check that mapping a pixel never touches the game.
     private BoardClickHandler handlerWithIdleGame() {
@@ -312,6 +323,15 @@ public class BoardClickHandlerTests {
     private Game recordGameWithPawns(Color currentPlayer) {
         Game game = recordBoardReads(currentPlayer);
         EasyMock.expect(game.isGameOver()).andReturn(false).anyTimes();
+        return game;
+    }
+
+    // In progress for the first click, over from then on (e.g. the player resigned).
+    private Game gameThatEndsAfterFirstClick() {
+        Game game = recordBoardReads(Color.WHITE);
+        EasyMock.expect(game.isGameOver()).andReturn(false).once()
+                .andReturn(true).anyTimes();
+        EasyMock.replay(game);
         return game;
     }
 
