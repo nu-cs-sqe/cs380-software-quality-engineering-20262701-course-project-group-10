@@ -480,3 +480,14 @@ Null/invariant failures retain their existing exception types. The strengthened
 GameMakeMoveTests, CastlingTests, and GamePromotionTests assert the precise error
 codes and continue checking that rejected moves leave state unchanged. Translation
 is tested separately in MessagesTests; Game never selects a display language.
+
+## Resignation, agreed draws, and restart (Issue #54)
+
+| ID | Action | Game state and input | Expected result |
+|---|---|---|---|
+| GE42 | `resign` | In progress, White to move, White resigns | `RESIGNED`, Black wins, board and turn unchanged. |
+| GE43 | `resign` | In progress, Black to move, Black resigns | `RESIGNED`, White wins, board and turn unchanged. |
+| GE46 | `agreeDraw` | In progress after both players agree | `DRAW_AGREED`, no winner, board and turn unchanged. |
+| GE47 | `makeMove(from, to)` | Game ended by resignation | `GAME_OVER` before reading the board. |
+| GE51 | `startNewGame` | Game ended by resignation | Board resets once, status is `IN_PROGRESS`, winner is cleared. |
+| GE52 | `startNewGame` | Game ended by agreed draw | Board resets once, status is `IN_PROGRESS`, winner is empty. |
