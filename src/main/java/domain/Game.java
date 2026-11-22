@@ -374,6 +374,12 @@ public class Game {
         return status != GameStatus.IN_PROGRESS;
     }
 
+    public void resign(Color color) {
+    }
+
+    public void agreeDraw() {
+    }
+
     public boolean isCurrentPlayerInCheck() {
         return validator.isInCheck(board, currentPlayer);
     }
