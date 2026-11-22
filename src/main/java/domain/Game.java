@@ -368,6 +368,11 @@ public class Game {
         winner = color == Color.WHITE ? Color.BLACK : Color.WHITE;
     }
 
+    // Stub until #54 merges, so the Offer Draw menu can be built; #54 replaces it.
+    public void agreeDraw() {
+        status = GameStatus.DRAW_AGREED;
+    }
+
     public GameStatus getStatus() {
         return status;
     }
