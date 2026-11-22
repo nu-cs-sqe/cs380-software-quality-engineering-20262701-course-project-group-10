@@ -48,6 +48,8 @@ public class Game {
     public void startNewGame() {
         board.setUpStartingPosition();
         currentPlayer = Color.WHITE;
+        status = GameStatus.IN_PROGRESS;
+        winner = null;
         whiteKingSide = true;
         whiteQueenSide = true;
         blackKingSide = true;
