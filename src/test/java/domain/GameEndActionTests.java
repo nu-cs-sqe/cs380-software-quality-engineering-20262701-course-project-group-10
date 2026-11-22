@@ -14,6 +14,8 @@ import org.junit.jupiter.api.function.Executable;
 public class GameEndActionTests {
     private static final Position E2 = new Position(4, 1);
     private static final Position E4 = new Position(4, 3);
+    private static final Position A7 = new Position(0, 6);
+    private static final Position A8 = new Position(0, 7);
 
     private final Board board = EasyMock.createStrictMock(Board.class);
     private final Game game = new Game(board);
@@ -86,6 +88,19 @@ public class GameEndActionTests {
     }
 
     @Test
+    public void GE48PromotionIsBlockedAfterDraw() {
+        EasyMock.replay(board);
+        game.agreeDraw();
+
+        assertError(MoveError.GAME_OVER, () -> game.makeMove(A7, A8, PieceType.QUEEN));
+        assertError(MoveError.GAME_OVER, () -> game.makeMove(A7, A8, null));
+
+        assertResult(game, GameStatus.DRAW_AGREED, null);
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+        EasyMock.verify(board);
+    }
+
+    @Test
     public void GE49ResignationIsBlockedAfterDraw() {
         EasyMock.replay(board);
         game.agreeDraw();
@@ -131,6 +146,30 @@ public class GameEndActionTests {
 
         assertInProgress(game);
         EasyMock.verify(board);
+    }
+
+    @Test
+    public void GE53CheckmateBlocksMovesUntilRestart() {
+        Game finished = afterWhiteMove(false, true);
+        assertResult(finished, GameStatus.CHECKMATE, Color.WHITE);
+
+        assertError(MoveError.GAME_OVER, () -> finished.makeMove(E2, E4));
+        finished.startNewGame();
+
+        assertInProgress(finished);
+        EasyMock.verify(finished);
+    }
+
+    @Test
+    public void GE54StalemateBlocksMovesUntilRestart() {
+        Game finished = afterWhiteMove(false, false);
+        assertResult(finished, GameStatus.STALEMATE, null);
+
+        assertError(MoveError.GAME_OVER, () -> finished.makeMove(E2, E4));
+        finished.startNewGame();
+
+        assertInProgress(finished);
+        EasyMock.verify(finished);
     }
 
     private Game afterWhiteMove(boolean hasReply, boolean inCheck) {
