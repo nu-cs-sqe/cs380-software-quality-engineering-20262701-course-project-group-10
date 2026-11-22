@@ -277,6 +277,20 @@ public class BoardClickHandlerTests {
         assertNull(handler.getSelected());
     }
 
+    // K13: once the game is over, clicking an own piece selects nothing.
+    @Test
+    public void clickAfterGameOverSelectsNothing() {
+        Game game = recordBoardReads(Color.WHITE);
+        EasyMock.expect(game.isGameOver()).andReturn(true).anyTimes();
+        EasyMock.replay(game);
+        BoardClickHandler handler = new BoardClickHandler(game);
+
+        handler.click(E2);
+
+        assertNull(handler.getSelected());
+        EasyMock.verify(game);
+    }
+
     // A replayed mock with no expectations fails on any call, so these tests
     // also check that mapping a pixel never touches the game.
     private BoardClickHandler handlerWithIdleGame() {
@@ -294,8 +308,15 @@ public class BoardClickHandlerTests {
     }
 
     // Same game, still recording, so a case can add a makeMove expectation
-    // before calling replay.
+    // before calling replay. The game is in progress (K17).
     private Game recordGameWithPawns(Color currentPlayer) {
+        Game game = recordBoardReads(currentPlayer);
+        EasyMock.expect(game.isGameOver()).andReturn(false).anyTimes();
+        return game;
+    }
+
+    // Board reads only, so a case can choose what isGameOver() answers.
+    private Game recordBoardReads(Color currentPlayer) {
         Board board = new Board();
         board.placePiece(new Piece(PieceType.PAWN, Color.WHITE), E2);
         board.placePiece(new Piece(PieceType.PAWN, Color.BLACK), E7);
