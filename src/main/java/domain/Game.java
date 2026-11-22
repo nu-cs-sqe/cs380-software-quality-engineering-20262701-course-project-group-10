@@ -362,6 +362,12 @@ public class Game {
         return color == Color.WHITE ? whiteQueenSide : blackQueenSide;
     }
 
+    // Stub until #54 merges, so the Resign menu can be built; #54 replaces it.
+    public void resign(Color color) {
+        status = GameStatus.RESIGNED;
+        winner = Color.BLACK;
+    }
+
     public GameStatus getStatus() {
         return status;
     }
