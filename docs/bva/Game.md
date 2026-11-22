@@ -480,3 +480,25 @@ Null/invariant failures retain their existing exception types. The strengthened
 GameMakeMoveTests, CastlingTests, and GamePromotionTests assert the precise error
 codes and continue checking that rejected moves leave state unchanged. Translation
 is tested separately in MessagesTests; Game never selects a display language.
+
+## Resignation and agreed draw stubs (Issue #59, until #54 merges)
+
+**Contract.** Temporary versions of `resign(Color color)` and `agreeDraw()` from
+`docs/design/game-end-conditions.md`, so the Resign and Offer Draw menu items can
+be built and tested by hand before #54 lands. `resign(color)` sets the status to
+`RESIGNED` and makes the other color the winner. `agreeDraw()` sets the status to
+`DRAW_AGREED` with no winner. Both only cover the happy path. Rejecting a call after
+the game is over, "only the current player may resign", and null checks belong to
+#54, whose version and BVA replace this section. The `GR` prefix keeps these IDs
+apart from #54's `GE` rows.
+
+**Inputs and outputs.** Inputs: the resigning color. Outputs: `getStatus()`,
+`getWinner()`, and `isGameOver()`.
+
+**Catalog clues.** **Cases**: White or Black resigns; a draw is agreed.
+
+| ID | State of the system | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| GR01 | New game, White to move; `resign(WHITE)` | Status `RESIGNED`; winner `BLACK`; `isGameOver()` true | :x: |
+| GR02 | New game, White plays e2 to e4, Black to move; `resign(BLACK)` | Status `RESIGNED`; winner `WHITE` | :x: |
+| GR03 | New game, White to move; `agreeDraw()` | Status `DRAW_AGREED`; no winner; `isGameOver()` true | :x: |
