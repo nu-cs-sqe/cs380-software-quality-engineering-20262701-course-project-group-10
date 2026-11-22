@@ -34,7 +34,7 @@ public class GameEndActionTests {
     @Test
     public void GE39BlackCanResignOnItsTurn() {
         Game secondTurn = afterWhiteMove(true, false);
-        Board before = secondTurn.getBoard().copy();
+        final Board before = secondTurn.getBoard().copy();
 
         secondTurn.resign(Color.BLACK);
 
