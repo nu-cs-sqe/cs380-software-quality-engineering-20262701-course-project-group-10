@@ -1,13 +1,15 @@
 package domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-// Covers the temporary resign and agreeDraw stubs; #54 replaces both.
+// GR01 to GR03 cover the temporary resign and agreeDraw stubs, which #54 replaces.
+// GR04 tests startNewGame and stays after #54 merges.
 public class GameResignDrawStubTests {
     private static final int FILE_E = 4;
     private static final int RANK_2 = 1;
@@ -52,5 +54,18 @@ public class GameResignDrawStubTests {
         assertEquals(GameStatus.DRAW_AGREED, game.getStatus());
         assertEquals(Optional.empty(), game.getWinner());
         assertTrue(game.isGameOver());
+    }
+
+    // GR04: New Game after a finished game starts a fresh, unfinished game.
+    @Test
+    public void GR04NewGameAfterResignationIsInProgress() {
+        game.resign(Color.WHITE);
+
+        game.startNewGame();
+
+        assertEquals(GameStatus.IN_PROGRESS, game.getStatus());
+        assertEquals(Optional.empty(), game.getWinner());
+        assertFalse(game.isGameOver());
+        assertEquals(Color.WHITE, game.getCurrentPlayer());
     }
 }

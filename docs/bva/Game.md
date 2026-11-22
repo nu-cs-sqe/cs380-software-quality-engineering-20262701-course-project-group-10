@@ -502,3 +502,14 @@ apart from #54's `GE` rows.
 | GR01 | New game, White to move; `resign(WHITE)` | Status `RESIGNED`; winner `BLACK`; `isGameOver()` true | :white_check_mark: |
 | GR02 | New game, White plays e2 to e4, Black to move; `resign(BLACK)` | Status `RESIGNED`; winner `WHITE` | :white_check_mark: |
 | GR03 | New game, White to move; `agreeDraw()` | Status `DRAW_AGREED`; no winner; `isGameOver()` true | :white_check_mark: |
+
+### `startNewGame()` after a finished game (Issue #59)
+
+**Contract.** "New Game" must reset everything, so `startNewGame()` also sets the
+status back to `IN_PROGRESS` and clears the winner. Without this, a finished game
+stays over after New Game and the board ignores every click. One case covers both
+fields, because a resignation sets a status and a winner.
+
+| ID | State of the system | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| GR04 | New game; `resign(WHITE)`; then `startNewGame()` | Status `IN_PROGRESS`; no winner; `isGameOver()` false; White to move | :x: |
