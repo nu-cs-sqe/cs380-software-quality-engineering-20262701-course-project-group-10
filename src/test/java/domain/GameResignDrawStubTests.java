@@ -43,4 +43,14 @@ public class GameResignDrawStubTests {
         assertEquals(GameStatus.RESIGNED, game.getStatus());
         assertEquals(Optional.of(Color.WHITE), game.getWinner());
     }
+
+    // GR03: an agreed draw ends the game with no winner.
+    @Test
+    public void GR03AgreedDrawEndsGameWithNoWinner() {
+        game.agreeDraw();
+
+        assertEquals(GameStatus.DRAW_AGREED, game.getStatus());
+        assertEquals(Optional.empty(), game.getWinner());
+        assertTrue(game.isGameOver());
+    }
 }
