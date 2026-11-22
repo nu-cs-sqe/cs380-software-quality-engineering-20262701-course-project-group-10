@@ -49,6 +49,9 @@ public class BoardClickHandler {
         if (position == null) {
             return;
         }
+        if (game.isGameOver()) {
+            return;
+        }
         if (position.equals(selected)) {
             clearSelection();
         } else if (selected != null) {
