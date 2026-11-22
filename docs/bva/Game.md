@@ -491,7 +491,10 @@ is tested separately in MessagesTests; Game never selects a display language.
 | GE45 | `resign` | In progress, color is `null` | `NOT_YOUR_TURN`, game stays in progress. |
 | GE46 | `agreeDraw` | In progress after both players agree | `DRAW_AGREED`, no winner, board and turn unchanged. |
 | GE47 | `makeMove(from, to)` | Game ended by resignation | `GAME_OVER` before reading the board. |
+| GE48 | `makeMove(from, to, promotion)` | Game ended by agreed draw, with a promotion choice or `null` | `GAME_OVER` before checking the choice or reading the board. |
 | GE49 | `resign` | Game ended by agreed draw, color is not on turn | `GAME_OVER`, draw stands. |
 | GE50 | `agreeDraw` | Game ended by resignation | `GAME_OVER`, resignation and winner stand. |
 | GE51 | `startNewGame` | Game ended by resignation | Board resets once, status is `IN_PROGRESS`, winner is cleared. |
 | GE52 | `startNewGame` | Game ended by agreed draw | Board resets once, status is `IN_PROGRESS`, winner is empty. |
+| GE53 | `makeMove`, `startNewGame` | No legal reply and the player to move is in check | Move is rejected with `GAME_OVER`; restart clears the checkmate and winner. |
+| GE54 | `makeMove`, `startNewGame` | No legal reply and the player to move is not in check | Move is rejected with `GAME_OVER`; restart clears the stalemate. |
