@@ -49,7 +49,9 @@ public class BoardClickHandler {
         if (position == null) {
             return;
         }
+        // A selection made before the game ended must not stay highlighted.
         if (game.isGameOver()) {
+            clearSelection();
             return;
         }
         if (position.equals(selected)) {
