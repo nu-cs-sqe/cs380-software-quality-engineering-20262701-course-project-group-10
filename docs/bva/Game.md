@@ -500,5 +500,5 @@ apart from #54's `GE` rows.
 | ID | State of the system | Expected output | Implemented? |
 | --- | --- | --- | --- |
 | GR01 | New game, White to move; `resign(WHITE)` | Status `RESIGNED`; winner `BLACK`; `isGameOver()` true | :white_check_mark: |
-| GR02 | New game, White plays e2 to e4, Black to move; `resign(BLACK)` | Status `RESIGNED`; winner `WHITE` | :x: |
+| GR02 | New game, White plays e2 to e4, Black to move; `resign(BLACK)` | Status `RESIGNED`; winner `WHITE` | :white_check_mark: |
 | GR03 | New game, White to move; `agreeDraw()` | Status `DRAW_AGREED`; no winner; `isGameOver()` true | :x: |
