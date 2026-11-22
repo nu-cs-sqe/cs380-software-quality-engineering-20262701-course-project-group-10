@@ -71,6 +71,7 @@ public class Game {
     }
 
     public void makeMove(Position from, Position to, PieceType promotion) {
+        requireGameInProgress();
         Objects.requireNonNull(promotion, "promotion");
 
         final Board trial = trialMove(from, to);
