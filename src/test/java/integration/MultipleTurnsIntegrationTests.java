@@ -1,8 +1,11 @@
 package integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import domain.Board;
 import domain.Color;
@@ -223,6 +226,61 @@ public class MultipleTurnsIntegrationTests {
         assertSame(Color.BLACK, game.getCurrentPlayer());
 
         // The game remains in progress.
+        assertSame(GameStatus.IN_PROGRESS, game.getStatus());
+    }
+
+    @Test
+    public void IT05IllegalMoveLeavesKingInCheck() {
+        Board board = new Board();
+        Game game = new Game(board);
+        game.startNewGame();
+
+        // 1. White: e2 -> e4.
+        game.makeMove(new Position(4, 1), new Position(4, 3));
+
+        // 2. Black: e7 -> e5.
+        game.makeMove(new Position(4, 6), new Position(4, 4));
+
+        // 3. White: d2 -> d3.
+        game.makeMove(new Position(3, 1), new Position(3, 2));
+
+        // 4. Black: Bf8 -> b4+, checking the White King.
+        game.makeMove(new Position(5, 7), new Position(1, 3));
+
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+        assertSame(GameStatus.IN_PROGRESS, game.getStatus());
+        assertTrue(game.isCurrentPlayerInCheck());
+
+        // Save the pieces before attempting an illegal move.
+        Piece whitePawn = board.getPiece(new Position(0, 1)); // a2
+        Piece blackBishop = board.getPiece(new Position(1, 3)); // b4
+
+        // 5. White attempts a2 -> a3.
+        // This move is illegal because it does not resolve the check.
+        assertThrows(IllegalArgumentException.class,
+                () -> game.makeMove(
+                        new Position(0, 1),
+                        new Position(0, 2)));
+
+        // The rejected move must not change the board.
+        assertSame(whitePawn, board.getPiece(new Position(0, 1)));
+        assertNull(board.getPiece(new Position(0, 2)));
+        assertSame(blackBishop, board.getPiece(new Position(1, 3)));
+
+        // The turn and game status must remain unchanged.
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+        assertSame(GameStatus.IN_PROGRESS, game.getStatus());
+        assertTrue(game.isCurrentPlayerInCheck());
+
+        // 6. White makes a legal move: c2 -> c3.
+        // The pawn blocks the Bishop's diagonal attack.
+        game.makeMove(new Position(2, 1), new Position(2, 2));
+
+        // The White King is no longer in check.
+        assertFalse(game.isCurrentPlayerInCheck());
+
+        // The turn finally switches to Black.
+        assertSame(Color.BLACK, game.getCurrentPlayer());
         assertSame(GameStatus.IN_PROGRESS, game.getStatus());
     }
 }
