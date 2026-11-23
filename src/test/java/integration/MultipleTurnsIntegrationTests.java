@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import domain.Board;
 import domain.Color;
 import domain.Game;
+import domain.GameStatus;
 import domain.Piece;
 import domain.PieceType;
 import domain.Position;
@@ -108,5 +109,54 @@ public class MultipleTurnsIntegrationTests {
 
         // Turn switches to Black.
         assertSame(Color.BLACK, game.getCurrentPlayer());
+    }
+
+    @Test
+    public void IT03EnPassantAfterMultipleMoves() {
+        Board board = new Board();
+        Game game = new Game(board);
+        game.startNewGame();
+
+        // 1. White pawn advances two squares: e2 -> e4.
+        game.makeMove(new Position(4, 1), new Position(4, 3));
+
+        Piece whitePawn = board.getPiece(new Position(4, 3));
+
+        assertSame(Color.BLACK, game.getCurrentPlayer());
+
+        // 2. Black plays a7 -> a6.
+        game.makeMove(new Position(0, 6), new Position(0, 5));
+
+        // 3. White advances to e5.
+        game.makeMove(new Position(4, 3), new Position(4, 4));
+
+        assertSame(whitePawn, board.getPiece(new Position(4, 4)));
+
+        // 4. Black advances two squares: d7 -> d5.
+        game.makeMove(new Position(3, 6), new Position(3, 4));
+
+        Piece blackPawn = board.getPiece(new Position(3, 4));
+
+        assertSame(PieceType.PAWN, blackPawn.getType());
+        assertSame(Color.BLACK, blackPawn.getColor());
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+
+        // 5. White captures en passant: e5 -> d6.
+        game.makeMove(new Position(4, 4), new Position(3, 5));
+
+        // White pawn now occupies d6.
+        assertSame(whitePawn, board.getPiece(new Position(3, 5)));
+
+        // The original square e5 is empty.
+        assertNull(board.getPiece(new Position(4, 4)));
+
+        // The captured black pawn has been removed from d5.
+        assertNull(board.getPiece(new Position(3, 4)));
+
+        // Turn switches to Black.
+        assertSame(Color.BLACK, game.getCurrentPlayer());
+
+        // The game should still be in progress.
+        assertSame(GameStatus.IN_PROGRESS, game.getStatus());
     }
 }
