@@ -2,6 +2,7 @@ package integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -123,7 +124,7 @@ public class MultipleTurnsIntegrationTests {
         // 1. White pawn advances two squares: e2 -> e4.
         game.makeMove(new Position(4, 1), new Position(4, 3));
 
-        Piece whitePawn = board.getPiece(new Position(4, 3));
+        final Piece whitePawn = board.getPiece(new Position(4, 3));
 
         assertSame(Color.BLACK, game.getCurrentPlayer());
 
@@ -170,7 +171,7 @@ public class MultipleTurnsIntegrationTests {
         game.startNewGame();
 
         // Keep a reference to the original White pawn.
-        Piece whitePawn = board.getPiece(new Position(0, 1)); // a2
+        final Piece whitePawn = board.getPiece(new Position(0, 1)); // a2
 
         // 1. White: a2 -> a4; Black: h7 -> h5.
         game.makeMove(new Position(0, 1), new Position(0, 3));
@@ -253,7 +254,7 @@ public class MultipleTurnsIntegrationTests {
 
         // Save the pieces before attempting an illegal move.
         Piece whitePawn = board.getPiece(new Position(0, 1)); // a2
-        Piece blackBishop = board.getPiece(new Position(1, 3)); // b4
+        final Piece blackBishop = board.getPiece(new Position(1, 3)); // b4
 
         // 5. White attempts a2 -> a3.
         // This move is illegal because it does not resolve the check.
@@ -283,4 +284,293 @@ public class MultipleTurnsIntegrationTests {
         assertSame(Color.BLACK, game.getCurrentPlayer());
         assertSame(GameStatus.IN_PROGRESS, game.getStatus());
     }
+
+    @Test
+    public void IT06CastlingRightsNotRestoredAfterRookReturns() {
+        Board board = new Board();
+
+        Piece whiteKing = new Piece(PieceType.KING, Color.WHITE);
+        Piece whiteRook = new Piece(PieceType.ROOK, Color.WHITE);
+        Piece blackKing = new Piece(PieceType.KING, Color.BLACK);
+        Piece blackPawn = new Piece(PieceType.PAWN, Color.BLACK);
+
+        board.placePiece(whiteKing, new Position(4, 0)); // e1
+        board.placePiece(whiteRook, new Position(7, 0)); // h1
+        board.placePiece(blackKing, new Position(4, 7)); // e8
+        board.placePiece(blackPawn, new Position(0, 6)); // a7
+
+        Game game = new Game(board);
+
+        // Initially, White has the right to castle king-side.
+        assertTrue(game.canCastleKingSide(Color.WHITE));
+
+        // 1. White moves the rook away: h1 -> h2.
+        game.makeMove(new Position(7, 0), new Position(7, 1));
+
+        assertFalse(game.canCastleKingSide(Color.WHITE));
+        assertSame(Color.BLACK, game.getCurrentPlayer());
+
+        // 2. Black: a7 -> a6.
+        game.makeMove(new Position(0, 6), new Position(0, 5));
+
+        // 3. White returns the rook: h2 -> h1.
+        game.makeMove(new Position(7, 1), new Position(7, 0));
+
+        assertSame(whiteRook, board.getPiece(new Position(7, 0)));
+
+        // Castling rights must NOT be restored.
+        assertFalse(game.canCastleKingSide(Color.WHITE));
+
+        // 4. Black: a6 -> a5.
+        game.makeMove(new Position(0, 5), new Position(0, 4));
+
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+
+        // 5. White attempts to castle: e1 -> g1.
+        // This must fail because the rook has moved before.
+        assertThrows(IllegalArgumentException.class,
+                () -> game.makeMove(
+                        new Position(4, 0),
+                        new Position(6, 0)));
+
+        // Rejected castling must leave pieces unchanged.
+        assertSame(whiteKing, board.getPiece(new Position(4, 0)));
+        assertSame(whiteRook, board.getPiece(new Position(7, 0)));
+        assertNull(board.getPiece(new Position(6, 0)));
+        assertNull(board.getPiece(new Position(5, 0)));
+
+        // No turn change after the rejected move.
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+        assertFalse(game.canCastleKingSide(Color.WHITE));
+
+        // 6. White makes an ordinary legal king move: e1 -> f1.
+        game.makeMove(new Position(4, 0), new Position(5, 0));
+
+        assertSame(whiteKing, board.getPiece(new Position(5, 0)));
+        assertNull(board.getPiece(new Position(4, 0)));
+        assertSame(whiteRook, board.getPiece(new Position(7, 0)));
+
+        // The legal move switches the turn normally.
+        assertSame(Color.BLACK, game.getCurrentPlayer());
+        assertSame(GameStatus.IN_PROGRESS, game.getStatus());
+    }
+
+
+    @Test
+    public void IT07IllegalMoveDoesNotExpireEnPassant() {
+        Board board = new Board();
+        board.placePiece(new Piece(PieceType.KING, Color.WHITE),
+                new Position(0, 0)); // a1
+        board.placePiece(new Piece(PieceType.KING, Color.BLACK),
+                new Position(7, 7)); // h8
+        board.placePiece(new Piece(PieceType.PAWN, Color.WHITE),
+                new Position(4, 4)); // e5
+        board.placePiece(new Piece(PieceType.PAWN, Color.BLACK),
+                new Position(3, 6)); // d7
+
+        Game game = new Game(board);
+        final Piece whitePawn = board.getPiece(new Position(4, 4));
+
+        // White makes a normal move: a1 -> a2.
+        game.makeMove(new Position(0, 0), new Position(0, 1));
+
+        // Black creates an en passant opportunity: d7 -> d5.
+        game.makeMove(new Position(3, 6), new Position(3, 4));
+
+        Piece blackPawn = board.getPiece(new Position(3, 4));
+
+        // White attempts an illegal pawn move: e5 -> e7.
+        assertThrows(IllegalArgumentException.class,
+                () -> game.makeMove(
+                        new Position(4, 4),
+                        new Position(4, 6)));
+
+        // The illegal move must not change the game.
+        assertSame(whitePawn, board.getPiece(new Position(4, 4)));
+        assertSame(blackPawn, board.getPiece(new Position(3, 4)));
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+
+        // White can still capture en passant: e5 -> d6.
+        game.makeMove(new Position(4, 4), new Position(3, 5));
+
+        assertSame(whitePawn, board.getPiece(new Position(3, 5)));
+        assertNull(board.getPiece(new Position(4, 4)));
+        assertNull(board.getPiece(new Position(3, 4)));
+        assertSame(Color.BLACK, game.getCurrentPlayer());
+        assertSame(GameStatus.IN_PROGRESS, game.getStatus());
+    }
+
+    @Test
+    public void IT08LegalMoveExpiresEnPassantOpportunity() {
+        Board board = new Board();
+        board.placePiece(new Piece(PieceType.KING, Color.WHITE),
+                new Position(0, 0)); // a1
+        board.placePiece(new Piece(PieceType.KING, Color.BLACK),
+                new Position(7, 7)); // h8
+        board.placePiece(new Piece(PieceType.PAWN, Color.WHITE),
+                new Position(4, 4)); // e5
+        board.placePiece(new Piece(PieceType.PAWN, Color.BLACK),
+                new Position(3, 6)); // d7
+
+        Game game = new Game(board);
+        final Piece whitePawn = board.getPiece(new Position(4, 4));
+
+        // White: a1 -> a2.
+        game.makeMove(new Position(0, 0), new Position(0, 1));
+
+        // Black: d7 -> d5, creating an en passant opportunity.
+        game.makeMove(new Position(3, 6), new Position(3, 4));
+
+        final Piece blackPawn = board.getPiece(new Position(3, 4));
+
+        // White makes a different legal move instead of en passant.
+        game.makeMove(new Position(0, 1), new Position(0, 2));
+
+        // Black makes another legal move: h8 -> h7.
+        game.makeMove(new Position(7, 7), new Position(7, 6));
+
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+
+        // White tries en passant too late: e5 -> d6.
+        assertThrows(IllegalArgumentException.class,
+                () -> game.makeMove(
+                        new Position(4, 4),
+                        new Position(3, 5)));
+
+        // The expired capture must not change the board.
+        assertSame(whitePawn, board.getPiece(new Position(4, 4)));
+        assertSame(blackPawn, board.getPiece(new Position(3, 4)));
+        assertNull(board.getPiece(new Position(3, 5)));
+
+        // Turn and game status remain unchanged.
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+        assertSame(GameStatus.IN_PROGRESS, game.getStatus());
+    }
+
+    @Test
+    public void IT09PromotedQueenCanMoveInLaterTurns() {
+        Board board = new Board();
+
+        board.placePiece(new Piece(PieceType.KING, Color.WHITE),
+                new Position(4, 0)); // e1
+        board.placePiece(new Piece(PieceType.KING, Color.BLACK),
+                new Position(7, 7)); // h8
+        board.placePiece(new Piece(PieceType.PAWN, Color.WHITE),
+                new Position(1, 6)); // b7
+        board.placePiece(new Piece(PieceType.ROOK, Color.BLACK),
+                new Position(0, 7)); // a8
+        board.placePiece(new Piece(PieceType.PAWN, Color.BLACK),
+                new Position(7, 5)); // h6
+
+        Game game = new Game(board);
+
+        final Piece originalPawn = board.getPiece(new Position(1, 6));
+        final Piece originalRook = board.getPiece(new Position(0, 7));
+
+        // 1. White: Ke1 -> f1.
+        game.makeMove(new Position(4, 0), new Position(5, 0));
+
+        // 2. Black: h6 -> h5.
+        game.makeMove(new Position(7, 5), new Position(7, 4));
+
+        // 3. White captures the rook and promotes: b7xa8=Q.
+        game.makeMove(
+                new Position(1, 6),
+                new Position(0, 7),
+                PieceType.QUEEN);
+
+        Piece queen = board.getPiece(new Position(0, 7));
+
+        assertEquals(PieceType.QUEEN, queen.getType());
+        assertEquals(Color.WHITE, queen.getColor());
+        assertNotSame(originalPawn, queen);
+        assertNotSame(originalRook, queen);
+        assertNull(board.getPiece(new Position(1, 6)));
+
+        // The new queen checks the Black King on h8.
+        assertTrue(game.isCurrentPlayerInCheck());
+        assertSame(Color.BLACK, game.getCurrentPlayer());
+
+        // 4. Black escapes check: Kh8 -> g7.
+        game.makeMove(new Position(7, 7), new Position(6, 6));
+
+        assertFalse(game.isCurrentPlayerInCheck());
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+
+        // 5. White moves the newly promoted Queen: a8 -> a6.
+        game.makeMove(new Position(0, 7), new Position(0, 5));
+
+        assertSame(queen, board.getPiece(new Position(0, 5)));
+        assertNull(board.getPiece(new Position(0, 7)));
+
+        // The original White King and Black Pawn remain in place.
+        assertEquals(PieceType.KING,
+                board.getPiece(new Position(5, 0)).getType());
+        assertEquals(PieceType.PAWN,
+                board.getPiece(new Position(7, 4)).getType());
+
+        assertSame(Color.BLACK, game.getCurrentPlayer());
+        assertSame(GameStatus.IN_PROGRESS, game.getStatus());
+    }
+
+    @Test
+    public void IT10CheckIllegalMoveBlockingAndContinuedPlay() {
+        Board board = new Board();
+        Game game = new Game(board);
+        game.startNewGame();
+
+        // 1. White: e2 -> e4.
+        game.makeMove(new Position(4, 1), new Position(4, 3));
+
+        // 2. Black: e7 -> e5.
+        game.makeMove(new Position(4, 6), new Position(4, 4));
+
+        // 3. White: d2 -> d3.
+        game.makeMove(new Position(3, 1), new Position(3, 2));
+
+        // 4. Black: Bf8 -> b4+, checking the White King.
+        game.makeMove(new Position(5, 7), new Position(1, 3));
+
+        assertTrue(game.isCurrentPlayerInCheck());
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+
+        Piece whitePawn = board.getPiece(new Position(0, 1));
+        final Piece blackBishop = board.getPiece(new Position(1, 3));
+
+        // 5. White attempts a2 -> a3 without resolving check.
+        assertThrows(IllegalArgumentException.class,
+                () -> game.makeMove(
+                        new Position(0, 1),
+                        new Position(0, 2)));
+
+        // Illegal move must not change the board or turn.
+        assertSame(whitePawn, board.getPiece(new Position(0, 1)));
+        assertNull(board.getPiece(new Position(0, 2)));
+        assertSame(blackBishop, board.getPiece(new Position(1, 3)));
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+        assertTrue(game.isCurrentPlayerInCheck());
+
+        // 6. White blocks the Bishop: c2 -> c3.
+        game.makeMove(new Position(2, 1), new Position(2, 2));
+
+        assertFalse(game.isCurrentPlayerInCheck());
+        assertSame(Color.BLACK, game.getCurrentPlayer());
+
+        // 7. Black retreats the Bishop: b4 -> a5.
+        game.makeMove(new Position(1, 3), new Position(0, 4));
+
+        assertSame(blackBishop, board.getPiece(new Position(0, 4)));
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+
+        // 8. The previously rejected pawn can now move: a2 -> a3.
+        game.makeMove(new Position(0, 1), new Position(0, 2));
+
+        assertSame(whitePawn, board.getPiece(new Position(0, 2)));
+        assertNull(board.getPiece(new Position(0, 1)));
+
+        // The game continues normally after resolving check.
+        assertSame(Color.BLACK, game.getCurrentPlayer());
+        assertSame(GameStatus.IN_PROGRESS, game.getStatus());
+    }
+
 }
