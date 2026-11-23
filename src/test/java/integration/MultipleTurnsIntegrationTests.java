@@ -159,4 +159,70 @@ public class MultipleTurnsIntegrationTests {
         // The game should still be in progress.
         assertSame(GameStatus.IN_PROGRESS, game.getStatus());
     }
+
+    @Test
+    public void IT04PromotionAfterMultipleMoves() {
+        Board board = new Board();
+        Game game = new Game(board);
+        game.startNewGame();
+
+        // Keep a reference to the original White pawn.
+        Piece whitePawn = board.getPiece(new Position(0, 1)); // a2
+
+        // 1. White: a2 -> a4; Black: h7 -> h5.
+        game.makeMove(new Position(0, 1), new Position(0, 3));
+        game.makeMove(new Position(7, 6), new Position(7, 4));
+
+        // 2. White: a4 -> a5; Black: h5 -> h4.
+        game.makeMove(new Position(0, 3), new Position(0, 4));
+        game.makeMove(new Position(7, 4), new Position(7, 3));
+
+        // 3. White: a5 -> a6; Black: h4 -> h3.
+        game.makeMove(new Position(0, 4), new Position(0, 5));
+        game.makeMove(new Position(7, 3), new Position(7, 2));
+
+        // 4. White captures the Black pawn: a6 -> b7.
+        game.makeMove(new Position(0, 5), new Position(1, 6));
+
+        assertSame(whitePawn, board.getPiece(new Position(1, 6)));
+
+        // Black captures the White pawn: h3 -> g2.
+        game.makeMove(new Position(7, 2), new Position(6, 1));
+
+        // Before promotion, the White pawn is on b7.
+        assertSame(whitePawn, board.getPiece(new Position(1, 6)));
+        assertSame(Color.WHITE, game.getCurrentPlayer());
+
+        // The Black rook is still on a8.
+        Piece blackRook = board.getPiece(new Position(0, 7));
+        assertEquals(PieceType.ROOK, blackRook.getType());
+        assertEquals(Color.BLACK, blackRook.getColor());
+
+        // 5. White captures the rook and promotes: b7 -> a8 = Queen.
+        game.makeMove(
+                new Position(1, 6),
+                new Position(0, 7),
+                PieceType.QUEEN);
+
+        // The original square b7 is empty.
+        assertNull(board.getPiece(new Position(1, 6)));
+
+        // The destination contains a White Queen.
+        Piece promoted = board.getPiece(new Position(0, 7));
+
+        assertEquals(PieceType.QUEEN, promoted.getType());
+        assertEquals(Color.WHITE, promoted.getColor());
+
+        // Promotion replaces the pawn with a different Piece object.
+        org.junit.jupiter.api.Assertions.assertNotSame(whitePawn, promoted);
+
+        // The original Black rook has been captured.
+        org.junit.jupiter.api.Assertions.assertNotSame(blackRook, promoted);
+
+        // Turn switches to Black.
+        assertSame(Color.BLACK, game.getCurrentPlayer());
+
+        // The game remains in progress.
+        assertSame(GameStatus.IN_PROGRESS, game.getStatus());
+    }
 }
