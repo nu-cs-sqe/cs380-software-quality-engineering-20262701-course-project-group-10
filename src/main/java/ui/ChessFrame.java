@@ -46,6 +46,8 @@ public class ChessFrame extends JFrame {
     private final JMenu gameMenu = new JMenu();
     private final JMenu languageMenu = new JMenu();
     private final JMenuItem newGameItem = new JMenuItem();
+    private final JMenuItem resignItem = new JMenuItem();
+    private final JMenuItem offerDrawItem = new JMenuItem();
     private Messages messages = new Messages(Locale.ENGLISH);
     private boolean started;
 
@@ -84,6 +86,10 @@ public class ChessFrame extends JFrame {
     private JMenuBar createMenuBar() {
         newGameItem.addActionListener(event -> confirmNewGame());
         gameMenu.add(newGameItem);
+        resignItem.addActionListener(event -> confirmResign());
+        gameMenu.add(resignItem);
+        offerDrawItem.addActionListener(event -> offerDraw());
+        gameMenu.add(offerDrawItem);
         ButtonGroup group = new ButtonGroup();
         for (int index = 0; index < locales.size(); index++) {
             final int choice = index;
@@ -109,6 +115,12 @@ public class ChessFrame extends JFrame {
         gameMenu.setText(messages.get("menu.game"));
         newGameItem.setText(messages.get("menu.newGame"));
         newGameItem.setEnabled(started);
+        // Resign and Offer Draw only make sense while a game is being played.
+        boolean playing = started && !game.isGameOver();
+        resignItem.setText(messages.get("menu.resign"));
+        resignItem.setEnabled(playing);
+        offerDrawItem.setText(messages.get("menu.offerDraw"));
+        offerDrawItem.setEnabled(playing);
         languageMenu.setText(messages.get("menu.language"));
         languagePrompt.setText(messages.get("start.language"));
         startButton.setText(messages.get("start.button"));
@@ -130,6 +142,8 @@ public class ChessFrame extends JFrame {
     private void refreshGameState() {
         refreshTexts();
         if (game.isGameOver()) {
+            // Resign and draws end the game without a click, so drop any highlight now.
+            boardPanel.clearSelection();
             showMessage(messages.resultText(game.getStatus(), game.getWinner()),
                     messages.get("result.title"), JOptionPane.INFORMATION_MESSAGE);
         }
@@ -157,12 +171,35 @@ public class ChessFrame extends JFrame {
     }
 
     private void confirmNewGame() {
-        String[] choices = {messages.get("button.yes"), messages.get("button.no")};
-        int choice = JOptionPane.showOptionDialog(this, messages.get("confirm.newGame"),
-                messages.get("menu.newGame"), JOptionPane.DEFAULT_OPTION,
-                JOptionPane.QUESTION_MESSAGE, null, choices, choices[1]);
-        if (choice == 0) {
+        if (askYesNo(messages.get("confirm.newGame"), messages.get("menu.newGame"))) {
             startGame();
         }
+    }
+
+    private void confirmResign() {
+        if (askYesNo(messages.get("confirm.resign"), messages.get("menu.resign"))) {
+            game.resign(game.getCurrentPlayer());
+            refreshGameState();
+        }
+    }
+
+    // One screen, so the opponent answers the offer on the same window.
+    private void offerDraw() {
+        if (askYesNo(messages.get("draw.offer"), messages.get("draw.title"))) {
+            game.agreeDraw();
+            refreshGameState();
+        } else {
+            showMessage(messages.get("draw.declined"), messages.get("draw.title"),
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    // "No" is the default button, so pressing Enter never ends or abandons a game.
+    private boolean askYesNo(String text, String title) {
+        String[] choices = {messages.get("button.yes"), messages.get("button.no")};
+        int choice = JOptionPane.showOptionDialog(this, text, title,
+                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                null, choices, choices[1]);
+        return choice == 0;
     }
 }

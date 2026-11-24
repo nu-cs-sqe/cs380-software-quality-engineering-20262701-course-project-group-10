@@ -48,6 +48,8 @@ public class Game {
     public void startNewGame() {
         board.setUpStartingPosition();
         currentPlayer = Color.WHITE;
+        status = GameStatus.IN_PROGRESS;
+        winner = null;
         whiteKingSide = true;
         whiteQueenSide = true;
         blackKingSide = true;
@@ -59,6 +61,7 @@ public class Game {
     }
 
     public void makeMove(Position from, Position to) {
+        requireGameInProgress();
         if (requiresPromotion(from, to)) {
             throw new IllegalMoveException(MoveError.PROMOTION_REQUIRED);
         }
@@ -68,6 +71,7 @@ public class Game {
     }
 
     public void makeMove(Position from, Position to, PieceType promotion) {
+        requireGameInProgress();
         Objects.requireNonNull(promotion, "promotion");
 
         final Board trial = trialMove(from, to);
@@ -372,6 +376,26 @@ public class Game {
 
     public boolean isGameOver() {
         return status != GameStatus.IN_PROGRESS;
+    }
+
+    public void resign(Color color) {
+        requireGameInProgress();
+        if (color != currentPlayer) {
+            throw new IllegalMoveException(MoveError.NOT_YOUR_TURN);
+        }
+        status = GameStatus.RESIGNED;
+        winner = opponent();
+    }
+
+    public void agreeDraw() {
+        requireGameInProgress();
+        status = GameStatus.DRAW_AGREED;
+    }
+
+    private void requireGameInProgress() {
+        if (isGameOver()) {
+            throw new IllegalMoveException(MoveError.GAME_OVER);
+        }
     }
 
     public boolean isCurrentPlayerInCheck() {

@@ -480,3 +480,32 @@ Null/invariant failures retain their existing exception types. The strengthened
 GameMakeMoveTests, CastlingTests, and GamePromotionTests assert the precise error
 codes and continue checking that rejected moves leave state unchanged. Translation
 is tested separately in MessagesTests; Game never selects a display language.
+
+## Resignation, agreed draws, and restart (Issue #54)
+
+| ID | Action | Game state and input | Expected result |
+|---|---|---|---|
+| GE42 | `resign` | In progress, White to move, White resigns | `RESIGNED`, Black wins, board and turn unchanged. |
+| GE43 | `resign` | In progress, Black to move, Black resigns | `RESIGNED`, White wins, board and turn unchanged. |
+| GE44 | `resign` | In progress, White to move, Black tries to resign | `NOT_YOUR_TURN`, game stays in progress. |
+| GE45 | `resign` | In progress, color is `null` | `NOT_YOUR_TURN`, game stays in progress. |
+| GE46 | `agreeDraw` | In progress after both players agree | `DRAW_AGREED`, no winner, board and turn unchanged. |
+| GE47 | `makeMove(from, to)` | Game ended by resignation | `GAME_OVER` before reading the board. |
+| GE48 | `makeMove(from, to, promotion)` | Game ended by agreed draw, with a promotion choice or `null` | `GAME_OVER` before checking the choice or reading the board. |
+| GE49 | `resign` | Game ended by agreed draw, color is not on turn | `GAME_OVER`, draw stands. |
+| GE50 | `agreeDraw` | Game ended by resignation | `GAME_OVER`, resignation and winner stand. |
+| GE51 | `startNewGame` | Game ended by resignation | Board resets once, status is `IN_PROGRESS`, winner is cleared. |
+| GE52 | `startNewGame` | Game ended by agreed draw | Board resets once, status is `IN_PROGRESS`, winner is empty. |
+| GE53 | `makeMove`, `startNewGame` | No legal reply and the player to move is in check | Move is rejected with `GAME_OVER`; restart clears the checkmate and winner. |
+| GE54 | `makeMove`, `startNewGame` | No legal reply and the player to move is not in check | Move is rejected with `GAME_OVER`; restart clears the stalemate. |
+
+## `startNewGame()` after a finished game (Issue #59)
+
+**Contract.** "New Game" must reset everything, so `startNewGame()` also sets the
+status back to `IN_PROGRESS` and clears the winner. Without this, a finished game
+stays over after New Game and the board ignores every click. One case covers both
+fields, because a resignation sets a status and a winner.
+
+| ID | State of the system | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| GR04 | New game; `resign(WHITE)`; then `startNewGame()` | Status `IN_PROGRESS`; no winner; `isGameOver()` false; White to move | :white_check_mark: |
