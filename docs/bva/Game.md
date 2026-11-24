@@ -498,3 +498,14 @@ is tested separately in MessagesTests; Game never selects a display language.
 | GE52 | `startNewGame` | Game ended by agreed draw | Board resets once, status is `IN_PROGRESS`, winner is empty. |
 | GE53 | `makeMove`, `startNewGame` | No legal reply and the player to move is in check | Move is rejected with `GAME_OVER`; restart clears the checkmate and winner. |
 | GE54 | `makeMove`, `startNewGame` | No legal reply and the player to move is not in check | Move is rejected with `GAME_OVER`; restart clears the stalemate. |
+
+## `startNewGame()` after a finished game (Issue #59)
+
+**Contract.** "New Game" must reset everything, so `startNewGame()` also sets the
+status back to `IN_PROGRESS` and clears the winner. Without this, a finished game
+stays over after New Game and the board ignores every click. One case covers both
+fields, because a resignation sets a status and a winner.
+
+| ID | State of the system | Expected output | Implemented? |
+| --- | --- | --- | --- |
+| GR04 | New game; `resign(WHITE)`; then `startNewGame()` | Status `IN_PROGRESS`; no winner; `isGameOver()` false; White to move | :white_check_mark: |
