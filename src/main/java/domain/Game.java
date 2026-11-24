@@ -61,6 +61,7 @@ public class Game {
     }
 
     public void makeMove(Position from, Position to) {
+        requireGameInProgress();
         if (requiresPromotion(from, to)) {
             throw new IllegalMoveException(MoveError.PROMOTION_REQUIRED);
         }
@@ -70,6 +71,7 @@ public class Game {
     }
 
     public void makeMove(Position from, Position to, PieceType promotion) {
+        requireGameInProgress();
         Objects.requireNonNull(promotion, "promotion");
 
         final Board trial = trialMove(from, to);
@@ -364,17 +366,6 @@ public class Game {
         return color == Color.WHITE ? whiteQueenSide : blackQueenSide;
     }
 
-    // Stub until #54 merges, so the Resign menu can be built; #54 replaces it.
-    public void resign(Color color) {
-        status = GameStatus.RESIGNED;
-        winner = color == Color.WHITE ? Color.BLACK : Color.WHITE;
-    }
-
-    // Stub until #54 merges, so the Offer Draw menu can be built; #54 replaces it.
-    public void agreeDraw() {
-        status = GameStatus.DRAW_AGREED;
-    }
-
     public GameStatus getStatus() {
         return status;
     }
@@ -385,6 +376,26 @@ public class Game {
 
     public boolean isGameOver() {
         return status != GameStatus.IN_PROGRESS;
+    }
+
+    public void resign(Color color) {
+        requireGameInProgress();
+        if (color != currentPlayer) {
+            throw new IllegalMoveException(MoveError.NOT_YOUR_TURN);
+        }
+        status = GameStatus.RESIGNED;
+        winner = opponent();
+    }
+
+    public void agreeDraw() {
+        requireGameInProgress();
+        status = GameStatus.DRAW_AGREED;
+    }
+
+    private void requireGameInProgress() {
+        if (isGameOver()) {
+            throw new IllegalMoveException(MoveError.GAME_OVER);
+        }
     }
 
     public boolean isCurrentPlayerInCheck() {

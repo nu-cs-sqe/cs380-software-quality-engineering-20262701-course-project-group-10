@@ -8,9 +8,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-// GR01 to GR03 cover the temporary resign and agreeDraw stubs, which #54 replaces.
-// GR04 tests startNewGame and stays after #54 merges.
-public class GameResignDrawStubTests {
+public class GameEndFlowTests {
     private static final int FILE_E = 4;
     private static final int RANK_2 = 1;
     private static final int RANK_4 = 3;

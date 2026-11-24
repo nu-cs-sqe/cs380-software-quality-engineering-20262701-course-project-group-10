@@ -481,29 +481,25 @@ GameMakeMoveTests, CastlingTests, and GamePromotionTests assert the precise erro
 codes and continue checking that rejected moves leave state unchanged. Translation
 is tested separately in MessagesTests; Game never selects a display language.
 
-## Resignation and agreed draw stubs (Issue #59, until #54 merges)
+## Resignation, agreed draws, and restart (Issue #54)
 
-**Contract.** Temporary versions of `resign(Color color)` and `agreeDraw()` from
-`docs/design/game-end-conditions.md`, so the Resign and Offer Draw menu items can
-be built and tested by hand before #54 lands. `resign(color)` sets the status to
-`RESIGNED` and makes the other color the winner. `agreeDraw()` sets the status to
-`DRAW_AGREED` with no winner. Both only cover the happy path. Rejecting a call after
-the game is over, "only the current player may resign", and null checks belong to
-#54, whose version and BVA replace this section. The `GR` prefix keeps these IDs
-apart from #54's `GE` rows.
+| ID | Action | Game state and input | Expected result |
+|---|---|---|---|
+| GE42 | `resign` | In progress, White to move, White resigns | `RESIGNED`, Black wins, board and turn unchanged. |
+| GE43 | `resign` | In progress, Black to move, Black resigns | `RESIGNED`, White wins, board and turn unchanged. |
+| GE44 | `resign` | In progress, White to move, Black tries to resign | `NOT_YOUR_TURN`, game stays in progress. |
+| GE45 | `resign` | In progress, color is `null` | `NOT_YOUR_TURN`, game stays in progress. |
+| GE46 | `agreeDraw` | In progress after both players agree | `DRAW_AGREED`, no winner, board and turn unchanged. |
+| GE47 | `makeMove(from, to)` | Game ended by resignation | `GAME_OVER` before reading the board. |
+| GE48 | `makeMove(from, to, promotion)` | Game ended by agreed draw, with a promotion choice or `null` | `GAME_OVER` before checking the choice or reading the board. |
+| GE49 | `resign` | Game ended by agreed draw, color is not on turn | `GAME_OVER`, draw stands. |
+| GE50 | `agreeDraw` | Game ended by resignation | `GAME_OVER`, resignation and winner stand. |
+| GE51 | `startNewGame` | Game ended by resignation | Board resets once, status is `IN_PROGRESS`, winner is cleared. |
+| GE52 | `startNewGame` | Game ended by agreed draw | Board resets once, status is `IN_PROGRESS`, winner is empty. |
+| GE53 | `makeMove`, `startNewGame` | No legal reply and the player to move is in check | Move is rejected with `GAME_OVER`; restart clears the checkmate and winner. |
+| GE54 | `makeMove`, `startNewGame` | No legal reply and the player to move is not in check | Move is rejected with `GAME_OVER`; restart clears the stalemate. |
 
-**Inputs and outputs.** Inputs: the resigning color. Outputs: `getStatus()`,
-`getWinner()`, and `isGameOver()`.
-
-**Catalog clues.** **Cases**: White or Black resigns; a draw is agreed.
-
-| ID | State of the system | Expected output | Implemented? |
-| --- | --- | --- | --- |
-| GR01 | New game, White to move; `resign(WHITE)` | Status `RESIGNED`; winner `BLACK`; `isGameOver()` true | :white_check_mark: |
-| GR02 | New game, White plays e2 to e4, Black to move; `resign(BLACK)` | Status `RESIGNED`; winner `WHITE` | :white_check_mark: |
-| GR03 | New game, White to move; `agreeDraw()` | Status `DRAW_AGREED`; no winner; `isGameOver()` true | :white_check_mark: |
-
-### `startNewGame()` after a finished game (Issue #59)
+## `startNewGame()` after a finished game (Issue #59)
 
 **Contract.** "New Game" must reset everything, so `startNewGame()` also sets the
 status back to `IN_PROGRESS` and clears the winner. Without this, a finished game
