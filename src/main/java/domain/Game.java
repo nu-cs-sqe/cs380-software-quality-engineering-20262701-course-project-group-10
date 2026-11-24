@@ -48,6 +48,8 @@ public class Game {
     public void startNewGame() {
         board.setUpStartingPosition();
         currentPlayer = Color.WHITE;
+        status = GameStatus.IN_PROGRESS;
+        winner = null;
         whiteKingSide = true;
         whiteQueenSide = true;
         blackKingSide = true;
@@ -360,6 +362,17 @@ public class Game {
     public boolean canCastleQueenSide(Color color) {
         Objects.requireNonNull(color, "color");
         return color == Color.WHITE ? whiteQueenSide : blackQueenSide;
+    }
+
+    // Stub until #54 merges, so the Resign menu can be built; #54 replaces it.
+    public void resign(Color color) {
+        status = GameStatus.RESIGNED;
+        winner = color == Color.WHITE ? Color.BLACK : Color.WHITE;
+    }
+
+    // Stub until #54 merges, so the Offer Draw menu can be built; #54 replaces it.
+    public void agreeDraw() {
+        status = GameStatus.DRAW_AGREED;
     }
 
     public GameStatus getStatus() {
