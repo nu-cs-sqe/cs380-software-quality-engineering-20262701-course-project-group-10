@@ -51,6 +51,8 @@
 - [done] Youran Ma: Implemented resignation, agreed draws, game-over guards, and new game reset with BVA and tests ([Draft PR #63](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/63)).
 - [done] Mengpang Xing: English/Spanish resource bundles, typed move errors, locale selection, BVA and tests ([PR #60](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/60)).
 - [done] Naman Dua: End-of-game GUI with Resign and Offer Draw, BVA and tests ([PR #61](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/61)).
+- [done] Yurou Quan: Added integration tests for multiple-turn chess gameplay without mocks, covering normal moves and captures, castling, en passant, pawn promotion, king safety, and composite move sequences ([PR #64](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/64)).
+- [done] Yurou Quan: Added game-end integration tests covering Fool's Mate, stalemate, resignation, move rejection after game termination, and resetting the game state. Verified game status, winner, board state, and turn management ([PR #65](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-10/pull/65)).
 
 
 
